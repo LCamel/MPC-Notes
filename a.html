@@ -17,6 +17,7 @@
         background-color: black;
     }
     .overlay {
+        white-space: pre;        
         z-index: 1;
         position: absolute;
         top: 0px;
@@ -43,7 +44,7 @@
 <div class="container">
 
 <div class="txt" id="board">
-                                                             
+                               @errorMsg                              
                                                              
        ┌────────────────────┐                                
        │                    │                                
@@ -101,6 +102,8 @@ function parseBoard(s) {
 var wires = [0, 1, 0, 0, 0, 0];
 var updaters = [];
 var barSel = [0];
+var errorMsg = "";
+
 var [board, loc] = parseBoard(document.querySelector("#board").innerText);
 console.log("loc: ", loc);
 document.querySelector("#board").innerText = board;
@@ -128,6 +131,9 @@ function Button(rowCol, expr, listener) {
 function updateUI() {
     updaters.forEach((u) => u());
 }
+
+Label(loc["errorMsg"], () => errorMsg);
+
 Label(loc["A"], () => wires[0]);
 Label(loc["B"], () => wires[1]);
 Label(loc["C"], () => wires[2]);
@@ -137,7 +143,15 @@ Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI
 Button(loc["NA"], () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
 Button(loc["NB"], () => "▼", () => { wires[1] = 1 - wires[1]; updateUI() });
 
-Button(loc["E1"], () => "►", () => { wires[2] = wires[0] & wires[1]; updateUI() });
+Button(loc["E1"], () => "►", () => {
+    if (barSel[0] != wires[0] * 2 + wires[1]) {
+        errorMsg = "try another posision";
+    } else {
+        wires[2] = wires[0] & wires[1];
+        errorMsg = "";
+    }
+    updateUI();
+});
 
 updateUI();
 </script>
