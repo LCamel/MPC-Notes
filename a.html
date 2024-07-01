@@ -31,36 +31,41 @@
     .lbl {
         height: 1lh;
         position: absolute;
-        background-color: gray;
+        font-weight: bold;
+        /*background-color: gray;*/
     }
 </style>
 
 <div class="container">
 
-<div class="txt">
-    ┌────────────────────┐                              
-    │                    │                              
-    │         AND        │                              
-  1 │                    │                              
-    │         0 0 0      │                              
-    │         0 1 0   0  │                              
-    │   1 0   1 0 0      │       ┌────────────────────┐ 
-  0 │         1 1 1      │       │                    │ 
-    │    ▼          ►    │       │         AND        │ 
-    │                    │     1 │                    │ 
-    └────────────────────┘       │         0 0 0      │ 
-                                 │         0 1 0   0  │ 
-    ┌────────────────────┐       │   1 0   1 0 0      │ 
-    │                    │     0 │         1 1 1      │ 
-    │         AND        │       │    ▼          ►    │ 
-  1 │                    │       │                    │ 
-    │         0 0 0      │       └────────────────────┘ 
-    │         0 1 0   0  │                              
-    │   1 0   1 0 0      │                              
-  0 │         1 1 1      │                              
-    │    ▼          ►    │                              
-    │                    │                              
-    └────────────────────┘                                                                                      
+<div class="txt" id="board">
+                                                             
+                                                             
+       ┌────────────────────┐                                
+       │                    │                                
+       │         AND        │                                
+  @NA@A│                    │                                
+       │   @a@b  0 0 0      │                                
+       │         0 1 0   @C │                                
+       │         1 0 0      │       ┌────────────────────┐   
+  @NB@B│         1 1 1      │       │                    │   
+       │    @N1        @E1  │       │         AND        │   
+       │                    │     @c│                    │   
+       └────────────────────┘       │         0 0 0      │   
+                                    │         0 1 0   0  │   
+       ┌────────────────────┐       │   1 0   1 0 0      │   
+       │                    │     0 │         1 1 1      │   
+       │         AND        │       │    ▼          ►    │   
+     1 │                    │       │                    │   
+       │         0 0 0      │       └────────────────────┘   
+       │         0 1 0   0  │                                
+       │   1 0   1 0 0      │                                
+     0 │         1 1 1      │                                
+       │    ▼          ►    │                                
+       │                    │                                
+       └────────────────────┘                                
+                                                             
+                                                                                                                 
 </div>
 
 <div class="overlay">
@@ -70,44 +75,65 @@
 
 </div>
 <script>
+function parseBoard(s) {
+    var locations = {};
+    var row = 0;
+    var col = 0;
+    var regex = /(.*?)@(\w+)/gs;
+    var replaced = s.replace(regex, (all, before, name) => {
+        var lines = before.split("\n");
+        if (lines.length == 1) {
+            col += lines[0].length;
+        } else {
+            row += lines.length - 1;
+            col = lines.pop().length;
+        }
+        locations[name] = [row, col];
+        col += 1 + name.length;
+        return before + " ".repeat(1 + name.length);
+    });
+    return [replaced, locations];
+}
 var wires = [0, 1, 0, 0, 0, 0];
 var updaters = [];
 var barSel = [0];
+var [board, loc] = parseBoard(document.querySelector("#board").innerText);
+console.log("loc: ", loc);
+document.querySelector("#board").innerText = board;
 
 function Bar(row, sel, ...objs) {
     updaters.push(() => objs.forEach(o => o.style.top = (row + sel()) + "lh"));
 }
-function Label(row, col, expr) {
-    var protoLbl = document.querySelector(".protoLbl");
-    var lbl = protoLbl.cloneNode(true);
-    lbl.style.top = row + "lh";
-    lbl.style.left = col + "ch";
-    protoLbl.parentNode.appendChild(lbl);
-    updaters.push(() => lbl.innerText = expr());
-    return lbl;
+function clone(protoNode, rowCol, captionFn) {
+    var node = protoNode.cloneNode(true);
+    node.style.top = rowCol[0] + "lh";
+    node.style.left = rowCol[1] + "ch";
+    protoNode.parentNode.appendChild(node);
+    updaters.push(() => node.innerText = captionFn());
+    return node;
 }
-function Button(row, col, expr, listener) {
-    var protoBtn = document.querySelector(".protoBtn");
-    var btn = protoBtn.cloneNode(true);
-    btn.style.top = row + "lh";
-    btn.style.left = col + "ch";
-    protoBtn.parentNode.appendChild(btn);
-    updaters.push(() => btn.innerText = expr());
-    btn.onclick = listener;
-    return btn;
+function Label(rowCol, expr) {
+    var node = clone(document.querySelector(".protoLbl"), rowCol, expr);
+    return node;
+}
+function Button(rowCol, expr, listener) {
+    var node = clone(document.querySelector(".protoBtn"), rowCol, expr);
+    node.onclick = listener;
+    return node;
 }
 function updateUI() {
     updaters.forEach((u) => u());
 }
-Label(4, 2, () => wires[0]);
-Label(8, 2, () => wires[1]);
-Label(6, 22, () => wires[2]);
-Bar(5, () => barSel[0], Label(7, 8, () => wires[0]), Label(7, 10, () => wires[1]));
-Button(9, 9, () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
+Label(loc["A"], () => wires[0]);
+Label(loc["B"], () => wires[1]);
+Label(loc["C"], () => wires[2]);
+Bar(loc["a"][0], () => barSel[0], Label(loc["a"], () => wires[0]), Label(loc["b"], () => wires[1]));
+Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
 
-Button(4, 1, () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
+Button(loc["NA"], () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
+Button(loc["NB"], () => "▼", () => { wires[1] = 1 - wires[1]; updateUI() });
 
-Button(9, 20, () => "►", () => { wires[2] = wires[0] & wires[1]; updateUI() });
+Button(loc["E1"], () => "►", () => { wires[2] = wires[0] & wires[1]; updateUI() });
 
 updateUI();
 </script>
