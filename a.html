@@ -44,38 +44,37 @@
 <div class="container">
 
 <div class="txt" id="board">
-                               @errorMsg                              
-                                                             
-       ┌────────────────────┐                                
-       │                    │                                
-       │         AND        │                                
-  @NA@A│                    │                                
-       │   @a@b  0 0 0      │                                
-       │         0 1 0   @C │                                
-       │         1 0 0      │       ┌────────────────────┐   
-  @NB@B│         1 1 1      │       │                    │   
-       │    @N1        @E1  │       │         AND        │   
-       │                    │     @c│                    │   
-       └────────────────────┘       │         0 0 0      │   
-                                    │         0 1 0   0  │   
-       ┌────────────────────┐       │   1 0   1 0 0      │   
-       │                    │     0 │         1 1 1      │   
-       │         AND        │       │    ▼          ►    │   
-     1 │                    │       │                    │   
-       │         0 0 0      │       └────────────────────┘   
-       │         0 1 0   0  │                                
-       │   1 0   1 0 0      │                                
-     0 │         1 1 1      │                                
-       │    ▼          ►    │                                
-       │                    │                                
-       └────────────────────┘                                
-                                                             
-                                                                                                                 
+       @errorMsg                                                
+                                                                
+       ┌────────────────────┐                                   
+       │                    │                                   
+       │         AND        │                                   
+  @NA@A│                    │                                   
+       │   @a@b  0 0 0      │                                   
+       │         0 1 0   @C ├───┐                               
+       │         1 0 0      │   │  ┌────────────────────┐       
+  @NB@B│         1 1 1      │   │  │                    │       
+       │    @N1        @E1  │   └──┤         XOR        │       
+       │                    │      │                    │       
+       └────────────────────┘      │   @c@f  0 0 0      │       
+                                   │         0 1 1   @G ├── @g  
+       ┌────────────────────┐      │         1 0 1      │       
+       │                    │      │         1 1 0      │       
+       │         OR         │   ┌──┤    @N3        @E3  │       
+  @ND@D│                    │   │  │                    │       
+       │   @d@e  0 0 0      │   │  └────────────────────┘       
+       │         0 1 1   @F ├───┘                               
+       │         1 0 1      │                                   
+  @NE@E│         1 1 1      │                                   
+       │    @N2        @E2  │                                   
+       │                    │                                   
+       └────────────────────┘                                   
+                                                                
 </div>
 
 <div class="overlay">
-<div class="btn protoBtn" style="top: 0lh; left: 0ch">B</div>
-<div class="lbl protoLbl" style="top: 0lh; left: 1ch">L</div>
+<div class="btn protoBtn" style="top: -1000lh; left: -1000ch">B</div>
+<div class="lbl protoLbl" style="top: -1000lh; left: -1001ch">L</div>
 </div>
 
 </div>
@@ -99,9 +98,9 @@ function parseBoard(s) {
     });
     return [replaced, locations];
 }
-var wires = [0, 1, 0, 0, 0, 0];
+var wires = [0, 0, 0, 0, 0, 0, 0];
 var updaters = [];
-var barSel = [0];
+var barSel = [0, 0, 0];
 var errorMsg = "";
 
 var [board, loc] = parseBoard(document.querySelector("#board").innerText);
@@ -137,18 +136,50 @@ Label(loc["errorMsg"], () => errorMsg);
 Label(loc["A"], () => wires[0]);
 Label(loc["B"], () => wires[1]);
 Label(loc["C"], () => wires[2]);
+Label(loc["D"], () => wires[3]);
+Label(loc["E"], () => wires[4]);
+Label(loc["F"], () => wires[5]);
+Label(loc["G"], () => wires[6]);
+
+Label(loc["g"], () => wires[6]);
+
 Bar(loc["a"][0], () => barSel[0], Label(loc["a"], () => wires[0]), Label(loc["b"], () => wires[1]));
+Bar(loc["d"][0], () => barSel[1], Label(loc["d"], () => wires[3]), Label(loc["e"], () => wires[4]));
+Bar(loc["c"][0], () => barSel[2], Label(loc["c"], () => wires[2]), Label(loc["f"], () => wires[5]));
+
 Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
+Button(loc["N2"], () => "▼", () => { barSel[1] = (barSel[1] + 1) % 4; updateUI() });
+Button(loc["N3"], () => "▼", () => { barSel[2] = (barSel[2] + 1) % 4; updateUI() });
 
 Button(loc["NA"], () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
 Button(loc["NB"], () => "▼", () => { wires[1] = 1 - wires[1]; updateUI() });
+Button(loc["ND"], () => "▼", () => { wires[3] = 1 - wires[3]; updateUI() });
+Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
 
 Button(loc["E1"], () => "►", () => {
     if (barSel[0] != wires[0] * 2 + wires[1]) {
         errorMsg = "try another posision";
     } else {
         wires[2] = wires[0] & wires[1];
-        errorMsg = "";
+        errorMsg = `${wires[0]} AND ${wires[1]} = ${wires[2]}`;
+    }
+    updateUI();
+});
+Button(loc["E2"], () => "►", () => {
+    if (barSel[1] != wires[3] * 2 + wires[4]) {
+        errorMsg = "try another posision";
+    } else {
+        wires[5] = wires[3] | wires[4];
+        errorMsg = `${wires[3]} OR ${wires[4]} = ${wires[5]}`;
+    }
+    updateUI();
+});
+Button(loc["E3"], () => "►", () => {
+    if (barSel[2] != wires[2] * 2 + wires[5]) {
+        errorMsg = "try another posision";
+    } else {
+        wires[6] = wires[2] ^ wires[5];
+        errorMsg = `${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
     }
     updateUI();
 });
