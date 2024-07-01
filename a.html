@@ -1,0 +1,46 @@
+<html>
+<body>
+
+<style>
+    .container {
+        background-color: gray;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 24px;
+        color: white;
+        width: 80ch;
+        line-height: 1.5em;
+        height: 25lh;
+        position: relative; /* for its "absolute" child */
+    }
+    .txt {
+        white-space: pre;
+        background-color: black;
+    }
+    .overlay {
+        z-index: 1;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+    .btn {
+        height: 1lh;
+        position: absolute;
+        background-color: blue;
+        outline: 1px solid green;
+    }
+</style>
+
+<div class="container">
+
+<div class="txt">1234567890
+12Y4567890
+1234567890</div>
+
+<div class="overlay">
+<div class="btn" style="top: 1lh; left: 1ch" onclick="alert('Button clicked!'); document.getElementById('AAA').style.top = '3lh';">Y</div>
+<div class="btn" id="AAA" style="top: 2lh; left: 2ch">Z</div>
+</div>
+
+</div>
+</body>
+</html>
