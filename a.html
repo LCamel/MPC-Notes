@@ -5,10 +5,10 @@
     .container {
         background-color: gray;
         font-family: 'Courier New', Courier, monospace;
-        font-size: 24px;
+        font-size: 16px;
         color: white;
         width: 80ch;
-        line-height: 1.5em;
+        line-height: 1em;
         height: 25lh;
         position: relative; /* for its "absolute" child */
     }
@@ -28,19 +28,88 @@
         background-color: blue;
         outline: 1px solid green;
     }
+    .lbl {
+        height: 1lh;
+        position: absolute;
+        background-color: gray;
+    }
 </style>
 
 <div class="container">
 
-<div class="txt">1234567890
-12Y4567890
-1234567890</div>
+<div class="txt">
+    ┌────────────────────┐                              
+    │                    │                              
+    │         AND        │                              
+  1 │                    │                              
+    │         0 0 0      │                              
+    │         0 1 0   0  │                              
+    │   1 0   1 0 0      │       ┌────────────────────┐ 
+  0 │         1 1 1      │       │                    │ 
+    │    ▼          ►    │       │         AND        │ 
+    │                    │     1 │                    │ 
+    └────────────────────┘       │         0 0 0      │ 
+                                 │         0 1 0   0  │ 
+    ┌────────────────────┐       │   1 0   1 0 0      │ 
+    │                    │     0 │         1 1 1      │ 
+    │         AND        │       │    ▼          ►    │ 
+  1 │                    │       │                    │ 
+    │         0 0 0      │       └────────────────────┘ 
+    │         0 1 0   0  │                              
+    │   1 0   1 0 0      │                              
+  0 │         1 1 1      │                              
+    │    ▼          ►    │                              
+    │                    │                              
+    └────────────────────┘                                                                                      
+</div>
 
 <div class="overlay">
-<div class="btn" style="top: 1lh; left: 1ch" onclick="alert('Button clicked!'); document.getElementById('AAA').style.top = '3lh';">Y</div>
-<div class="btn" id="AAA" style="top: 2lh; left: 2ch">Z</div>
+<div class="btn protoBtn" style="top: 0lh; left: 0ch">B</div>
+<div class="lbl protoLbl" style="top: 0lh; left: 1ch">L</div>
 </div>
 
 </div>
+<script>
+var wires = [0, 1, 0, 0, 0, 0];
+var updaters = [];
+var barSel = [0];
+
+function Bar(row, sel, ...objs) {
+    updaters.push(() => objs.forEach(o => o.style.top = (row + sel()) + "lh"));
+}
+function Label(row, col, expr) {
+    var protoLbl = document.querySelector(".protoLbl");
+    var lbl = protoLbl.cloneNode(true);
+    lbl.style.top = row + "lh";
+    lbl.style.left = col + "ch";
+    protoLbl.parentNode.appendChild(lbl);
+    updaters.push(() => lbl.innerText = expr());
+    return lbl;
+}
+function Button(row, col, expr, listener) {
+    var protoBtn = document.querySelector(".protoBtn");
+    var btn = protoBtn.cloneNode(true);
+    btn.style.top = row + "lh";
+    btn.style.left = col + "ch";
+    protoBtn.parentNode.appendChild(btn);
+    updaters.push(() => btn.innerText = expr());
+    btn.onclick = listener;
+    return btn;
+}
+function updateUI() {
+    updaters.forEach((u) => u());
+}
+Label(4, 2, () => wires[0]);
+Label(8, 2, () => wires[1]);
+Label(6, 22, () => wires[2]);
+Bar(5, () => barSel[0], Label(7, 8, () => wires[0]), Label(7, 10, () => wires[1]));
+Button(9, 9, () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
+
+Button(4, 1, () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
+
+Button(9, 20, () => "►", () => { wires[2] = wires[0] & wires[1]; updateUI() });
+
+updateUI();
+</script>
 </body>
 </html>
