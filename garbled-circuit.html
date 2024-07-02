@@ -131,21 +131,34 @@ function updateUI() {
     updaters.forEach((u) => u());
 }
 
+var labels = [
+  [ '🐱', '🐶' ],
+  [ '🐭', '🐰' ],
+  [ '🐮', '🐴' ],
+  [ '🐷', '🐏' ],
+  [ '🐻', '🐵' ],
+  [ '🦁', '🦁' ],
+  [ '🐫', '🐪' ]
+];
+function wireLabel(w) {
+    return () => labels[w][wires[w]];
+}
 Text(loc["errorMsg"], () => errorMsg);
 
-Text(loc["A"], () => wires[0]);
-Text(loc["B"], () => wires[1]);
-Text(loc["C"], () => wires[2]);
-Text(loc["D"], () => wires[3]);
-Text(loc["E"], () => wires[4]);
-Text(loc["F"], () => wires[5]);
-Text(loc["G"], () => wires[6]);
 
-Text(loc["g"], () => wires[6]);
+Text(loc["A"], wireLabel(0));
+Text(loc["B"], wireLabel(1));
+Text(loc["C"], wireLabel(2));
+Text(loc["D"], wireLabel(3));
+Text(loc["E"], wireLabel(4));
+Text(loc["F"], wireLabel(5));
+Text(loc["G"], wireLabel(6));
 
-Bar(loc["a"][0], () => barSel[0], Text(loc["a"], () => wires[0]), Text(loc["b"], () => wires[1]));
-Bar(loc["d"][0], () => barSel[1], Text(loc["d"], () => wires[3]), Text(loc["e"], () => wires[4]));
-Bar(loc["c"][0], () => barSel[2], Text(loc["c"], () => wires[2]), Text(loc["f"], () => wires[5]));
+Text(loc["g"], wireLabel(6));
+
+Bar(loc["a"][0], () => barSel[0], Text(loc["a"], wireLabel(0)), Text(loc["b"], wireLabel(1)));
+Bar(loc["d"][0], () => barSel[1], Text(loc["d"], wireLabel(3)), Text(loc["e"], wireLabel(4)));
+Bar(loc["c"][0], () => barSel[2], Text(loc["c"], wireLabel(2)), Text(loc["f"], wireLabel(5)));
 
 Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
 Button(loc["N2"], () => "▼", () => { barSel[1] = (barSel[1] + 1) % 4; updateUI() });
