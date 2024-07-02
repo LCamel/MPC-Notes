@@ -1,0 +1,190 @@
+<html>
+<body>
+
+<style>
+    .container {
+        background-color: gray;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        color: white;
+        width: 80ch;
+        line-height: 1em;
+        height: 25lh;
+        position: relative; /* for its "absolute" child */
+    }
+    .board {
+        white-space: pre;
+        background-color: black;
+    }
+    .overlay {
+        white-space: pre;        
+        z-index: 1;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+    .btn {
+        height: 1lh;
+        position: absolute;
+        background-color: blue;
+        outline: 1px solid gray;
+        cursor: pointer;
+        transition: background-color 0.1s ease;
+    }
+    .btn:active {
+        background-color: black;
+    }
+    .txt {
+        height: 1lh;
+        position: absolute;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+
+<div class="board" id="board">
+       @errorMsg                                                
+                                                                
+       ┌────────────────────┐                                   
+       │                    │                                   
+       │         AND        │                                   
+  @NA@A│                    │                                   
+       │   @a@b  0 0 0      │                                   
+       │         0 1 0   @C ├───┐                               
+       │         1 0 0      │   │  ┌────────────────────┐       
+  @NB@B│         1 1 1      │   │  │                    │       
+       │    @N1        @E1  │   └──┤         XOR        │       
+       │                    │      │                    │       
+       └────────────────────┘      │   @c@f  0 0 0      │       
+                                   │         0 1 1   @G ├── @g  
+       ┌────────────────────┐      │         1 0 1      │       
+       │                    │      │         1 1 0      │       
+       │         OR         │   ┌──┤    @N3        @E3  │       
+  @ND@D│                    │   │  │                    │       
+       │   @d@e  0 0 0      │   │  └────────────────────┘       
+       │         0 1 1   @F ├───┘                               
+       │         1 0 1      │                                   
+  @NE@E│         1 1 1      │                                   
+       │    @N2        @E2  │                                   
+       │                    │                                   
+       └────────────────────┘                                   
+                                                                
+</div>
+
+<div class="overlay">
+<div class="btn protoBtn" style="top: -1000lh; left: -1000ch">B</div>
+<div class="txt protoTxt" style="top: -1000lh; left: -1001ch">L</div>
+</div>
+
+</div>
+<script>
+function parseBoard(s) {
+    var locations = {};
+    var row = 0;
+    var col = 0;
+    var regex = /(.*?)@(\w+)/gs;
+    var replaced = s.replace(regex, (all, before, name) => {
+        var lines = before.split("\n");
+        if (lines.length == 1) {
+            col += lines[0].length;
+        } else {
+            row += lines.length - 1;
+            col = lines.pop().length;
+        }
+        locations[name] = [row, col];
+        col += 1 + name.length;
+        return before + " ".repeat(1 + name.length);
+    });
+    return [replaced, locations];
+}
+var wires = [0, 0, 0, 0, 0, 0, 0];
+var updaters = [];
+var barSel = [0, 0, 0];
+var errorMsg = "";
+
+var [board, loc] = parseBoard(document.querySelector("#board").innerText);
+console.log("loc: ", loc);
+document.querySelector("#board").innerText = board;
+
+function Bar(row, sel, ...objs) {
+    updaters.push(() => objs.forEach(o => o.style.top = (row + sel()) + "lh"));
+}
+function clone(protoNode, rowCol, captionFn) {
+    var node = protoNode.cloneNode(true);
+    node.style.top = rowCol[0] + "lh";
+    node.style.left = rowCol[1] + "ch";
+    protoNode.parentNode.appendChild(node);
+    updaters.push(() => node.innerText = captionFn());
+    return node;
+}
+function Text(rowCol, expr) {
+    var node = clone(document.querySelector(".protoTxt"), rowCol, expr);
+    return node;
+}
+function Button(rowCol, expr, listener) {
+    var node = clone(document.querySelector(".protoBtn"), rowCol, expr);
+    node.onclick = listener;
+    return node;
+}
+function updateUI() {
+    updaters.forEach((u) => u());
+}
+
+Text(loc["errorMsg"], () => errorMsg);
+
+Text(loc["A"], () => wires[0]);
+Text(loc["B"], () => wires[1]);
+Text(loc["C"], () => wires[2]);
+Text(loc["D"], () => wires[3]);
+Text(loc["E"], () => wires[4]);
+Text(loc["F"], () => wires[5]);
+Text(loc["G"], () => wires[6]);
+
+Text(loc["g"], () => wires[6]);
+
+Bar(loc["a"][0], () => barSel[0], Text(loc["a"], () => wires[0]), Text(loc["b"], () => wires[1]));
+Bar(loc["d"][0], () => barSel[1], Text(loc["d"], () => wires[3]), Text(loc["e"], () => wires[4]));
+Bar(loc["c"][0], () => barSel[2], Text(loc["c"], () => wires[2]), Text(loc["f"], () => wires[5]));
+
+Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
+Button(loc["N2"], () => "▼", () => { barSel[1] = (barSel[1] + 1) % 4; updateUI() });
+Button(loc["N3"], () => "▼", () => { barSel[2] = (barSel[2] + 1) % 4; updateUI() });
+
+Button(loc["NA"], () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
+Button(loc["NB"], () => "▼", () => { wires[1] = 1 - wires[1]; updateUI() });
+Button(loc["ND"], () => "▼", () => { wires[3] = 1 - wires[3]; updateUI() });
+Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
+
+Button(loc["E1"], () => "►", () => {
+    if (barSel[0] != wires[0] * 2 + wires[1]) {
+        errorMsg = "try another posision";
+    } else {
+        wires[2] = wires[0] & wires[1];
+        errorMsg = `${wires[0]} AND ${wires[1]} = ${wires[2]}`;
+    }
+    updateUI();
+});
+Button(loc["E2"], () => "►", () => {
+    if (barSel[1] != wires[3] * 2 + wires[4]) {
+        errorMsg = "try another posision";
+    } else {
+        wires[5] = wires[3] | wires[4];
+        errorMsg = `${wires[3]} OR ${wires[4]} = ${wires[5]}`;
+    }
+    updateUI();
+});
+Button(loc["E3"], () => "►", () => {
+    if (barSel[2] != wires[2] * 2 + wires[5]) {
+        errorMsg = "try another posision";
+    } else {
+        wires[6] = wires[2] ^ wires[5];
+        errorMsg = `${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
+    }
+    updateUI();
+});
+
+updateUI();
+</script>
+</body>
+</html>
