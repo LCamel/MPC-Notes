@@ -98,7 +98,7 @@ function parseBoard(s) {
     });
     return [replaced, locations];
 }
-var wires = [0, 0, 0, 0, 0, 0, 0];
+var wires = [0, 0, 2, 0, 0, 2, 2];
 var updaters = [];
 var barSel = [0, 0, 0];
 var errorMsg = "";
@@ -132,13 +132,13 @@ function updateUI() {
 }
 
 var labels = [
-  [ '🐱', '🐶' ],
-  [ '🐭', '🐰' ],
-  [ '🐮', '🐴' ],
-  [ '🐷', '🐏' ],
-  [ '🐻', '🐵' ],
-  [ '🦁', '🦁' ],
-  [ '🐫', '🐪' ]
+  [ '🐱', '🐶', ' ' ],
+  [ '🐭', '🐰', ' ' ],
+  [ '🐮', '🐴', ' ' ],
+  [ '🐷', '🐏', ' ' ],
+  [ '🐻', '🐵', ' ' ],
+  [ '🦁', '🦁', ' ' ],
+  [ '🐫', '🐪', ' ' ]
 ];
 function wireLabel(w) {
     return () => labels[w][wires[w]];
