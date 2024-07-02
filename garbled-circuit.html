@@ -50,22 +50,22 @@
        │                    │                                   
        │         AND        │                                   
   @NA@A│                    │                                   
-       │   @a@b  0 0 0      │                                   
-       │         0 1 0   @C ├───┐                               
-       │         1 0 0      │   │  ┌────────────────────┐       
-  @NB@B│         1 1 1      │   │  │                    │       
+       │   @a@b  [BOX]      │                                   
+       │         [BOX]   @C ├───┐                               
+       │         [BOX]      │   │  ┌────────────────────┐       
+  @NB@B│         [BOX]      │   │  │                    │       
        │    @N1        @E1  │   └──┤         XOR        │       
        │                    │      │                    │       
-       └────────────────────┘      │   @c@f  0 0 0      │       
-                                   │         0 1 1   @G ├── @g  
-       ┌────────────────────┐      │         1 0 1      │       
-       │                    │      │         1 1 0      │       
+       └────────────────────┘      │   @c@f  [BOX]      │       
+                                   │         [BOX]   @G ├── @g  
+       ┌────────────────────┐      │         [BOX]      │       
+       │                    │      │         [BOX]      │       
        │         OR         │   ┌──┤    @N3        @E3  │       
   @ND@D│                    │   │  │                    │       
-       │   @d@e  0 0 0      │   │  └────────────────────┘       
-       │         0 1 1   @F ├───┘                               
-       │         1 0 1      │                                   
-  @NE@E│         1 1 1      │                                   
+       │   @d@e  [BOX]      │   │  └────────────────────┘       
+       │         [BOX]   @F ├───┘                               
+       │         [BOX]      │                                   
+  @NE@E│         [BOX]      │                                   
        │    @N2        @E2  │                                   
        │                    │                                   
        └────────────────────┘                                   
@@ -98,11 +98,44 @@ function parseBoard(s) {
     });
     return [replaced, locations];
 }
-var wires = [0, 0, 2, 0, 0, 2, 2];
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+function encrypt(key1, key2, plaintext) {
+    return key1 + key2 + plaintext;
+}
+function decrypt(ciphertext, key1, key2) {
+    return ciphertext.startsWith(key1 + key2) ? ciphertext.substring((key1 + key2).length) : undefined;
+}
+
+function gateCiphertexts(labels1, labels2, labels3, fn) {
+    return [[0, 0], [0, 1], [1, 0], [1, 1]]
+        .map(([v1, v2]) => encrypt(labels1[v1], labels2[v2], labels3[fn(v1, v2)]));
+}
+var labels = [
+  [ '🐱', '🐶', ' ' ],
+  [ '🐭', '🐰', ' ' ],
+  [ '🐮', '🐴', ' ' ],
+  [ '🐷', '🐏', ' ' ],
+  [ '🐻', '🐵', ' ' ],
+  [ '🦁', '🦊', ' ' ],
+  [ '🐫', '🐪', ' ' ]
+];
+var wires = [0, 1, 2, 0, 0, 2, 2].map((v, i) => labels[i][v]);
 var updaters = [];
 var barSel = [0, 0, 0];
 var errorMsg = "";
 
+var ciphertexts = [
+    gateCiphertexts(labels[0], labels[1], labels[2], (a, b) => a & b),
+    gateCiphertexts(labels[3], labels[4], labels[5], (a, b) => a | b),
+    gateCiphertexts(labels[2], labels[5], labels[6], (a, b) => a ^ b),
+];
+console.log(ciphertexts);
 var [board, loc] = parseBoard(document.querySelector("#board").innerText);
 console.log("loc: ", loc);
 document.querySelector("#board").innerText = board;
@@ -131,17 +164,8 @@ function updateUI() {
     updaters.forEach((u) => u());
 }
 
-var labels = [
-  [ '🐱', '🐶', ' ' ],
-  [ '🐭', '🐰', ' ' ],
-  [ '🐮', '🐴', ' ' ],
-  [ '🐷', '🐏', ' ' ],
-  [ '🐻', '🐵', ' ' ],
-  [ '🦁', '🦁', ' ' ],
-  [ '🐫', '🐪', ' ' ]
-];
 function wireLabel(w) {
-    return () => labels[w][wires[w]];
+    return () => wires[w];
 }
 Text(loc["errorMsg"], () => errorMsg);
 
@@ -164,35 +188,35 @@ Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI
 Button(loc["N2"], () => "▼", () => { barSel[1] = (barSel[1] + 1) % 4; updateUI() });
 Button(loc["N3"], () => "▼", () => { barSel[2] = (barSel[2] + 1) % 4; updateUI() });
 
-Button(loc["NA"], () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
-Button(loc["NB"], () => "▼", () => { wires[1] = 1 - wires[1]; updateUI() });
-Button(loc["ND"], () => "▼", () => { wires[3] = 1 - wires[3]; updateUI() });
-Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
+//Button(loc["NA"], () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
+//Button(loc["NB"], () => "▼", () => { wires[1] = 1 - wires[1]; updateUI() });
+//Button(loc["ND"], () => "▼", () => { wires[3] = 1 - wires[3]; updateUI() });
+//Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
 
 Button(loc["E1"], () => "►", () => {
-    if (barSel[0] != wires[0] * 2 + wires[1]) {
-        errorMsg = "try another posision";
+    if (plaintext = decrypt(ciphertexts[0][barSel[0]], wires[0], wires[1])) {
+        wires[2] = plaintext;
+        errorMsg = `Decrypted!  ${wires[0]} AND ${wires[1]} = ${wires[2]}`;
     } else {
-        wires[2] = wires[0] & wires[1];
-        errorMsg = `${wires[0]} AND ${wires[1]} = ${wires[2]}`;
+        errorMsg = "try another posision";
     }
     updateUI();
 });
 Button(loc["E2"], () => "►", () => {
-    if (barSel[1] != wires[3] * 2 + wires[4]) {
-        errorMsg = "try another posision";
+    if (plaintext = decrypt(ciphertexts[1][barSel[1]], wires[3], wires[4])) {
+        wires[5] = plaintext;
+        errorMsg = `Decrypted!  ${wires[3]} OR ${wires[4]} = ${wires[5]}`;
     } else {
-        wires[5] = wires[3] | wires[4];
-        errorMsg = `${wires[3]} OR ${wires[4]} = ${wires[5]}`;
+        errorMsg = "try another posision";
     }
     updateUI();
 });
 Button(loc["E3"], () => "►", () => {
-    if (barSel[2] != wires[2] * 2 + wires[5]) {
-        errorMsg = "try another posision";
+    if (plaintext = decrypt(ciphertexts[2][barSel[2]], wires[2], wires[5])) {
+        wires[6] = plaintext;
+        errorMsg = `Decrypted!  ${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
     } else {
-        wires[6] = wires[2] ^ wires[5];
-        errorMsg = `${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
+        errorMsg = "try another posision";
     }
     updateUI();
 });
