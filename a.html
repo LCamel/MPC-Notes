@@ -158,7 +158,7 @@ Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
 
 Button(loc["E1"], () => "►", () => {
     if (barSel[0] != wires[0] * 2 + wires[1]) {
-        errorMsg = "try another posision";
+        errorMsg = "try another row...";
     } else {
         wires[2] = wires[0] & wires[1];
         errorMsg = `${wires[0]} AND ${wires[1]} = ${wires[2]}`;
@@ -167,7 +167,7 @@ Button(loc["E1"], () => "►", () => {
 });
 Button(loc["E2"], () => "►", () => {
     if (barSel[1] != wires[3] * 2 + wires[4]) {
-        errorMsg = "try another posision";
+        errorMsg = "try another row...";
     } else {
         wires[5] = wires[3] | wires[4];
         errorMsg = `${wires[3]} OR ${wires[4]} = ${wires[5]}`;
@@ -176,7 +176,7 @@ Button(loc["E2"], () => "►", () => {
 });
 Button(loc["E3"], () => "►", () => {
     if (barSel[2] != wires[2] * 2 + wires[5]) {
-        errorMsg = "try another posision";
+        errorMsg = "try another row...";
     } else {
         wires[6] = wires[2] ^ wires[5];
         errorMsg = `${wires[2]} XOR ${wires[5]} = ${wires[6]}`;

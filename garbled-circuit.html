@@ -198,7 +198,7 @@ Button(loc["E1"], () => "►", () => {
         wires[2] = plaintext;
         errorMsg = `Decrypted!  ${wires[0]} AND ${wires[1]} = ${wires[2]}`;
     } else {
-        errorMsg = "try another posision";
+        errorMsg = "try another row...";
     }
     updateUI();
 });
@@ -207,7 +207,7 @@ Button(loc["E2"], () => "►", () => {
         wires[5] = plaintext;
         errorMsg = `Decrypted!  ${wires[3]} OR ${wires[4]} = ${wires[5]}`;
     } else {
-        errorMsg = "try another posision";
+        errorMsg = "try another row...";
     }
     updateUI();
 });
@@ -216,7 +216,7 @@ Button(loc["E3"], () => "►", () => {
         wires[6] = plaintext;
         errorMsg = `Decrypted!  ${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
     } else {
-        errorMsg = "try another posision";
+        errorMsg = "try another row...";
     }
     updateUI();
 });
