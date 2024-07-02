@@ -118,7 +118,7 @@ function clone(protoNode, rowCol, captionFn) {
     updaters.push(() => node.innerText = captionFn());
     return node;
 }
-function Label(rowCol, expr) {
+function Text(rowCol, expr) {
     var node = clone(document.querySelector(".protoLbl"), rowCol, expr);
     return node;
 }
@@ -131,21 +131,21 @@ function updateUI() {
     updaters.forEach((u) => u());
 }
 
-Label(loc["errorMsg"], () => errorMsg);
+Text(loc["errorMsg"], () => errorMsg);
 
-Label(loc["A"], () => wires[0]);
-Label(loc["B"], () => wires[1]);
-Label(loc["C"], () => wires[2]);
-Label(loc["D"], () => wires[3]);
-Label(loc["E"], () => wires[4]);
-Label(loc["F"], () => wires[5]);
-Label(loc["G"], () => wires[6]);
+Text(loc["A"], () => wires[0]);
+Text(loc["B"], () => wires[1]);
+Text(loc["C"], () => wires[2]);
+Text(loc["D"], () => wires[3]);
+Text(loc["E"], () => wires[4]);
+Text(loc["F"], () => wires[5]);
+Text(loc["G"], () => wires[6]);
 
-Label(loc["g"], () => wires[6]);
+Text(loc["g"], () => wires[6]);
 
-Bar(loc["a"][0], () => barSel[0], Label(loc["a"], () => wires[0]), Label(loc["b"], () => wires[1]));
-Bar(loc["d"][0], () => barSel[1], Label(loc["d"], () => wires[3]), Label(loc["e"], () => wires[4]));
-Bar(loc["c"][0], () => barSel[2], Label(loc["c"], () => wires[2]), Label(loc["f"], () => wires[5]));
+Bar(loc["a"][0], () => barSel[0], Text(loc["a"], () => wires[0]), Text(loc["b"], () => wires[1]));
+Bar(loc["d"][0], () => barSel[1], Text(loc["d"], () => wires[3]), Text(loc["e"], () => wires[4]));
+Bar(loc["c"][0], () => barSel[2], Text(loc["c"], () => wires[2]), Text(loc["f"], () => wires[5]));
 
 Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
 Button(loc["N2"], () => "▼", () => { barSel[1] = (barSel[1] + 1) % 4; updateUI() });
