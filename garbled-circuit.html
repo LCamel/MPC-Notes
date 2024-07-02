@@ -37,7 +37,7 @@
     .txt {
         height: 1lh;
         position: absolute;
-        font-weight: bold;
+        /*font-weight: bold;*/
     }
 </style>
 
@@ -50,22 +50,22 @@
        │                    │                                   
        │         AND        │                                   
   @NA@A│                    │                                   
-       │   @a@b  [BOX]      │                                   
-       │         [BOX]   @C ├───┐                               
-       │         [BOX]      │   │  ┌────────────────────┐       
-  @NB@B│         [BOX]      │   │  │                    │       
+       │   @a@b  @BOX0      │                                   
+       │         @BOX1   @C ├───┐                               
+       │         @BOX2      │   │  ┌────────────────────┐       
+  @NB@B│         @BOX3      │   │  │                    │       
        │    @N1        @E1  │   └──┤         XOR        │       
        │                    │      │                    │       
-       └────────────────────┘      │   @c@f  [BOX]      │       
-                                   │         [BOX]   @G ├── @g  
-       ┌────────────────────┐      │         [BOX]      │       
-       │                    │      │         [BOX]      │       
+       └────────────────────┘      │   @c@f  @BOX8      │       
+                                   │         @BOX9   @G ├── @g  
+       ┌────────────────────┐      │         @BOX10     │       
+       │                    │      │         @BOX11     │       
        │         OR         │   ┌──┤    @N3        @E3  │       
   @ND@D│                    │   │  │                    │       
-       │   @d@e  [BOX]      │   │  └────────────────────┘       
-       │         [BOX]   @F ├───┘                               
-       │         [BOX]      │                                   
-  @NE@E│         [BOX]      │                                   
+       │   @d@e  @BOX4      │   │  └────────────────────┘       
+       │         @BOX5   @F ├───┘                               
+       │         @BOX6      │                                   
+  @NE@E│         @BOX7      │                                   
        │    @N2        @E2  │                                   
        │                    │                                   
        └────────────────────┘                                   
@@ -193,10 +193,12 @@ Button(loc["N3"], () => "▼", () => { barSel[2] = (barSel[2] + 1) % 4; updateUI
 //Button(loc["ND"], () => "▼", () => { wires[3] = 1 - wires[3]; updateUI() });
 //Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
 
+
 Button(loc["E1"], () => "►", () => {
     if (plaintext = decrypt(ciphertexts[0][barSel[0]], wires[0], wires[1])) {
         wires[2] = plaintext;
         errorMsg = `Decrypted!  ${wires[0]} AND ${wires[1]} = ${wires[2]}`;
+        boxes[0 + barSel[0]] = "";
     } else {
         errorMsg = "try another row...";
     }
@@ -206,6 +208,7 @@ Button(loc["E2"], () => "►", () => {
     if (plaintext = decrypt(ciphertexts[1][barSel[1]], wires[3], wires[4])) {
         wires[5] = plaintext;
         errorMsg = `Decrypted!  ${wires[3]} OR ${wires[4]} = ${wires[5]}`;
+        boxes[4 + barSel[1]] = "";
     } else {
         errorMsg = "try another row...";
     }
@@ -215,12 +218,19 @@ Button(loc["E3"], () => "►", () => {
     if (plaintext = decrypt(ciphertexts[2][barSel[2]], wires[2], wires[5])) {
         wires[6] = plaintext;
         errorMsg = `Decrypted!  ${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
+        boxes[8 + barSel[2]] = "";
     } else {
         errorMsg = "try another row...";
     }
     updateUI();
 });
 
+var boxes = [];
+for (let i = 0; i < 12; i++) {
+    boxes.push("[BOX]")
+    var boxNode = Text(loc["BOX" + i], () => boxes[i]);
+    boxNode.style.background = "maroon";
+}
 updateUI();
 </script>
 </body>
