@@ -53,20 +53,20 @@
             │   @0@1  @BOX0      │                                      
             │         @BOX1   @2_├───┐                                  
             │         @BOX2      │   │  ┌────────────────────┐          
- @NB@VB@1_──┤         @BOX3      │   │  │                    │          
-        @OTB│    @N1        @E1  │   └──┤         XOR        │   @OL0 0 
+ @S1@v1@1_──┤         @BOX3      │   │  │                    │          
+       @OT1 │    @BARS0     @E0  │   └──┤         XOR        │   @OL0 0 
             │                    │      │                    │   @OL1 1 
             └────────────────────┘      │   @2@5  @BOX8      │          
                                         │         @BOX9   @6_├── @6     
             ┌────────────────────┐      │         @BOX10     │          
             │                    │      │         @BOX11     │          
-            │         OR         │   ┌──┤    @N3        @E3  │          
+            │         OR         │   ┌──┤    @BARS2     @E2  │          
        @3_──┤                    │   │  │                    │          
             │   @3@4  @BOX4      │   │  └────────────────────┘          
             │         @BOX5   @5_├───┘                                  
             │         @BOX6      │                                      
- @NE@VE@4_──┤         @BOX7      │                                      
-        @OTE│    @N2        @E2  │                                      
+ @S4@v4@4_──┤         @BOX7      │                                      
+       @OT4 │    @BARS1     @E1  │                                      
             │                    │                                      
             └────────────────────┘                                      
                                                                                                                       
@@ -175,7 +175,7 @@ function updateUI() {
 
 Text(loc["errorMsg"], () => errorMsg);
 
-var texts = {};
+var texts = {}; // saved for Bar()
 for (let w = 0; w < wires.length; w++) {
     let fn = () => wires[w];
     texts[`${w}`] = Text(loc[`${w}`], fn); // saved for Bar()
@@ -184,11 +184,9 @@ for (let w = 0; w < wires.length; w++) {
 Bar(loc["0"][0], () => barSel[0], texts["0"], texts["1"]);
 Bar(loc["3"][0], () => barSel[1], texts["3"], texts["4"]);
 Bar(loc["2"][0], () => barSel[2], texts["2"], texts["5"]);
-
-Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
-Button(loc["N2"], () => "▼", () => { barSel[1] = (barSel[1] + 1) % 4; updateUI() });
-Button(loc["N3"], () => "▼", () => { barSel[2] = (barSel[2] + 1) % 4; updateUI() });
-
+for (let i = 0; i < 3; i++) {
+    Button(loc[`BARS${i}`], () => "▼", () => { barSel[i] = (barSel[i] + 1) % 4; updateUI() });
+}
 
 Text(loc["OL0"], () => labels[6][0]);
 Text(loc["OL1"], () => labels[6][1]);
@@ -206,7 +204,7 @@ function shakeBoxString(i) {
     };
     setTimeout(h, 80);
 }
-Button(loc["E1"], () => "►", () => {
+Button(loc["E0"], () => "►", () => {
     if (plaintext = decrypt(ciphertexts[0][barSel[0]], wires[0], wires[1])) {
         wires[2] = plaintext;
         errorMsg = `Decrypted!  ${wires[0]} AND ${wires[1]} = ${wires[2]}`;
@@ -217,7 +215,7 @@ Button(loc["E1"], () => "►", () => {
     }
     updateUI();
 });
-Button(loc["E2"], () => "►", () => {
+Button(loc["E1"], () => "►", () => {
     if (plaintext = decrypt(ciphertexts[1][barSel[1]], wires[3], wires[4])) {
         wires[5] = plaintext;
         errorMsg = `Decrypted!  ${wires[3]} OR ${wires[4]} = ${wires[5]}`;
@@ -228,7 +226,7 @@ Button(loc["E2"], () => "►", () => {
     }
     updateUI();
 });
-Button(loc["E3"], () => "►", () => {
+Button(loc["E2"], () => "►", () => {
     if (plaintext = decrypt(ciphertexts[2][barSel[2]], wires[2], wires[5])) {
         wires[6] = plaintext;
         errorMsg = `Decrypted!  ${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
@@ -248,17 +246,17 @@ for (let i = 0; i < 12; i++) {
 
 var inputValues = [0, 0]; // two wires for the evaluator
 var OTDone = [0, 0];
-Button(loc["NB"], () => OTDone[0] ? "" : "▼", () => { inputValues[0] = 1 - inputValues[0]; updateUI() });
-Text(loc["VB"], () => inputValues[0]);
-Button(loc["OTB"], () => OTDone[0] ? "" : "►", () => {
+Button(loc["S1"], () => OTDone[0] ? "" : "▼", () => { inputValues[0] = 1 - inputValues[0]; updateUI() });
+Text(loc["v1"], () => inputValues[0]);
+Button(loc["OT1"], () => OTDone[0] ? "" : "►", () => {
     wires[1] = labels[1][inputValues[0]];
     OTDone[0] = 1;
     errorMsg = `Label of ${inputValues[0]} => ${wires[1]} (OT)`;
     updateUI();
 });
-Button(loc["NE"], () => OTDone[1] ? "" : "▼", () => { inputValues[1] = 1 - inputValues[1]; updateUI() });
-Text(loc["VE"], () => inputValues[1]);
-Button(loc["OTE"], () => OTDone[1] ? "" : "►", () => {
+Button(loc["S4"], () => OTDone[1] ? "" : "▼", () => { inputValues[1] = 1 - inputValues[1]; updateUI() });
+Text(loc["v4"], () => inputValues[1]);
+Button(loc["OT4"], () => OTDone[1] ? "" : "►", () => {
     wires[4] = labels[4][inputValues[1]];
     OTDone[1] = 1;
     errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
