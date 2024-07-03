@@ -127,7 +127,11 @@ var labels = [
   [ '🐪', '🦙' ],
 ].map(row => shuffle(row));
 console.log("labels: ", labels);
-var wires = [0, 2, 2, 1, 2, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
+// 0
+// 1  2  6
+// 3  5
+// 4
+var wires = [1, 2, 2, 0, 2, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
 var updaters = [];
 var barSel = [0, 0, 0];
 var errorMsg = "";
