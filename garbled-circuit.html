@@ -44,32 +44,32 @@
 <div class="container">
 
 <div class="board" id="board">
-       @errorMsg                                                
-                                                                
-       ┌────────────────────┐                                   
-       │                    │                                   
-       │         AND        │                                   
-  @NA@A│                    │                                   
-       │   @a@b  @BOX0      │                                   
-       │         @BOX1   @C ├───┐                               
-       │         @BOX2      │   │  ┌────────────────────┐       
-  @NB@B│         @BOX3      │   │  │                    │       
-       │    @N1        @E1  │   └──┤         XOR        │   @OL0 0
-       │                    │      │                    │   @OL1 1
-       └────────────────────┘      │   @c@f  @BOX8      │       
-                                   │         @BOX9   @G ├── @g  
-       ┌────────────────────┐      │         @BOX10     │       
-       │                    │      │         @BOX11     │       
-       │         OR         │   ┌──┤    @N3        @E3  │       
-  @ND@D│                    │   │  │                    │       
-       │   @d@e  @BOX4      │   │  └────────────────────┘       
-       │         @BOX5   @F ├───┘                               
-       │         @BOX6      │                                   
-  @NE@E│         @BOX7      │                                   
-       │    @N2        @E2  │                                   
-       │                    │                                   
-       └────────────────────┘                                   
-                                                                
+            @errorMsg                                                   
+                                                                        
+            ┌────────────────────┐                                      
+            │                    │                                      
+            │         AND        │                                      
+        @A──┤                    │                                      
+            │   @a@b  @BOX0      │                                      
+            │         @BOX1   @C ├───┐                                  
+            │         @BOX2      │   │  ┌────────────────────┐          
+  @NB@VB@B──┤         @BOX3      │   │  │                    │          
+        @OTB│    @N1        @E1  │   └──┤         XOR        │   @OL0 0 
+            │                    │      │                    │   @OL1 1 
+            └────────────────────┘      │   @c@f  @BOX8      │          
+                                        │         @BOX9   @G ├── @g     
+            ┌────────────────────┐      │         @BOX10     │          
+            │                    │      │         @BOX11     │          
+            │         OR         │   ┌──┤    @N3        @E3  │          
+     @ND@D──┤                    │   │  │                    │          
+            │   @d@e  @BOX4      │   │  └────────────────────┘          
+            │         @BOX5   @F ├───┘                                  
+            │         @BOX6      │                                      
+  @NE@VE@E──┤         @BOX7      │                                      
+        @OTE│    @N2        @E2  │                                      
+            │                    │                                      
+            └────────────────────┘                                      
+                                                                                                                      
 </div>
 
 <div class="overlay">
@@ -127,7 +127,7 @@ var labels = [
   [ '🐪', '🦙' ],
 ].map(row => shuffle(row));
 console.log("labels: ", labels);
-var wires = [0, 1, 2, 1, 1, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
+var wires = [0, 2, 2, 1, 2, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
 var updaters = [];
 var barSel = [0, 0, 0];
 var errorMsg = "";
@@ -253,6 +253,26 @@ for (let i = 0; i < 12; i++) {
     boxes.push("🔒🔒🧳")
     Text(loc["BOX" + i], () => boxes[i]);
 }
+
+var inputValues = [0, 0]; // two wires for the evaluator
+var OTDone = [0, 0];
+Button(loc["NB"], () => OTDone[0] ? "" : "▼", () => { inputValues[0] = 1 - inputValues[0]; updateUI() });
+Text(loc["VB"], () => inputValues[0]);
+Button(loc["OTB"], () => OTDone[0] ? "" : "►", () => {
+    wires[1] = labels[1][inputValues[0]];
+    OTDone[0] = 1;
+    errorMsg = `Label of ${inputValues[0]} => ${wires[1]} (OT)`;
+    updateUI();
+});
+Button(loc["NE"], () => OTDone[1] ? "" : "▼", () => { inputValues[1] = 1 - inputValues[1]; updateUI() });
+Text(loc["VE"], () => inputValues[1]);
+Button(loc["OTE"], () => OTDone[1] ? "" : "►", () => {
+    wires[4] = labels[4][inputValues[1]];
+    OTDone[1] = 1;
+    errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
+    updateUI();
+});
+
 updateUI();
 </script>
 </body>
