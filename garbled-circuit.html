@@ -49,23 +49,23 @@
             ┌────────────────────┐                                      
             │                    │                                      
             │         AND        │                                      
-        @A──┤                    │                                      
-            │   @a@b  @BOX0      │                                      
-            │         @BOX1   @C ├───┐                                  
+       @0_──┤                    │                                      
+            │   @0@1  @BOX0      │                                      
+            │         @BOX1   @2_├───┐                                  
             │         @BOX2      │   │  ┌────────────────────┐          
-  @NB@VB@B──┤         @BOX3      │   │  │                    │          
+ @NB@VB@1_──┤         @BOX3      │   │  │                    │          
         @OTB│    @N1        @E1  │   └──┤         XOR        │   @OL0 0 
             │                    │      │                    │   @OL1 1 
-            └────────────────────┘      │   @c@f  @BOX8      │          
-                                        │         @BOX9   @G ├── @g     
+            └────────────────────┘      │   @2@5  @BOX8      │          
+                                        │         @BOX9   @6_├── @6     
             ┌────────────────────┐      │         @BOX10     │          
             │                    │      │         @BOX11     │          
             │         OR         │   ┌──┤    @N3        @E3  │          
-     @ND@D──┤                    │   │  │                    │          
-            │   @d@e  @BOX4      │   │  └────────────────────┘          
-            │         @BOX5   @F ├───┘                                  
+       @3_──┤                    │   │  │                    │          
+            │   @3@4  @BOX4      │   │  └────────────────────┘          
+            │         @BOX5   @5_├───┘                                  
             │         @BOX6      │                                      
-  @NE@VE@E──┤         @BOX7      │                                      
+ @NE@VE@4_──┤         @BOX7      │                                      
         @OTE│    @N2        @E2  │                                      
             │                    │                                      
             └────────────────────┘                                      
@@ -173,34 +173,22 @@ function updateUI() {
     updaters.forEach((u) => u());
 }
 
-function wireLabel(w) {
-    return () => wires[w];
-}
 Text(loc["errorMsg"], () => errorMsg);
 
-
-Text(loc["A"], wireLabel(0));
-Text(loc["B"], wireLabel(1));
-Text(loc["C"], wireLabel(2));
-Text(loc["D"], wireLabel(3));
-Text(loc["E"], wireLabel(4));
-Text(loc["F"], wireLabel(5));
-Text(loc["G"], wireLabel(6));
-
-Text(loc["g"], wireLabel(6));
-
-Bar(loc["a"][0], () => barSel[0], Text(loc["a"], wireLabel(0)), Text(loc["b"], wireLabel(1)));
-Bar(loc["d"][0], () => barSel[1], Text(loc["d"], wireLabel(3)), Text(loc["e"], wireLabel(4)));
-Bar(loc["c"][0], () => barSel[2], Text(loc["c"], wireLabel(2)), Text(loc["f"], wireLabel(5)));
+var texts = {};
+for (let w = 0; w < wires.length; w++) {
+    let fn = () => wires[w];
+    texts[`${w}`] = Text(loc[`${w}`], fn); // saved for Bar()
+    Text(loc[`${w}_`], fn);
+}
+Bar(loc["0"][0], () => barSel[0], texts["0"], texts["1"]);
+Bar(loc["3"][0], () => barSel[1], texts["3"], texts["4"]);
+Bar(loc["2"][0], () => barSel[2], texts["2"], texts["5"]);
 
 Button(loc["N1"], () => "▼", () => { barSel[0] = (barSel[0] + 1) % 4; updateUI() });
 Button(loc["N2"], () => "▼", () => { barSel[1] = (barSel[1] + 1) % 4; updateUI() });
 Button(loc["N3"], () => "▼", () => { barSel[2] = (barSel[2] + 1) % 4; updateUI() });
 
-//Button(loc["NA"], () => "▼", () => { wires[0] = 1 - wires[0]; updateUI() });
-//Button(loc["NB"], () => "▼", () => { wires[1] = 1 - wires[1]; updateUI() });
-//Button(loc["ND"], () => "▼", () => { wires[3] = 1 - wires[3]; updateUI() });
-//Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
 
 Text(loc["OL0"], () => labels[6][0]);
 Text(loc["OL1"], () => labels[6][1]);
