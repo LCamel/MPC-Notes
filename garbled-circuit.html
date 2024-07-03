@@ -98,12 +98,13 @@ function parseBoard(s) {
     });
     return [replaced, locations];
 }
-// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+// https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+function shuffle(arr) {
+    for (var i = arr.length - 1; i != 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+    return arr;
 }
 function encrypt(key1, key2, plaintext) {
     return key1 + key2 + plaintext;
@@ -117,15 +118,16 @@ function gateCiphertexts(labels1, labels2, labels3, fn) {
         .map(([v1, v2]) => encrypt(labels1[v1], labels2[v2], labels3[fn(v1, v2)]));
 }
 var labels = [
-  [ '🐱', '🐶', ' ' ],
-  [ '🐭', '🐰', ' ' ],
-  [ '🐮', '🐴', ' ' ],
-  [ '🐷', '🐏', ' ' ],
-  [ '🐻', '🐵', ' ' ],
-  [ '🦁', '🦊', ' ' ],
-  [ '🐫', '🐪', ' ' ]
-];
-var wires = [0, 1, 2, 0, 0, 2, 2].map((v, i) => labels[i][v]);
+  [ '🐱', '🐶' ],
+  [ '🐭', '🐰' ],
+  [ '🐮', '🐴' ],
+  [ '🐷', '🐏' ],
+  [ '🐻', '🐵' ],
+  [ '🦁', '🦊' ],
+  [ '🐫', '🐪' ],
+].map(row => shuffle(row));
+console.log("labels: ", labels);
+var wires = [0, 1, 2, 1, 1, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
 var updaters = [];
 var barSel = [0, 0, 0];
 var errorMsg = "";
@@ -135,7 +137,10 @@ var ciphertexts = [
     gateCiphertexts(labels[3], labels[4], labels[5], (a, b) => a | b),
     gateCiphertexts(labels[2], labels[5], labels[6], (a, b) => a ^ b),
 ];
-console.log(ciphertexts);
+console.log("ciphertexts: ", JSON.stringify(ciphertexts)); // copy
+ciphertexts.map(gate => shuffle(gate));
+console.log("shuffled ciphertexts: ", ciphertexts);
+
 var [board, loc] = parseBoard(document.querySelector("#board").innerText);
 console.log("loc: ", loc);
 document.querySelector("#board").innerText = board;
