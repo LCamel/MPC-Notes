@@ -27,7 +27,7 @@
         height: 1lh;
         position: absolute;
         background-color: blue;
-        outline: 1px solid gray;
+        /* outline: 1px solid gray; */
         cursor: pointer;
         transition: background-color 0.1s ease;
     }
@@ -193,7 +193,19 @@ Button(loc["N3"], () => "▼", () => { barSel[2] = (barSel[2] + 1) % 4; updateUI
 //Button(loc["ND"], () => "▼", () => { wires[3] = 1 - wires[3]; updateUI() });
 //Button(loc["NE"], () => "▼", () => { wires[4] = 1 - wires[4]; updateUI() });
 
-
+function shakeBoxString(i) {
+    var count = 4;
+    var h = () => {
+        if (count % 2 == 0) {
+            boxes[i] = " " + boxes[i];
+        } else {
+            boxes[i] = boxes[i].substring(1);
+        }
+        if (--count != 0) setTimeout(h, 80);
+        updateUI(); // expensive
+    };
+    setTimeout(h, 80);
+}
 Button(loc["E1"], () => "►", () => {
     if (plaintext = decrypt(ciphertexts[0][barSel[0]], wires[0], wires[1])) {
         wires[2] = plaintext;
@@ -201,6 +213,7 @@ Button(loc["E1"], () => "►", () => {
         boxes[0 + barSel[0]] = "";
     } else {
         errorMsg = "try another row...";
+        shakeBoxString(0 + barSel[0]);
     }
     updateUI();
 });
@@ -211,6 +224,7 @@ Button(loc["E2"], () => "►", () => {
         boxes[4 + barSel[1]] = "";
     } else {
         errorMsg = "try another row...";
+        shakeBoxString(4 + barSel[1]);
     }
     updateUI();
 });
@@ -221,6 +235,7 @@ Button(loc["E3"], () => "►", () => {
         boxes[8 + barSel[2]] = "";
     } else {
         errorMsg = "try another row...";
+        shakeBoxString(8 + barSel[2]);
     }
     updateUI();
 });
@@ -228,8 +243,7 @@ Button(loc["E3"], () => "►", () => {
 var boxes = [];
 for (let i = 0; i < 12; i++) {
     boxes.push("[BOX]")
-    var boxNode = Text(loc["BOX" + i], () => boxes[i]);
-    boxNode.style.background = "maroon";
+    Text(loc["BOX" + i], () => boxes[i]);
 }
 updateUI();
 </script>
