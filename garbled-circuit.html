@@ -165,8 +165,9 @@ function Text(id, expr) {
     node.id = "id" + id; // to avoid escaping in query selectors
     return node;
 }
-function Button(rowCol, expr, listener) {
-    var node = clone(document.querySelector(".protoBtn"), rowCol, expr);
+function Button(id, expr, listener) {
+    var node = clone(document.querySelector(".protoBtn"), loc[id], expr);
+    node.id = "id" + id;
     node.onclick = listener;
     return node;
 }
@@ -183,11 +184,11 @@ for (let w = 0; w < wires.length; w++) {
     Text(`${w}`, () => wires[w]);
     Text(`${w}_`, () => wires[w]);
 }
-Bar(loc["0"][0], () => barSel[0], query("0"), query("1"));
-Bar(loc["3"][0], () => barSel[1], query("3"), query("4"));
-Bar(loc["2"][0], () => barSel[2], query("2"), query("5"));
+Bar(loc["0"][0], () => barSel[0], query("id0"), query("id1"));
+Bar(loc["3"][0], () => barSel[1], query("id3"), query("id4"));
+Bar(loc["2"][0], () => barSel[2], query("id2"), query("id5"));
 for (let i = 0; i < 3; i++) {
-    Button(loc[`BARS${i}`], () => "▼", () => { barSel[i] = (barSel[i] + 1) % 4; updateUI() });
+    Button(`BARS${i}`, () => "▼", () => { barSel[i] = (barSel[i] + 1) % 4; updateUI() });
 }
 
 Text("OL0", () => labels[6][0]);
@@ -206,7 +207,7 @@ function shakeBoxString(i) {
     };
     setTimeout(h, 80);
 }
-Button(loc["E0"], () => "►", () => {
+Button("E0", () => "►", () => {
     if (plaintext = decrypt(ciphertexts[0][barSel[0]], wires[0], wires[1])) {
         wires[2] = plaintext;
         errorMsg = `Decrypted!  ${wires[0]} AND ${wires[1]} = ${wires[2]}`;
@@ -217,7 +218,7 @@ Button(loc["E0"], () => "►", () => {
     }
     updateUI();
 });
-Button(loc["E1"], () => "►", () => {
+Button("E1", () => "►", () => {
     if (plaintext = decrypt(ciphertexts[1][barSel[1]], wires[3], wires[4])) {
         wires[5] = plaintext;
         errorMsg = `Decrypted!  ${wires[3]} OR ${wires[4]} = ${wires[5]}`;
@@ -228,7 +229,7 @@ Button(loc["E1"], () => "►", () => {
     }
     updateUI();
 });
-Button(loc["E2"], () => "►", () => {
+Button("E2", () => "►", () => {
     if (plaintext = decrypt(ciphertexts[2][barSel[2]], wires[2], wires[5])) {
         wires[6] = plaintext;
         errorMsg = `Decrypted!  ${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
@@ -248,17 +249,17 @@ for (let i = 0; i < 12; i++) {
 
 var inputValues = [0, 0]; // two wires for the evaluator
 var OTDone = [0, 0];
-Button(loc["S1"], () => OTDone[0] ? "" : "▼", () => { inputValues[0] = 1 - inputValues[0]; updateUI() });
+Button("S1", () => OTDone[0] ? "" : "▼", () => { inputValues[0] = 1 - inputValues[0]; updateUI() });
 Text("v1", () => inputValues[0]);
-Button(loc["OT1"], () => OTDone[0] ? "" : "►", () => {
+Button("OT1", () => OTDone[0] ? "" : "►", () => {
     wires[1] = labels[1][inputValues[0]];
     OTDone[0] = 1;
     errorMsg = `Label of ${inputValues[0]} => ${wires[1]} (OT)`;
     updateUI();
 });
-Button(loc["S4"], () => OTDone[1] ? "" : "▼", () => { inputValues[1] = 1 - inputValues[1]; updateUI() });
+Button("S4", () => OTDone[1] ? "" : "▼", () => { inputValues[1] = 1 - inputValues[1]; updateUI() });
 Text("v4", () => inputValues[1]);
-Button(loc["OT4"], () => OTDone[1] ? "" : "►", () => {
+Button("OT4", () => OTDone[1] ? "" : "►", () => {
     wires[4] = labels[4][inputValues[1]];
     OTDone[1] = 1;
     errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
