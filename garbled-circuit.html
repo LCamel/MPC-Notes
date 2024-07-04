@@ -173,18 +173,19 @@ function Button(rowCol, expr, listener) {
 function updateUI() {
     updaters.forEach((u) => u());
 }
+function query(id) {
+    return document.querySelector("#" + id);
+}
 
 Text("errorMsg", () => errorMsg);
 
-var texts = {}; // saved for Bar()
 for (let w = 0; w < wires.length; w++) {
-    let fn = () => wires[w];
-    texts[`${w}`] = Text(`${w}`, fn); // saved for Bar()
-    Text(`${w}_`, fn);
+    Text(`${w}`, () => wires[w]);
+    Text(`${w}_`, () => wires[w]);
 }
-Bar(loc["0"][0], () => barSel[0], texts["0"], texts["1"]);
-Bar(loc["3"][0], () => barSel[1], texts["3"], texts["4"]);
-Bar(loc["2"][0], () => barSel[2], texts["2"], texts["5"]);
+Bar(loc["0"][0], () => barSel[0], query("0"), query("1"));
+Bar(loc["3"][0], () => barSel[1], query("3"), query("4"));
+Bar(loc["2"][0], () => barSel[2], query("2"), query("5"));
 for (let i = 0; i < 3; i++) {
     Button(loc[`BARS${i}`], () => "▼", () => { barSel[i] = (barSel[i] + 1) % 4; updateUI() });
 }
