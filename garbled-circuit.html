@@ -48,23 +48,23 @@
                                                                         
             ┌────────────────────┐                                      
             │                    │                                      
-            │         AND        │                                      
+    @L00@L01│         AND        │                                      
        @0_──┤                    │                                      
-            │   @0@1  @BOX00     │                                      
+            │   @0@1  @BOX00     │@L20@L21                                      
             │         @BOX01  @2_├───┐                                  
-            │         @BOX02     │   │  ┌────────────────────┐          
+    @L10@L11│         @BOX02     │   │  ┌────────────────────┐          
  @S1@v1@1_──┤         @BOX03     │   │  │                    │          
-       @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   @6L0 0 
-            │                    │      │                    │   @6L1 1 
+       @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   @L60 0 
+            │                    │      │                    │   @L61 1 
             └────────────────────┘      │   @2@5  @BOX20     │          
                                         │         @BOX21  @6_├── @6     
             ┌────────────────────┐      │         @BOX22     │          
             │                    │      │         @BOX23     │          
-            │         OR         │   ┌──┤    @SEL2      @E2  │          
+    @L30@L31│         OR         │   ┌──┤    @SEL2      @E2  │          
        @3_──┤                    │   │  │                    │          
             │   @3@4  @BOX10     │   │  └────────────────────┘          
             │         @BOX11  @5_├───┘                                  
-            │         @BOX12     │                                      
+    @L40@L41│         @BOX12     │@L50@L51                                      
  @S4@v4@4_──┤         @BOX13     │                                      
        @OT4 │    @SEL1      @E1  │                                      
             │                    │                                      
@@ -192,9 +192,19 @@ updaters.push(() => setRow(query("id5"), loc["5"][0] + sel[2]));
 for (let i = 0; i < 3; i++) {
     Button(`SEL${i}`, () => "▼", () => { sel[i] = (sel[i] + 1) % 4; updateUI(); });
 }
-Text("6L0", () => labels[6][0]);
-Text("6L1", () => labels[6][1]);
 
+var showWireLabels = 0;
+for (let w = 0; w < 7; w++) {
+    for (let v = 0; v < 2; v++) {
+        Text("L" + w + v, () => showWireLabels ? labels[w][v] : ' ');
+    }
+}
+/*
+Text("L60", () => labels[6][0]);
+Text("L61", () => labels[6][1]);
+Text("L00", () => labels[0][0]);
+Text("L01", () => labels[0][1]);
+*/
 function shakeBoxString(i, j) {
     var count = 4;
     var h = () => {
