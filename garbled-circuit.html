@@ -208,38 +208,18 @@ function shakeBoxString(i, j) {
     };
     setTimeout(h, 80);
 }
-Button("E0", () => "►", () => {
-    if (plaintext = decrypt(ciphertexts[0][sel[0]], wires[0], wires[1])) {
-        wires[2] = plaintext;
-        errorMsg = `Decrypted!  ${wires[0]} AND ${wires[1]} = ${wires[2]}`;
-        boxes[0][sel[0]] = "";
-    } else {
-        errorMsg = "Decryption error: Invalid key.";
-        shakeBoxString(0, sel[0]);
-    }
-    updateUI();
-});
-Button("E1", () => "►", () => {
-    if (plaintext = decrypt(ciphertexts[1][sel[1]], wires[3], wires[4])) {
-        wires[5] = plaintext;
-        errorMsg = `Decrypted!  ${wires[3]} OR ${wires[4]} = ${wires[5]}`;
-        boxes[1][sel[1]] = "";
-    } else {
-        errorMsg = "Decryption error: Invalid key.";
-        shakeBoxString(1, sel[1]);
-    }
-    updateUI();
-});
-Button("E2", () => "►", () => {
-    if (plaintext = decrypt(ciphertexts[2][sel[2]], wires[2], wires[5])) {
-        wires[6] = plaintext;
-        errorMsg = `Decrypted!  ${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
-        boxes[2][sel[2]] = "";
-    } else {
-        errorMsg = "Decryption error: Invalid key.";
-        shakeBoxString(2, sel[2]);
-    }
-    updateUI();
+[[0, 1, 2, "AND"], [3, 4, 5, "OR"], [2, 5, 6, "XOR"]].forEach(([in0, in1, out, name], i) => {
+    Button("E" + i, () => "►", () => {
+        if (plaintext = decrypt(ciphertexts[i][sel[i]], wires[in0], wires[in1])) {
+            wires[out] = plaintext;
+            errorMsg = `Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`;
+            boxes[i][sel[i]] = "";
+        } else {
+            errorMsg = "Decryption error: Invalid key.";
+            shakeBoxString(i, sel[i]);
+        }
+        updateUI();
+    });
 });
 
 var boxes = [[], [], []];
