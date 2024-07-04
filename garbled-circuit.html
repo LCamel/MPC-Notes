@@ -54,8 +54,8 @@
             │         @BOX1   @2_├───┐                                  
             │         @BOX2      │   │  ┌────────────────────┐          
  @S1@v1@1_──┤         @BOX3      │   │  │                    │          
-       @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   @OL0 0 
-            │                    │      │                    │   @OL1 1 
+       @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   @6L0 0 
+            │                    │      │                    │   @6L1 1 
             └────────────────────┘      │   @2@5  @BOX8      │          
                                         │         @BOX9   @6_├── @6     
             ┌────────────────────┐      │         @BOX10     │          
@@ -189,13 +189,11 @@ updaters.push(() => setRow(query("id3"), loc["3"][0] + sel[1]));
 updaters.push(() => setRow(query("id4"), loc["4"][0] + sel[1]));
 updaters.push(() => setRow(query("id2"), loc["2"][0] + sel[2]));
 updaters.push(() => setRow(query("id5"), loc["5"][0] + sel[2]));
-
 for (let i = 0; i < 3; i++) {
     Button(`SEL${i}`, () => "▼", () => { sel[i] = (sel[i] + 1) % 4; updateUI(); });
 }
-
-Text("OL0", () => labels[6][0]);
-Text("OL1", () => labels[6][1]);
+Text("6L0", () => labels[6][0]);
+Text("6L1", () => labels[6][1]);
 
 function shakeBoxString(i) {
     var count = 4;
