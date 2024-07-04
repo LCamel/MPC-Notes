@@ -39,6 +39,9 @@
         position: absolute;
         /*font-weight: bold;*/
     }
+    .hide {
+        display: none;
+    }
 </style>
 
 <div class="container">
@@ -64,11 +67,11 @@
        @3_──┤                    │   │  │                    │          
             │   @3@4  #BOX10     │   │  └────────────────────┘          
             │         #BOX11  @5_├───┘                                  
-    !L40!L41│         #BOX12     │!L50!L51                                      
- @S4@v4@4_──┤         #BOX13     │                                      
-       @OT4 │    @SEL1      @E1  │                                      
-            │                    │                                      
-            └────────────────────┘                                      
+    !L40!L41│         #BOX12     │!L50!L51          !GL                            
+ @S4@v4@4_──┤         #BOX13     │                  !GT                 
+       @OT4 │    @SEL1      @E1  │                  !ST                    
+            │                    │                  !ET                    
+            └────────────────────┘                  @GEN                    
                                                                                                                       
 </div>
 
@@ -119,15 +122,19 @@ function gateCiphertexts(in0Labels, in1Labels, outLabels, fn) {
     return [[0, 0], [0, 1], [1, 0], [1, 1]]
         .map(([v1, v2]) => encrypt(in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]));
 }
-var labels = [
-  [ '🐱', '🐶' ],
-  [ '🐭', '🐰' ],
-  [ '🐮', '🐴' ],
-  [ '🐷', '🐏' ],
-  [ '🐻', '🐵' ],
-  [ '🦁', '🦊' ],
-  [ '🐪', '🦙' ],
-].map(row => shuffle(row));
+
+function generateWireLabels() {
+    return [
+        [ '🐱', '🐶' ],
+        [ '🐭', '🐰' ],
+        [ '🐮', '🐴' ],
+        [ '🐷', '🐏' ],
+        [ '🐻', '🐵' ],
+        [ '🦁', '🦊' ],
+        [ '🐪', '🦙' ],
+    ].map(row => shuffle(row));
+}
+var labels = generateWireLabels();
 console.log("labels: ", labels);
 // 0
 // 1  2  6
@@ -138,13 +145,19 @@ var updaters = [];
 var sel = [0, 0, 0];
 var errorMsg = "";
 
-var ciphertexts = [
-    gateCiphertexts(labels[0], labels[1], labels[2], (a, b) => a & b),
-    gateCiphertexts(labels[3], labels[4], labels[5], (a, b) => a | b),
-    gateCiphertexts(labels[2], labels[5], labels[6], (a, b) => a ^ b),
-];
+var ciphertexts;
+function generateCiphertexts() {
+    ciphertexts = [
+        gateCiphertexts(labels[0], labels[1], labels[2], (a, b) => a & b),
+        gateCiphertexts(labels[3], labels[4], labels[5], (a, b) => a | b),
+        gateCiphertexts(labels[2], labels[5], labels[6], (a, b) => a ^ b),
+    ];
+}
+function shuffleCiphertexts() { ciphertexts.map(gate => shuffle(gate)); }
+
+generateCiphertexts();
 console.log("ciphertexts: ", JSON.stringify(ciphertexts)); // copy
-ciphertexts.map(gate => shuffle(gate));
+shuffleCiphertexts();
 console.log("shuffled ciphertexts: ", ciphertexts);
 
 var [board, loc, symbols] = parseBoard(document.querySelector("#board").innerText);
@@ -199,10 +212,9 @@ for (let i = 0; i < 3; i++) {
     Button(`SEL${i}`, () => "▼", () => { sel[i] = (sel[i] + 1) % 4; updateUI(); });
 }
 
-var showWireLabels = 0;
 for (let w = 0; w < 7; w++) {
     for (let v = 0; v < 2; v++) {
-        Text("L" + w + v, () => showWireLabels ? labels[w][v] : ' ');
+        Text("L" + w + v, () => labels[w][v]);
     }
 }
 /*
@@ -237,14 +249,20 @@ function shakeBoxString(i, j) {
         updateUI();
     });
 });
-
-var boxes = [[], [], []];
-for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 4; j++) {
-        boxes[i].push("🔒🔒🧳")
-        Text("BOX" + i + j, () => boxes[i][j]);
-    }
+function forEachBoxIndex(fn) {
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 4; j++) {
+            fn(i, j);
+        }
 }
+
+}
+var boxes = [[], [], []];
+forEachBoxIndex((i, j) => {
+    boxes[i].push("🔒🔒🧳");
+    Text("BOX" + i + j, () => boxes[i][j]);
+});
+
 
 
 var inputValues = [0, 0]; // two wires for the evaluator
@@ -265,7 +283,30 @@ Button("OT4", () => OTDone[1] ? "" : "►", () => {
     errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
     updateUI();
 });
+Button("GL", () => "Generate Wire Labels", () => { labels = generateWireLabels(); updateUI(); });
+Button("GT", () => "Generate Tables", () => {
+    generateCiphertexts();
+    forEachBoxIndex((i, j) => boxes[i][j] = ciphertexts[i][j]);
+    updateUI();
+});
+Button("ST", () => "Shuffle Tables", () => {
+    shuffleCiphertexts();
+    forEachBoxIndex((i, j) => boxes[i][j] = ciphertexts[i][j]);
+    updateUI();
+});
+Button("ET", () => "Encrypt Tables", () => {
+    forEachBoxIndex((i, j) => boxes[i][j] = "🔒🔒🧳");
+    updateUI();
+})
 
+document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
+Button("GEN", () => "=> G", () => {
+    document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
+    document.querySelectorAll(".generator").forEach(n => n.classList.remove("hide"));
+    forEachBoxIndex((i, j) => boxes[i][j] = "");
+    labels = labels.map(() => ['', '']);
+    updateUI();
+});
 updateUI();
 </script>
 </body>
