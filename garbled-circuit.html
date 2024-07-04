@@ -113,9 +113,9 @@ function decrypt(ciphertext, key1, key2) {
     return ciphertext.startsWith(key1 + key2) ? ciphertext.substring((key1 + key2).length) : undefined;
 }
 
-function gateCiphertexts(labels1, labels2, labels3, fn) {
+function gateCiphertexts(in0Labels, in1Labels, outLabels, fn) {
     return [[0, 0], [0, 1], [1, 0], [1, 1]]
-        .map(([v1, v2]) => encrypt(labels1[v1], labels2[v2], labels3[fn(v1, v2)]));
+        .map(([v1, v2]) => encrypt(in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]));
 }
 var labels = [
   [ '🐱', '🐶' ],
