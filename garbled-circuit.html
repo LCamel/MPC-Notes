@@ -50,22 +50,22 @@
             │                    │                                      
             │         AND        │                                      
        @0_──┤                    │                                      
-            │   @0@1  @BOX0      │                                      
-            │         @BOX1   @2_├───┐                                  
-            │         @BOX2      │   │  ┌────────────────────┐          
- @S1@v1@1_──┤         @BOX3      │   │  │                    │          
+            │   @0@1  @BOX00     │                                      
+            │         @BOX01  @2_├───┐                                  
+            │         @BOX02     │   │  ┌────────────────────┐          
+ @S1@v1@1_──┤         @BOX03     │   │  │                    │          
        @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   @6L0 0 
             │                    │      │                    │   @6L1 1 
-            └────────────────────┘      │   @2@5  @BOX8      │          
-                                        │         @BOX9   @6_├── @6     
-            ┌────────────────────┐      │         @BOX10     │          
-            │                    │      │         @BOX11     │          
+            └────────────────────┘      │   @2@5  @BOX20     │          
+                                        │         @BOX21  @6_├── @6     
+            ┌────────────────────┐      │         @BOX22     │          
+            │                    │      │         @BOX23     │          
             │         OR         │   ┌──┤    @SEL2      @E2  │          
        @3_──┤                    │   │  │                    │          
-            │   @3@4  @BOX4      │   │  └────────────────────┘          
-            │         @BOX5   @5_├───┘                                  
-            │         @BOX6      │                                      
- @S4@v4@4_──┤         @BOX7      │                                      
+            │   @3@4  @BOX10     │   │  └────────────────────┘          
+            │         @BOX11  @5_├───┘                                  
+            │         @BOX12     │                                      
+ @S4@v4@4_──┤         @BOX13     │                                      
        @OT4 │    @SEL1      @E1  │                                      
             │                    │                                      
             └────────────────────┘                                      
@@ -195,13 +195,13 @@ for (let i = 0; i < 3; i++) {
 Text("6L0", () => labels[6][0]);
 Text("6L1", () => labels[6][1]);
 
-function shakeBoxString(i) {
+function shakeBoxString(i, j) {
     var count = 4;
     var h = () => {
         if (count % 2 == 0) {
-            boxes[i] = " " + boxes[i];
+            boxes[i][j] = " " + boxes[i][j];
         } else {
-            boxes[i] = boxes[i].substring(1);
+            boxes[i][j] = boxes[i][j].substring(1);
         }
         if (--count != 0) setTimeout(h, 80);
         updateUI(); // expensive
@@ -212,10 +212,10 @@ Button("E0", () => "►", () => {
     if (plaintext = decrypt(ciphertexts[0][sel[0]], wires[0], wires[1])) {
         wires[2] = plaintext;
         errorMsg = `Decrypted!  ${wires[0]} AND ${wires[1]} = ${wires[2]}`;
-        boxes[0 + sel[0]] = "";
+        boxes[0][sel[0]] = "";
     } else {
         errorMsg = "Decryption error: Invalid key.";
-        shakeBoxString(0 + sel[0]);
+        shakeBoxString(0, sel[0]);
     }
     updateUI();
 });
@@ -223,10 +223,10 @@ Button("E1", () => "►", () => {
     if (plaintext = decrypt(ciphertexts[1][sel[1]], wires[3], wires[4])) {
         wires[5] = plaintext;
         errorMsg = `Decrypted!  ${wires[3]} OR ${wires[4]} = ${wires[5]}`;
-        boxes[4 + sel[1]] = "";
+        boxes[1][sel[1]] = "";
     } else {
         errorMsg = "Decryption error: Invalid key.";
-        shakeBoxString(4 + sel[1]);
+        shakeBoxString(1, sel[1]);
     }
     updateUI();
 });
@@ -234,19 +234,22 @@ Button("E2", () => "►", () => {
     if (plaintext = decrypt(ciphertexts[2][sel[2]], wires[2], wires[5])) {
         wires[6] = plaintext;
         errorMsg = `Decrypted!  ${wires[2]} XOR ${wires[5]} = ${wires[6]}`;
-        boxes[8 + sel[2]] = "";
+        boxes[2][sel[2]] = "";
     } else {
         errorMsg = "Decryption error: Invalid key.";
-        shakeBoxString(8 + sel[2]);
+        shakeBoxString(2, sel[2]);
     }
     updateUI();
 });
 
-var boxes = [];
-for (let i = 0; i < 12; i++) {
-    boxes.push("🔒🔒🧳")
-    Text("BOX" + i, () => boxes[i]);
+var boxes = [[], [], []];
+for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 4; j++) {
+        boxes[i].push("🔒🔒🧳")
+        Text("BOX" + i + j, () => boxes[i][j]);
+    }
 }
+
 
 var inputValues = [0, 0]; // two wires for the evaluator
 var OTDone = [0, 0];
