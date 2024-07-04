@@ -48,24 +48,24 @@
                                                                         
             ┌────────────────────┐                                      
             │                    │                                      
-    @L00@L01│         AND        │                                      
+    !L00!L01│         AND        │                                      
        @0_──┤                    │                                      
-            │   @0@1  @BOX00     │@L20@L21                                      
-            │         @BOX01  @2_├───┐                                  
-    @L10@L11│         @BOX02     │   │  ┌────────────────────┐          
- @S1@v1@1_──┤         @BOX03     │   │  │                    │          
-       @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   @L60 0 
-            │                    │      │                    │   @L61 1 
-            └────────────────────┘      │   @2@5  @BOX20     │          
-                                        │         @BOX21  @6_├── @6     
-            ┌────────────────────┐      │         @BOX22     │          
-            │                    │      │         @BOX23     │          
-    @L30@L31│         OR         │   ┌──┤    @SEL2      @E2  │          
+            │   @0@1  #BOX00     │!L20!L21                                      
+            │         #BOX01  @2_├───┐                                  
+    !L10!L11│         #BOX02     │   │  ┌────────────────────┐          
+ @S1@v1@1_──┤         #BOX03     │   │  │                    │          
+       @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   #L60 0 
+            │                    │      │                    │   #L61 1 
+            └────────────────────┘      │   @2@5  #BOX20     │          
+                                        │         #BOX21  @6_├── @6     
+            ┌────────────────────┐      │         #BOX22     │          
+            │                    │      │         #BOX23     │          
+    !L30!L31│         OR         │   ┌──┤    @SEL2      @E2  │          
        @3_──┤                    │   │  │                    │          
-            │   @3@4  @BOX10     │   │  └────────────────────┘          
-            │         @BOX11  @5_├───┘                                  
-    @L40@L41│         @BOX12     │@L50@L51                                      
- @S4@v4@4_──┤         @BOX13     │                                      
+            │   @3@4  #BOX10     │   │  └────────────────────┘          
+            │         #BOX11  @5_├───┘                                  
+    !L40!L41│         #BOX12     │!L50!L51                                      
+ @S4@v4@4_──┤         #BOX13     │                                      
        @OT4 │    @SEL1      @E1  │                                      
             │                    │                                      
             └────────────────────┘                                      
@@ -81,10 +81,11 @@
 <script>
 function parseBoard(s) {
     var locations = {};
+    var symbols = {};
     var row = 0;
     var col = 0;
-    var regex = /(.*?)@(\w+)/gs;
-    var replaced = s.replace(regex, (all, before, name) => {
+    var regex = /(.*?)([!@#])(\w+)/gs;
+    var replaced = s.replace(regex, (all, before, symbol, name) => {
         var lines = before.split("\n");
         if (lines.length == 1) {
             col += lines[0].length;
@@ -93,10 +94,11 @@ function parseBoard(s) {
             col = lines.pop().length;
         }
         locations[name] = [row, col];
+        symbols[name] = symbol;
         col += 1 + name.length;
         return before + " ".repeat(1 + name.length);
     });
-    return [replaced, locations];
+    return [replaced, locations, symbols];
 }
 // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
 function shuffle(arr) {
@@ -145,8 +147,9 @@ console.log("ciphertexts: ", JSON.stringify(ciphertexts)); // copy
 ciphertexts.map(gate => shuffle(gate));
 console.log("shuffled ciphertexts: ", ciphertexts);
 
-var [board, loc] = parseBoard(document.querySelector("#board").innerText);
+var [board, loc, symbols] = parseBoard(document.querySelector("#board").innerText);
 console.log("loc: ", loc);
+console.log("symbols: ", symbols);
 document.querySelector("#board").innerText = board;
 
 function setRow(node, row) { node.style.top = row + "lh"; }
@@ -159,13 +162,16 @@ function clone(protoNode, rowCol, captionFn) {
     updaters.push(() => node.innerText = captionFn());
     return node;
 }
+var symbolToClass = { "@": "evaluator", "!": "generator", "#": "both" };
 function Text(id, expr) {
     var node = clone(document.querySelector(".protoTxt"), loc[id], expr);
+    node.classList.add(symbolToClass[symbols[id]]);
     node.id = "id" + id; // to avoid escaping in query selectors
     return node;
 }
 function Button(id, expr, listener) {
     var node = clone(document.querySelector(".protoBtn"), loc[id], expr);
+    node.classList.add(symbolToClass[symbols[id]]);
     node.id = "id" + id;
     node.onclick = listener;
     return node;
