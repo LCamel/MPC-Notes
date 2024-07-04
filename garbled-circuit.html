@@ -149,13 +149,12 @@ var [board, loc] = parseBoard(document.querySelector("#board").innerText);
 console.log("loc: ", loc);
 document.querySelector("#board").innerText = board;
 
-function Bar(row, sel, ...objs) {
-    updaters.push(() => objs.forEach(o => o.style.top = (row + sel()) + "lh"));
-}
+function setRow(node, row) { node.style.top = row + "lh"; }
+function setCol(node, col) { node.style.left = col + "ch"; }
 function clone(protoNode, rowCol, captionFn) {
     var node = protoNode.cloneNode(true);
-    node.style.top = rowCol[0] + "lh";
-    node.style.left = rowCol[1] + "ch";
+    setRow(node, rowCol[0]);
+    setCol(node, rowCol[1]);
     protoNode.parentNode.appendChild(node);
     updaters.push(() => node.innerText = captionFn());
     return node;
@@ -184,9 +183,13 @@ for (let w = 0; w < wires.length; w++) {
     Text(`${w}`, () => wires[w]);
     Text(`${w}_`, () => wires[w]);
 }
-Bar(loc["0"][0], () => barSel[0], query("id0"), query("id1"));
-Bar(loc["3"][0], () => barSel[1], query("id3"), query("id4"));
-Bar(loc["2"][0], () => barSel[2], query("id2"), query("id5"));
+updaters.push(() => setRow(query("id0"), loc["0"][0] + barSel[0]));
+updaters.push(() => setRow(query("id1"), loc["1"][0] + barSel[0]));
+updaters.push(() => setRow(query("id3"), loc["3"][0] + barSel[1]));
+updaters.push(() => setRow(query("id4"), loc["4"][0] + barSel[1]));
+updaters.push(() => setRow(query("id2"), loc["2"][0] + barSel[2]));
+updaters.push(() => setRow(query("id5"), loc["5"][0] + barSel[2]));
+
 for (let i = 0; i < 3; i++) {
     Button(`BARS${i}`, () => "▼", () => { barSel[i] = (barSel[i] + 1) % 4; updateUI() });
 }
