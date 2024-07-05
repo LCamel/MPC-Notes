@@ -43,7 +43,7 @@
 <div class="container">
 
 <div class="board" id="board">
-            @errorMsg                                                   
+            #errorMsg                                                   
                                                                         
             ┌────────────────────┐                                      
             │                    │                                      
@@ -288,14 +288,18 @@ Button("S3", () => "▼", () => { wires[3] = labels[3][i]; i = 1 - i; updateUI()
 }
 Text("SI", () => "Select Inputs with ▼");
 Button("SEND", () => "Send to the Evaluator", () => {
+    errorMsg = "Garbled Circuit (Evaluator)";
     document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
     document.querySelectorAll(".evaluator").forEach(n => n.classList.remove("hide"));
+    updateUI();
 });
 
 var startWithGeneratorMode = ! window.location.href.endsWith("#E");
 if (startWithGeneratorMode) {
+    errorMsg = "Garbled Circuit (Generator)";
     document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
 } else {
+    errorMsg = "Garbled Circuit (Evaluator)";
     document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
     generateWireLabels();
     generateTabels();
