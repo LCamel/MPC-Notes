@@ -141,9 +141,9 @@ function generateTabels() {
 function shuffleTables() {
     tables.forEach(t => shuffle(t));
 }
-function generateCiphertexts2() {
+function generateCiphertexts() {
     ciphertexts = tables.map(t => t.map(row => encrypt(...row)));
-    console.log("generateCiphertexts2: ", ciphertexts);
+    console.log("generateCiphertexts: ", ciphertexts);
 }
 var wires = ['', '', '', '', '', '', ''];
 var labels = wires.map(_ => ['', '']);
@@ -191,25 +191,18 @@ function query(id) {
 
 Text("errorMsg", () => errorMsg);
 
-for (let w = 0; w < wires.length; w++) {
-    Text(`${w}`, () => wires[w]);
-    Text(`${w}_`, () => wires[w]);
-}
-updaters.push(() => setRow(query("id0"), loc["0"][0] + sel[0]));
-updaters.push(() => setRow(query("id1"), loc["1"][0] + sel[0]));
-updaters.push(() => setRow(query("id3"), loc["3"][0] + sel[1]));
-updaters.push(() => setRow(query("id4"), loc["4"][0] + sel[1]));
-updaters.push(() => setRow(query("id2"), loc["2"][0] + sel[2]));
-updaters.push(() => setRow(query("id5"), loc["5"][0] + sel[2]));
-for (let i = 0; i < 3; i++) {
-    Button(`SEL${i}`, () => "▼", () => { sel[i] = (sel[i] + 1) % 4; updateUI(); });
-}
-
-for (let w = 0; w < 7; w++) {
+for (let w = 0; w < wires.length; w++) { // wire labels and wires
     for (let v = 0; v < 2; v++) {
         Text("L" + w + v, () => labels[w][v]);
     }
+    Text(`${w}`, () => wires[w]);
+    Text(`${w}_`, () => wires[w]);
 }
+gates.forEach(([name, in0, in1, out, fn], i) => { // selectors
+    Button(`SEL${i}`, () => "▼", () => { sel[i] = (sel[i] + 1) % 4; updateUI(); });
+    updaters.push(() => setRow(query("id" + in0), loc["" + in0][0] + sel[i])); // offset sel[i] rows
+    updaters.push(() => setRow(query("id" + in1), loc["" + in1][0] + sel[i]));
+});
 
 function shakeDisplayString(i, j) {
     var count = 4;
@@ -268,6 +261,7 @@ Button("OT4", () => OTDone[1] ? "" : "►", () => {
     errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
     updateUI();
 });
+
 Button("GL", () => "Generate Wire Labels", () => { generateWireLabels(); updateUI(); });
 Button("GT", () => "Generate Tables", () => {
     generateTabels();
@@ -280,7 +274,7 @@ Button("ST", () => "Shuffle Tables", () => {
     updateUI();
 });
 Button("ET", () => "Encrypt Tables", () => {
-    generateCiphertexts2();
+    generateCiphertexts();
     setDisplay((i, j) => "🔒🔒🧳");
     updateUI();
 })
@@ -306,7 +300,7 @@ if (startWithGeneratorMode) {
     generateWireLabels();
     generateTabels();
     shuffleTables();
-    generateCiphertexts2();
+    generateCiphertexts();
     setDisplay((i, j) => "🔒🔒🧳");
     wires[0] = labels[0][1]; // default input for Alice
     wires[3] = labels[3][0]; // default input for Alice
