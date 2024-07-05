@@ -179,7 +179,7 @@ function Button(id, expr, listener) {
     var node = clone(document.querySelector(".protoBtn"), loc[id], expr);
     node.classList.add(symbolToClass[symbols[id]]);
     node.id = "id" + id;
-    node.onclick = listener;
+    node.onclick = () => { listener(); updateUI(); };
     return node;
 }
 function updateUI() {
@@ -199,7 +199,7 @@ for (let w = 0; w < wires.length; w++) { // wire labels and wires
     Text(`${w}_`, () => wires[w]);
 }
 gates.forEach(([name, in0, in1, out, fn], i) => { // selectors
-    Button(`SEL${i}`, () => "▼", () => { sel[i] = (sel[i] + 1) % 4; updateUI(); });
+    Button(`SEL${i}`, () => "▼", () => sel[i] = (sel[i] + 1) % 4);
     updaters.push(() => setRow(query("id" + in0), loc["" + in0][0] + sel[i])); // offset sel[i] rows
     updaters.push(() => setRow(query("id" + in1), loc["" + in1][0] + sel[i]));
 });
@@ -227,7 +227,6 @@ function shakeDisplayString(i, j) {
             errorMsg = "Decryption error: Invalid key.";
             shakeDisplayString(i, sel[i]);
         }
-        updateUI();
     });
 });
 
@@ -245,53 +244,47 @@ forEachDisplayIndex((i, j) => Text("DSP" + i + j, () => display[i][j]));
 
 var inputValues = [0, 0]; // two wires for the evaluator
 var OTDone = [0, 0];
-Button("S1", () => OTDone[0] ? "" : "▼", () => { inputValues[0] = 1 - inputValues[0]; updateUI() });
+Button("S1", () => OTDone[0] ? "" : "▼", () => inputValues[0] = 1 - inputValues[0]);
 Text("v1", () => inputValues[0]);
 Button("OT1", () => OTDone[0] ? "" : "►", () => {
     wires[1] = labels[1][inputValues[0]];
     OTDone[0] = 1;
     errorMsg = `Label of ${inputValues[0]} => ${wires[1]} (OT)`;
-    updateUI();
 });
-Button("S4", () => OTDone[1] ? "" : "▼", () => { inputValues[1] = 1 - inputValues[1]; updateUI() });
+Button("S4", () => OTDone[1] ? "" : "▼", () => inputValues[1] = 1 - inputValues[1]);
 Text("v4", () => inputValues[1]);
 Button("OT4", () => OTDone[1] ? "" : "►", () => {
     wires[4] = labels[4][inputValues[1]];
     OTDone[1] = 1;
     errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
-    updateUI();
 });
 
-Button("GL", () => "Generate Wire Labels", () => { generateWireLabels(); updateUI(); });
+Button("GL", () => "Generate Wire Labels", () => generateWireLabels());
 Button("GT", () => "Generate Tables", () => {
     generateTabels();
     setDisplay((i, j) => tables[i][j]);
-    updateUI();
 });
 Button("ST", () => "Shuffle Tables", () => {
     shuffleTables();
     setDisplay((i, j) => tables[i][j]);
-    updateUI();
 });
 Button("ET", () => "Encrypt Tables", () => {
     generateCiphertexts();
     setDisplay((i, j) => "🔒🔒🧳");
-    updateUI();
 })
 {
 var i = 0;
-Button("S0", () => "▼", () => { wires[0] = labels[0][i]; i = 1 - i; updateUI(); })
+Button("S0", () => "▼", () => { wires[0] = labels[0][i]; i = 1 - i; });
 }
 {
 var i = 0;
-Button("S3", () => "▼", () => { wires[3] = labels[3][i]; i = 1 - i; updateUI(); })
+Button("S3", () => "▼", () => { wires[3] = labels[3][i]; i = 1 - i; });
 }
 Text("SI", () => "Select Inputs with ▼");
 Button("SEND", () => "Send to the Evaluator", () => {
     errorMsg = "Garbled Circuit (Evaluator)";
     document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
     document.querySelectorAll(".evaluator").forEach(n => n.classList.remove("hide"));
-    updateUI();
 });
 
 var startWithGeneratorMode = ! window.location.href.endsWith("#E");
