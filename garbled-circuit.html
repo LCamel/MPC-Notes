@@ -49,7 +49,7 @@
             ┌────────────────────┐                                      
             │                    │                                      
     !L00!L01│         AND        │                                      
-       @0_──┤                    │                                      
+    !S0#0_──┤                    │                                      
             │   @0@1  #DSP00     │!L20!L21                                      
             │         #DSP01  @2_├───┐                                  
     !L10!L11│         #DSP02     │   │  ┌────────────────────┐          
@@ -61,15 +61,15 @@
             ┌────────────────────┐      │         #DSP22     │          
             │                    │      │         #DSP23     │          
     !L30!L31│         OR         │   ┌──┤    @SEL2      @E2  │          
-       @3_──┤                    │   │  │                    │          
+    !S3#3_──┤                    │   │  │                    │          
             │   @3@4  #DSP10     │   │  └────────────────────┘          
             │         #DSP11  @5_├───┘                                  
-    !L40!L41│         #DSP12     │!L50!L51          !GL                            
- @S4@v4@4_──┤         #DSP13     │                  !GT                 
-       @OT4 │    @SEL1      @E1  │                  !ST                    
-            │                    │                  !ET                    
-            └────────────────────┘                  @GEN                    
-                                                                                                                      
+    !L40!L41│         #DSP12     │!L50!L51   !GL                            
+ @S4@v4@4_──┤         #DSP13     │           !GT                 
+       @OT4 │    @SEL1      @E1  │           !ST                    
+            │                    │           !ET                    
+            └────────────────────┘           !SI                   
+                                             !SEND          @GEN                                                             
 </div>
 
 <div class="overlay">
@@ -139,8 +139,30 @@ function generateCiphertexts() {
         gateCiphertexts(labels[2], labels[5], labels[6], (a, b) => a ^ b),
     ];
 }
-
+var gates = [
+    ["AND", 0, 1, 2, (a, b) => a & b],
+    ["OR", 3, 4, 5, (a, b) => a | b],
+    ["XOR", 2, 5, 6, (a, b) => a ^ b]
+];
+function generateTable(in0Labels, in1Labels, outLabels, fn) {
+    return [[0, 0], [0, 1], [1, 0], [1, 1]]
+        .map(([v1, v2]) => encrypt(in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]));
+}
+function generateTabels() {
+    tables = gates.map(([name, in0, in1, out, fn]) => generateTable(labels[in0], labels[in1], labels[out], fn));
+}
+function shuffleTables() {
+    tables.forEach(t => shuffle(t));
+}
+function encrypt2(key1, key2, plaintext) {
+    return `E,${key1},${key2},${plaintext}`;
+}
+function generateCiphertexts2() {
+    ciphertexts = tables.map(t => t.map(row => encrypt2(...row)));
+    console.log("generateCiphertexts2: ", ciphertexts);
+}
 var labels; generateWireLabels();
+var tables;
 var ciphertexts;
 // 0 AND 1 => 2   3 OR 4 => 5   2 XOR 5 => 6
 var wires = [1, 2, 2, 0, 2, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
@@ -280,19 +302,30 @@ Button("OT4", () => OTDone[1] ? "" : "►", () => {
 });
 Button("GL", () => "Generate Wire Labels", () => { generateWireLabels(); updateUI(); });
 Button("GT", () => "Generate Tables", () => {
-    generateCiphertexts();
-    setDisplay((i, j) => ciphertexts[i][j]);
+    generateTabels();
+    setDisplay((i, j) => tables[i][j]);
     updateUI();
 });
 Button("ST", () => "Shuffle Tables", () => {
-    shuffleCiphertexts();
-    setDisplay((i, j) => ciphertexts[i][j]);
+    shuffleTables();
+    setDisplay((i, j) => tables[i][j]);
     updateUI();
 });
 Button("ET", () => "Encrypt Tables", () => {
+    generateCiphertexts2();
     setDisplay((i, j) => "🔒🔒🧳");
     updateUI();
 })
+{
+var i = 0;
+Button("S0", () => "▼", () => { wires[0] = labels[0][i]; i = 1 - i; updateUI(); })
+}
+{
+var i = 0;
+Button("S3", () => "▼", () => { wires[3] = labels[3][i]; i = 1 - i; updateUI(); })
+}
+Text("SI", () => "Select Inputs with ▼");
+Button("SEND", () => "Send to the Evaluator");
 
 document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
 Button("GEN", () => "=> G", () => {
