@@ -24,7 +24,6 @@
         height: 1lh;
         position: absolute;
         background-color: blue;
-        /* outline: 1px solid gray; */
         cursor: pointer;
         transition: background-color 0.1s ease;
     }
@@ -108,14 +107,9 @@ function shuffle(arr) {
     }
     return arr;
 }
-/*
 function encrypt(key1, key2, plaintext) {
-    return key1 + key2 + plaintext;
+    return `E,${key1},${key2},${plaintext}`;
 }
-function decrypt(ciphertext, key1, key2) {
-    return ciphertext.startsWith(key1 + key2) ? ciphertext.substring((key1 + key2).length) : undefined;
-}
-*/
 function decrypt(ciphertext, key1, key2) {
     var prefix = `E,${key1},${key2},`;
     return ciphertext.startsWith(prefix) ? ciphertext.replace(prefix, "") : "";
@@ -132,19 +126,6 @@ function generateWireLabels() {
     ].map(row => shuffle(row));
     console.log("labels: ", labels);
 }
-/*
-function gateCiphertexts(in0Labels, in1Labels, outLabels, fn) {
-    return [[0, 0], [0, 1], [1, 0], [1, 1]]
-        .map(([v1, v2]) => encrypt(in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]));
-}
-function generateCiphertexts() {
-    ciphertexts = [
-        gateCiphertexts(labels[0], labels[1], labels[2], (a, b) => a & b),
-        gateCiphertexts(labels[3], labels[4], labels[5], (a, b) => a | b),
-        gateCiphertexts(labels[2], labels[5], labels[6], (a, b) => a ^ b),
-    ];
-}
-*/
 var gates = [
     ["AND", 0, 1, 2, (a, b) => a & b],
     ["OR", 3, 4, 5, (a, b) => a | b],
@@ -160,33 +141,22 @@ function generateTabels() {
 function shuffleTables() {
     tables.forEach(t => shuffle(t));
 }
-function encrypt2(key1, key2, plaintext) {
-    return `E,${key1},${key2},${plaintext}`;
-}
 function generateCiphertexts2() {
-    ciphertexts = tables.map(t => t.map(row => encrypt2(...row)));
+    ciphertexts = tables.map(t => t.map(row => encrypt(...row)));
     console.log("generateCiphertexts2: ", ciphertexts);
 }
-var labels = [['', ''],['', ''],['', ''],['', ''],['', ''],['', ''],['', '']]; //generateWireLabels();
+var wires = ['', '', '', '', '', '', ''];
+var labels = wires.map(_ => ['', '']);
 var tables;
 var ciphertexts;
-// 0 AND 1 => 2   3 OR 4 => 5   2 XOR 5 => 6
-var wires = ['', '', '', '', '', '', '']; // = [1, 2, 2, 0, 2, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
 var updaters = [];
 var sel = [0, 0, 0];
 var errorMsg = "";
 
-/*function shuffleCiphertexts() { ciphertexts.map(gate => shuffle(gate)); }*/
-/*
-generateCiphertexts();
-console.log("ciphertexts: ", JSON.stringify(ciphertexts)); // copy
-shuffleCiphertexts();
-console.log("shuffled ciphertexts: ", ciphertexts);
-*/
 var [board, loc, symbols] = parseBoard(document.querySelector("#board").innerText);
+document.querySelector("#board").innerText = board;
 console.log("loc: ", loc);
 console.log("symbols: ", symbols);
-document.querySelector("#board").innerText = board;
 
 function setRow(node, row) { node.style.top = row + "lh"; }
 function setCol(node, col) { node.style.left = col + "ch"; }
@@ -240,12 +210,7 @@ for (let w = 0; w < 7; w++) {
         Text("L" + w + v, () => labels[w][v]);
     }
 }
-/*
-Text("L60", () => labels[6][0]);
-Text("L61", () => labels[6][1]);
-Text("L00", () => labels[0][0]);
-Text("L01", () => labels[0][1]);
-*/
+
 function shakeDisplayString(i, j) {
     var count = 4;
     var h = () => {
@@ -284,9 +249,6 @@ function setDisplay(fn) { forEachDisplayIndex((i, j) => display[i][j] = fn(i, j)
 
 var display = [['','','',''], ['','','',''], ['','','','']];
 forEachDisplayIndex((i, j) => Text("DSP" + i + j, () => display[i][j]));
-//setDisplay((i, j) => "🔒🔒🧳");
-
-
 
 var inputValues = [0, 0]; // two wires for the evaluator
 var OTDone = [0, 0];
@@ -336,16 +298,6 @@ Button("SEND", () => "Send to the Evaluator", () => {
     document.querySelectorAll(".evaluator").forEach(n => n.classList.remove("hide"));
 });
 
-//document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
-/*
-Button("GEN", () => "=> G", () => {
-    document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
-    document.querySelectorAll(".generator").forEach(n => n.classList.remove("hide"));
-    setDisplay((i, j) => "");
-    labels = labels.map(() => ['', '']);
-    updateUI();
-});
-*/
 var startWithGeneratorMode = ! window.location.href.endsWith("#E");
 if (startWithGeneratorMode) {
     document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
