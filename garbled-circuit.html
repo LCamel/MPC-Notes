@@ -242,21 +242,16 @@ function setDisplay(fn) { forEachDisplayIndex((i, j) => display[i][j] = fn(i, j)
 var display = [['','','',''], ['','','',''], ['','','','']];
 forEachDisplayIndex((i, j) => Text("DSP" + i + j, () => display[i][j]));
 
-var inputValues = [0, 0]; // two wires for the evaluator
-var OTDone = [0, 0];
-Button("S1", () => OTDone[0] ? "" : "▼", () => inputValues[0] = 1 - inputValues[0]);
-Text("v1", () => inputValues[0]);
-Button("OT1", () => OTDone[0] ? "" : "►", () => {
-    wires[1] = labels[1][inputValues[0]];
-    OTDone[0] = 1;
-    errorMsg = `Label of ${inputValues[0]} => ${wires[1]} (OT)`;
-});
-Button("S4", () => OTDone[1] ? "" : "▼", () => inputValues[1] = 1 - inputValues[1]);
-Text("v4", () => inputValues[1]);
-Button("OT4", () => OTDone[1] ? "" : "►", () => {
-    wires[4] = labels[4][inputValues[1]];
-    OTDone[1] = 1;
-    errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
+var inputValues = [0, 0,  , 0, 0,  ,  ]; // Generator wires: 0, 3  Evaluator wires: 1, 4
+[1, 4].forEach(w => {
+    Button(`S${w}`, () => "▼", () => inputValues[w] = 1 - inputValues[w]);
+    Text(`v${w}`, () => inputValues[w]);
+    Button(`OT${w}`, () => "►", () => {
+        wires[w] = labels[w][inputValues[w]];
+        errorMsg = `Label of ${inputValues[w]} => ${wires[w]} (OT)`;
+        query(`idS${w}`).classList.add("hide");
+        query(`idOT${w}`).classList.add("hide");
+    });
 });
 
 Button("GL", () => "Generate Wire Labels", () => generateWireLabels());
@@ -272,14 +267,9 @@ Button("ET", () => "Encrypt Tables", () => {
     generateCiphertexts();
     setDisplay((i, j) => "🔒🔒🧳");
 })
-{
-var i = 0;
-Button("S0", () => "▼", () => { wires[0] = labels[0][i]; i = 1 - i; });
-}
-{
-var i = 0;
-Button("S3", () => "▼", () => { wires[3] = labels[3][i]; i = 1 - i; });
-}
+Button("S0", () => "▼", () => { wires[0] = labels[0][inputValues[0]]; inputValues[0] = 1 - inputValues[0]; });
+Button("S3", () => "▼", () => { wires[3] = labels[3][inputValues[3]]; inputValues[3] = 1 - inputValues[3]; });
+
 Text("SI", () => "Select Inputs with ▼");
 Button("SEND", () => "Send to the Evaluator", () => {
     errorMsg = "Garbled Circuit (Evaluator)";
