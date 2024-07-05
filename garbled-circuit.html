@@ -223,13 +223,13 @@ Text("L61", () => labels[6][1]);
 Text("L00", () => labels[0][0]);
 Text("L01", () => labels[0][1]);
 */
-function shakeBoxString(i, j) {
+function shakeDisplayString(i, j) {
     var count = 4;
     var h = () => {
         if (count % 2 == 0) {
-            boxes[i][j] = " " + boxes[i][j];
+            display[i][j] = " " + display[i][j];
         } else {
-            boxes[i][j] = boxes[i][j].substring(1);
+            display[i][j] = display[i][j].substring(1);
         }
         if (--count != 0) setTimeout(h, 80);
         updateUI(); // expensive
@@ -241,27 +241,27 @@ function shakeBoxString(i, j) {
         if (plaintext = decrypt(ciphertexts[i][sel[i]], wires[in0], wires[in1])) {
             wires[out] = plaintext;
             errorMsg = `Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`;
-            boxes[i][sel[i]] = "";
+            display[i][sel[i]] = "";
         } else {
             errorMsg = "Decryption error: Invalid key.";
-            shakeBoxString(i, sel[i]);
+            shakeDisplayString(i, sel[i]);
         }
         updateUI();
     });
 });
-function forEachBoxIndex(fn) {
+
+function forEachDisplayIndex(fn) {
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 4; j++) {
             fn(i, j);
         }
+    }
 }
+function setDisplay(fn) { forEachDisplayIndex((i, j) => display[i][j] = fn(i, j)) }
 
-}
-var boxes = [[], [], []];
-forEachBoxIndex((i, j) => {
-    boxes[i].push("🔒🔒🧳");
-    Text("DSP" + i + j, () => boxes[i][j]);
-});
+var display = [[], [], []];
+forEachDisplayIndex((i, j) => Text("DSP" + i + j, () => display[i][j]));
+setDisplay((i, j) => "🔒🔒🧳");
 
 
 
@@ -286,16 +286,16 @@ Button("OT4", () => OTDone[1] ? "" : "►", () => {
 Button("GL", () => "Generate Wire Labels", () => { labels = generateWireLabels(); updateUI(); });
 Button("GT", () => "Generate Tables", () => {
     generateCiphertexts();
-    forEachBoxIndex((i, j) => boxes[i][j] = ciphertexts[i][j]);
+    setDisplay((i, j) => ciphertexts[i][j]);
     updateUI();
 });
 Button("ST", () => "Shuffle Tables", () => {
     shuffleCiphertexts();
-    forEachBoxIndex((i, j) => boxes[i][j] = ciphertexts[i][j]);
+    setDisplay((i, j) => ciphertexts[i][j]);
     updateUI();
 });
 Button("ET", () => "Encrypt Tables", () => {
-    forEachBoxIndex((i, j) => boxes[i][j] = "🔒🔒🧳");
+    setDisplay((i, j) => "🔒🔒🧳");
     updateUI();
 })
 
@@ -303,7 +303,7 @@ document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
 Button("GEN", () => "=> G", () => {
     document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
     document.querySelectorAll(".generator").forEach(n => n.classList.remove("hide"));
-    forEachBoxIndex((i, j) => boxes[i][j] = "");
+    setDisplay((i, j) => "");
     labels = labels.map(() => ['', '']);
     updateUI();
 });
