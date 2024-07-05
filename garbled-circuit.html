@@ -118,13 +118,8 @@ function decrypt(ciphertext, key1, key2) {
     return ciphertext.startsWith(key1 + key2) ? ciphertext.substring((key1 + key2).length) : undefined;
 }
 
-function gateCiphertexts(in0Labels, in1Labels, outLabels, fn) {
-    return [[0, 0], [0, 1], [1, 0], [1, 1]]
-        .map(([v1, v2]) => encrypt(in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]));
-}
-
 function generateWireLabels() {
-    return [
+    labels = [
         [ '🐱', '🐶' ],
         [ '🐭', '🐰' ],
         [ '🐮', '🐴' ],
@@ -133,19 +128,13 @@ function generateWireLabels() {
         [ '🦁', '🦊' ],
         [ '🐪', '🦙' ],
     ].map(row => shuffle(row));
+    console.log("labels: ", labels);
 }
-var labels = generateWireLabels();
-console.log("labels: ", labels);
-// 0
-// 1  2  6
-// 3  5
-// 4
-var wires = [1, 2, 2, 0, 2, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
-var updaters = [];
-var sel = [0, 0, 0];
-var errorMsg = "";
 
-var ciphertexts;
+function gateCiphertexts(in0Labels, in1Labels, outLabels, fn) {
+    return [[0, 0], [0, 1], [1, 0], [1, 1]]
+        .map(([v1, v2]) => encrypt(in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]));
+}
 function generateCiphertexts() {
     ciphertexts = [
         gateCiphertexts(labels[0], labels[1], labels[2], (a, b) => a & b),
@@ -153,6 +142,15 @@ function generateCiphertexts() {
         gateCiphertexts(labels[2], labels[5], labels[6], (a, b) => a ^ b),
     ];
 }
+
+var labels; generateWireLabels();
+var ciphertexts;
+// 0 AND 1 => 2   3 OR 4 => 5   2 XOR 5 => 6
+var wires = [1, 2, 2, 0, 2, 2, 2].map((v, i) => v < 2 ? labels[i][v] : ' ');
+var updaters = [];
+var sel = [0, 0, 0];
+var errorMsg = "";
+
 function shuffleCiphertexts() { ciphertexts.map(gate => shuffle(gate)); }
 
 generateCiphertexts();
@@ -283,7 +281,7 @@ Button("OT4", () => OTDone[1] ? "" : "►", () => {
     errorMsg = `Label of ${inputValues[1]} => ${wires[4]} (OT)`;
     updateUI();
 });
-Button("GL", () => "Generate Wire Labels", () => { labels = generateWireLabels(); updateUI(); });
+Button("GL", () => "Generate Wire Labels", () => { generateWireLabels(); updateUI(); });
 Button("GT", () => "Generate Tables", () => {
     generateCiphertexts();
     setDisplay((i, j) => ciphertexts[i][j]);
