@@ -1,6 +1,5 @@
 <html>
 <body>
-
 <style>
     .container {
         background-color: gray;
@@ -68,7 +67,7 @@
        @OT4 │    @SEL1      @E1  │           !ST                    
             │                    │           !ET                    
             └────────────────────┘           !SI                   
-                                             !SEND          @GEN                                                             
+                                             !SEND                                                                       
 </div>
 
 <div class="overlay">
@@ -272,13 +271,18 @@ Button("S3", () => "▼", () => { wires[3] = labels[3][inputValues[3]]; inputVal
 
 Text("SI", () => "Select Inputs with ▼");
 Button("SEND", () => "Send to the Evaluator", () => {
+    if (wires[0] == '' || wires[3] == '') {
+        errorMsg = "select both inputs for the generator";
+        return;
+    }
     errorMsg = "Garbled Circuit (Evaluator)";
     document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
     document.querySelectorAll(".evaluator").forEach(n => n.classList.remove("hide"));
 });
 
-var startWithGeneratorMode = ! window.location.href.endsWith("#E");
-if (startWithGeneratorMode) {
+// ?role=evaluator&w0=1&w3=0
+var params = new URLSearchParams(document.location.search);
+if (params.get("role") != "evaluator") {
     errorMsg = "Garbled Circuit (Generator)";
     document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
 } else {
@@ -289,8 +293,8 @@ if (startWithGeneratorMode) {
     shuffleTables();
     generateCiphertexts();
     setDisplay((i, j) => "🔒🔒🧳");
-    wires[0] = labels[0][1]; // default input for Alice
-    wires[3] = labels[3][0]; // default input for Alice
+    wires[0] = labels[0][params.get("w0") || 0]; // default input for the generator
+    wires[3] = labels[3][params.get("w3") || 0]; // default input for the generator
 }
 updateUI();
 </script>
