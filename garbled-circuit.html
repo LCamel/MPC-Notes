@@ -159,33 +159,34 @@ console.log("symbols: ", symbols);
 
 function setRow(node, row) { node.style.top = row + "lh"; }
 function setCol(node, col) { node.style.left = col + "ch"; }
-function clone(protoNode, rowCol, captionFn) {
+
+function createNode(protoNodeSeletor, name, captionFn) {
+    var protoNode = document.querySelector(protoNodeSeletor);
     var node = protoNode.cloneNode(true);
-    setRow(node, rowCol[0]);
-    setCol(node, rowCol[1]);
+    //node.id = "id" + name; // for debugging only
+    node.setAttribute("data-name", name); // divs don't have "name" attribute but can use "data-name"
+    var symbolToClass = { "@": "evaluator", "!": "generator", "#": "both" };
+    node.classList.add(symbolToClass[symbols[name]]);
+    setRow(node, loc[name][0]);
+    setCol(node, loc[name][1]);
     protoNode.parentNode.appendChild(node);
     updaters.push(() => node.innerText = captionFn());
     return node;
 }
-var symbolToClass = { "@": "evaluator", "!": "generator", "#": "both" };
-function Text(id, expr) {
-    var node = clone(document.querySelector(".protoTxt"), loc[id], expr);
-    node.classList.add(symbolToClass[symbols[id]]);
-    node.id = "id" + id; // to avoid escaping in query selectors
-    return node;
+
+function Text(name, captionFn) {
+    return createNode(".protoTxt", name, captionFn);
 }
-function Button(id, expr, listener) {
-    var node = clone(document.querySelector(".protoBtn"), loc[id], expr);
-    node.classList.add(symbolToClass[symbols[id]]);
-    node.id = "id" + id;
+function Button(name, captionFn, listener) {
+    var node = createNode(".protoBtn", name, captionFn);
     node.onclick = () => { listener(); updateUI(); };
     return node;
 }
 function updateUI() {
     updaters.forEach((u) => u());
 }
-function query(id) {
-    return document.querySelector("#" + id);
+function byName(name) {
+    return document.querySelector(`[data-name="${name}"]`);
 }
 
 Text("errorMsg", () => errorMsg);
@@ -199,8 +200,8 @@ for (let w = 0; w < wires.length; w++) { // wire labels and wires
 }
 gates.forEach(([name, in0, in1, out, fn], i) => { // selectors
     Button(`SEL${i}`, () => "▼", () => sel[i] = (sel[i] + 1) % 4);
-    updaters.push(() => setRow(query("id" + in0), loc["" + in0][0] + sel[i])); // offset sel[i] rows
-    updaters.push(() => setRow(query("id" + in1), loc["" + in1][0] + sel[i]));
+    updaters.push(() => setRow(byName(in0), loc["" + in0][0] + sel[i])); // offset sel[i] rows
+    updaters.push(() => setRow(byName(in1), loc["" + in1][0] + sel[i]));
 });
 
 function shakeDisplayString(i, j) {
@@ -248,8 +249,8 @@ var inputValues = [0, 0,  , 0, 0,  ,  ]; // Generator wires: 0, 3  Evaluator wir
     Button(`OT${w}`, () => "►", () => {
         wires[w] = labels[w][inputValues[w]];
         errorMsg = `Label of ${inputValues[w]} => ${wires[w]} (OT)`;
-        query(`idS${w}`).classList.add("hide");
-        query(`idOT${w}`).classList.add("hide");
+        byName(`S${w}`).classList.add("hide");
+        byName(`OT${w}`).classList.add("hide");
     });
 });
 
