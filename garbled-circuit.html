@@ -52,19 +52,19 @@
             │         #DSP01  @2_├───┐                                  
     !L10!L11│         #DSP02     │   │  ┌────────────────────┐          
  @S1@v1@1_──┤         #DSP03     │   │  │                    │          
-       @OT1 │    @SEL0      @E0  │   └──┤         XOR        │   #L60 0 
+       @OT1 │    @ROW0      @E0  │   └──┤         XOR        │   #L60 0 
             │                    │      │                    │   #L61 1 
             └────────────────────┘      │   @2@5  #DSP20     │          
                                         │         #DSP21  @6_├── @6     
             ┌────────────────────┐      │         #DSP22     │          
             │                    │      │         #DSP23     │          
-    !L30!L31│         OR         │   ┌──┤    @SEL2      @E2  │          
+    !L30!L31│         OR         │   ┌──┤    @ROW2      @E2  │          
     !S3#3_──┤                    │   │  │                    │          
             │   @3@4  #DSP10     │   │  └────────────────────┘          
             │         #DSP11  @5_├───┘                                  
     !L40!L41│         #DSP12     │!L50!L51   !GL                            
  @S4@v4@4_──┤         #DSP13     │           !GT                 
-       @OT4 │    @SEL1      @E1  │           !ST                    
+       @OT4 │    @ROW1      @E1  │           !ST                    
             │                    │           !ET                    
             └────────────────────┘           !SI                   
                                              !SEND                                                                       
@@ -149,7 +149,7 @@ var labels = wires.map(_ => ['', '']);
 var tables;
 var ciphertexts;
 var updaters = [];
-var sel = [0, 0, 0];
+var rowOfGate = [0, 0, 0];
 var message = "";
 
 var [board, loc, symbols] = parseBoard(document.querySelector("#board").innerText);
@@ -199,10 +199,10 @@ for (let w = 0; w < wires.length; w++) { // wire labels and wires
     Text(`${w}_`, () => wires[w]);
 }
 gates.forEach(([name, in0, in1, out, fn], i) => { // row selectors
-    Button(`SEL${i}`, () => "▼", () => {
-        sel[i] = (sel[i] + 1) % 4;
-        setRow(byName(in0), loc["" + in0][0] + sel[i]);
-        setRow(byName(in1), loc["" + in1][0] + sel[i]);
+    Button(`ROW${i}`, () => "▼", () => {
+        rowOfGate[i] = (rowOfGate[i] + 1) % 4;
+        setRow(byName(in0), loc["" + in0][0] + rowOfGate[i]);
+        setRow(byName(in1), loc["" + in1][0] + rowOfGate[i]);
     });
 });
 
@@ -221,13 +221,13 @@ function shakeDisplayString(i, j) {
 }
 [[0, 1, 2, "AND"], [3, 4, 5, "OR"], [2, 5, 6, "XOR"]].forEach(([in0, in1, out, name], i) => {
     Button("E" + i, () => "►", () => {
-        if (plaintext = decrypt(ciphertexts[i][sel[i]], wires[in0], wires[in1])) {
+        if (plaintext = decrypt(ciphertexts[i][rowOfGate[i]], wires[in0], wires[in1])) {
             wires[out] = plaintext;
             message = `Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`;
-            display[i][sel[i]] = "";
+            display[i][rowOfGate[i]] = "";
         } else {
             message = "Decryption error: Invalid key.";
-            shakeDisplayString(i, sel[i]);
+            shakeDisplayString(i, rowOfGate[i]);
         }
     });
 });
