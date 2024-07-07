@@ -144,6 +144,10 @@ function generateCiphertexts() {
     ciphertexts = tables.map(t => t.map(row => encrypt(...row)));
     console.log("generateCiphertexts: ", ciphertexts);
 }
+function setMessage(s) {
+    message = s;
+    blink("message", "black", 80);
+}
 var wires = ['', '', '', '', '', '', ''];
 var labels = wires.map(_ => ['', '']);
 var tables;
@@ -151,6 +155,7 @@ var ciphertexts;
 var updaters = [];
 var rowOfGate = [0, 0, 0];
 var message = "";
+
 
 var [board, loc, symbols] = parseBoard(document.querySelector("#board").innerText);
 document.querySelector("#board").innerText = board;
@@ -188,6 +193,12 @@ function updateUI() {
 function byName(name) {
     return document.querySelector(`[data-name="${name}"]`);
 }
+function blink(name, color, duration) {
+    var node = byName(name);
+    var origColor = node.style.color;
+    node.style.color = color;
+    setTimeout(() => node.style.color = origColor, duration);
+}
 
 Text("message", () => message);
 
@@ -207,10 +218,10 @@ gates.forEach(([name, in0, in1, out, fn], i) => {
     Button("E" + i, () => "►", () => { // eval
         if (plaintext = decrypt(ciphertexts[i][rowOfGate[i]], wires[in0], wires[in1])) {
             wires[out] = plaintext;
-            message = `Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`;
+            setMessage(`Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`);
             display[i][rowOfGate[i]] = "";
         } else {
-            message = "Decryption error: Invalid key.";
+            setMessage("Decryption error: Invalid key.");
             shakeDisplayString(i, rowOfGate[i]);
         }
     });
@@ -248,7 +259,7 @@ var inputValues = [0, 0,  , 0, 0,  ,  ]; // Generator wires: 0, 3  Evaluator wir
     Text(`v${w}`, () => inputValues[w]);
     Button(`OT${w}`, () => "►", () => {
         wires[w] = labels[w][inputValues[w]];
-        message = `Label of ${inputValues[w]} => ${wires[w]} (OT)`;
+        setMessage(`Label of ${inputValues[w]} => ${wires[w]} (OT)`);
         byName(`S${w}`).classList.add("hide");
         byName(`OT${w}`).classList.add("hide");
     });
@@ -273,10 +284,12 @@ Button("S3", () => "▼", () => { wires[3] = labels[3][inputValues[3]]; inputVal
 Text("SI", () => "Select Inputs with ▼");
 Button("SEND", () => "Send to the Evaluator", () => {
     if (wires[0] == '' || wires[3] == '') {
-        message = "select both inputs for the generator";
+        setMessage("select both inputs for the generator");
+        if (wires[0] == '') blink("S0", "black", 80);
+        if (wires[3] == '') blink("S3", "black", 80);
         return;
     }
-    message = "Garbled Circuit (Evaluator)";
+    setMessage("Garbled Circuit (Evaluator)");
     document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
     document.querySelectorAll(".evaluator").forEach(n => n.classList.remove("hide"));
 });
@@ -284,10 +297,10 @@ Button("SEND", () => "Send to the Evaluator", () => {
 // ?role=evaluator&w0=1&w3=0
 var params = new URLSearchParams(document.location.search);
 if (params.get("role") != "evaluator") {
-    message = "Garbled Circuit (Generator)";
+    setMessage("Garbled Circuit (Generator)");
     document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
 } else {
-    message = "Garbled Circuit (Evaluator)";
+    setMessage("Garbled Circuit (Evaluator)");
     document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
     generateWireLabels();
     generateTabels();
