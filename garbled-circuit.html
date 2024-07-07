@@ -198,11 +198,21 @@ for (let w = 0; w < wires.length; w++) { // wire labels and wires
     Text(`${w}`, () => wires[w]);
     Text(`${w}_`, () => wires[w]);
 }
-gates.forEach(([name, in0, in1, out, fn], i) => { // row selectors
-    Button(`ROW${i}`, () => "▼", () => {
+gates.forEach(([name, in0, in1, out, fn], i) => {
+    Button(`ROW${i}`, () => "▼", () => { // row selectors
         rowOfGate[i] = (rowOfGate[i] + 1) % 4;
         setRow(byName(in0), loc["" + in0][0] + rowOfGate[i]);
         setRow(byName(in1), loc["" + in1][0] + rowOfGate[i]);
+    });
+    Button("E" + i, () => "►", () => { // eval
+        if (plaintext = decrypt(ciphertexts[i][rowOfGate[i]], wires[in0], wires[in1])) {
+            wires[out] = plaintext;
+            message = `Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`;
+            display[i][rowOfGate[i]] = "";
+        } else {
+            message = "Decryption error: Invalid key.";
+            shakeDisplayString(i, rowOfGate[i]);
+        }
     });
 });
 
@@ -219,18 +229,6 @@ function shakeDisplayString(i, j) {
     };
     setTimeout(h, 80);
 }
-[[0, 1, 2, "AND"], [3, 4, 5, "OR"], [2, 5, 6, "XOR"]].forEach(([in0, in1, out, name], i) => {
-    Button("E" + i, () => "►", () => {
-        if (plaintext = decrypt(ciphertexts[i][rowOfGate[i]], wires[in0], wires[in1])) {
-            wires[out] = plaintext;
-            message = `Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`;
-            display[i][rowOfGate[i]] = "";
-        } else {
-            message = "Decryption error: Invalid key.";
-            shakeDisplayString(i, rowOfGate[i]);
-        }
-    });
-});
 
 function forEachDisplayIndex(fn) {
     for (let i = 0; i < 3; i++) {
