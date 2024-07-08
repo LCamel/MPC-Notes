@@ -228,16 +228,12 @@ gates.forEach(([name, in0, in1, out, fn], g) => {
     });
 });
 
-function shakeString(getter, setter) {
+function shakeString(getter, setter) { // hacky, expensive
     var count = 4;
     var h = () => {
-        if (count % 2 == 0) {
-            setter(" " + getter());
-        } else {
-            setter(getter().substring(1));
-        }
+        setter(count % 2 == 0 ? " " + getter() : getter().substring(1));
         if (--count != 0) setTimeout(h, 80);
-        updateUI(); // expensive
+        updateUI();
     };
     setTimeout(h, 80);
 }
