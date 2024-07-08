@@ -170,7 +170,7 @@ function createNode(protoNodeSeletor, name, captionFn) {
     var node = protoNode.cloneNode(true);
     //node.id = "id" + name; // for debugging only
     node.setAttribute("data-name", name); // divs don't have "name" attribute but can use "data-name"
-    var symbolToClass = { "@": "evaluator", "!": "generator", "#": "both" };
+    var symbolToClass = { "@": "evaluatorOnly", "!": "generatorOnly", "#": "both" };
     node.classList.add(symbolToClass[symbols[name]]);
     setRow(node, loc[name][0]);
     setCol(node, loc[name][1]);
@@ -291,8 +291,8 @@ Button("SEND", () => "Send to the Evaluator", () => {
         return;
     }
     setMessage("Garbled Circuit (Evaluator)");
-    document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
-    document.querySelectorAll(".evaluator").forEach(n => n.classList.remove("hide"));
+    document.querySelectorAll(".generatorOnly").forEach(n => n.classList.add("hide"));
+    document.querySelectorAll(".evaluatorOnly").forEach(n => n.classList.remove("hide"));
 });
 
 Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
@@ -301,10 +301,10 @@ Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
 var params = new URLSearchParams(document.location.search);
 if (params.get("role") != "evaluator") {
     setMessage("Garbled Circuit (Generator)");
-    document.querySelectorAll(".evaluator").forEach(n => n.classList.add("hide"));
+    document.querySelectorAll(".evaluatorOnly").forEach(n => n.classList.add("hide"));
 } else {
     setMessage("Garbled Circuit (Evaluator)");
-    document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
+    document.querySelectorAll(".generatorOnly").forEach(n => n.classList.add("hide"));
     generateWireLabels();
     generateTabels();
     shuffleTables();
