@@ -222,18 +222,18 @@ gates.forEach(([name, in0, in1, out, fn], i) => {
             display[i][rowOfGate[i]] = "";
         } else {
             setMessage("Decryption error: Invalid key.");
-            shakeDisplayString(i, rowOfGate[i]);
+            shakeString(() => display[i][rowOfGate[i]], (v) => display[i][rowOfGate[i]] = v);
         }
     });
 });
 
-function shakeDisplayString(i, j) {
+function shakeString(getter, setter) {
     var count = 4;
     var h = () => {
         if (count % 2 == 0) {
-            display[i][j] = " " + display[i][j];
+            setter(" " + getter());
         } else {
-            display[i][j] = display[i][j].substring(1);
+            setter(getter().substring(1));
         }
         if (--count != 0) setTimeout(h, 80);
         updateUI(); // expensive
