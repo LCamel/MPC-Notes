@@ -4,7 +4,7 @@
     .container {
         background-color: gray;
         font-family: 'Courier New', Courier, monospace;
-        font-size: 16px;
+        font-size: 20px;
         color: white;
         position: relative; /* for its "absolute" child */
     }
@@ -293,9 +293,9 @@ Button("SEND", () => "Send to the Evaluator", () => {
 
 Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
 
-// ?role=evaluator&w0=1&w3=0
+// ?startFrom=evaluator&w0=1&w3=0
 var params = new URLSearchParams(document.location.search);
-if (params.get("role") != "evaluator") {
+if (params.get("startFrom") != "evaluator") {
     setMessage("Garbled Circuit (Generator)");
     document.querySelectorAll(".evaluatorOnly").forEach(n => n.classList.add("hide"));
 } else {
