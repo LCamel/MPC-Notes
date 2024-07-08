@@ -209,20 +209,21 @@ for (let w = 0; w < wires.length; w++) { // wire labels and wires
     Text(`${w}`, () => wires[w]);
     Text(`${w}_`, () => wires[w]);
 }
-gates.forEach(([name, in0, in1, out, fn], i) => {
-    Button(`ROW${i}`, () => "▼", () => { // row selectors
-        rowOfGate[i] = (rowOfGate[i] + 1) % 4;
-        setRow(byName(in0), loc["" + in0][0] + rowOfGate[i]);
-        setRow(byName(in1), loc["" + in1][0] + rowOfGate[i]);
+gates.forEach(([name, in0, in1, out, fn], g) => {
+    Button(`ROW${g}`, () => "▼", () => { // row selectors
+        rowOfGate[g] = (rowOfGate[g] + 1) % 4;
+        setRow(byName(in0), loc["" + in0][0] + rowOfGate[g]);
+        setRow(byName(in1), loc["" + in1][0] + rowOfGate[g]);
     });
-    Button("E" + i, () => "►", () => { // eval
-        if (plaintext = decrypt(ciphertexts[i][rowOfGate[i]], wires[in0], wires[in1])) {
+    Button("E" + g, () => "►", () => { // eval
+        let r = rowOfGate[g];
+        if (plaintext = decrypt(ciphertexts[g][r], wires[in0], wires[in1])) {
             wires[out] = plaintext;
             setMessage(`Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`);
-            display[i][rowOfGate[i]] = "";
+            display[g][r] = "";
         } else {
             setMessage("Decryption error: Invalid key.");
-            shakeString(() => display[i][rowOfGate[i]], (v) => display[i][rowOfGate[i]] = v);
+            shakeString(() => display[g][r], (v) => display[g][r] = v);
         }
     });
 });
