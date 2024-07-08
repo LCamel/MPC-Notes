@@ -55,7 +55,7 @@
        @OT1 │    @ROW0      @E0  │   └──┤         XOR        │   #L60 0 
             │                    │      │                    │   #L61 1 
             └────────────────────┘      │   @2@5  #DSP20     │          
-                                        │         #DSP21  @6_├── @6     
+                                        │         #DSP21  @6_├── @6  @FIN    
             ┌────────────────────┐      │         #DSP22     │          
             │                    │      │         #DSP23     │          
     !L30!L31│         OR         │   ┌──┤    @ROW2      @E2  │          
@@ -293,6 +293,8 @@ Button("SEND", () => "Send to the Evaluator", () => {
     document.querySelectorAll(".generator").forEach(n => n.classList.add("hide"));
     document.querySelectorAll(".evaluator").forEach(n => n.classList.remove("hide"));
 });
+
+Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
 
 // ?role=evaluator&w0=1&w3=0
 var params = new URLSearchParams(document.location.search);
