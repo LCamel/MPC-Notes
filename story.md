@@ -31,7 +31,7 @@ TBot: 讓我查一下資料...
 
 TBot: 有了. 大概快 40 年前, 有一個叫 "Yao" 的人, 發明了 <mark>"Garbled Circuit"</mark>. 不光是比大小, 只要你們把想計算的 function 表達成 boolean circuit, 就可以用 garbled circuit 的方式來計算了.
 
-先看一下普通的 boolean circuit. Bob, 你可以不要用心算, 而是用這個網頁來 evaluate (0 AND 1) XOR (1 OR 0) 嗎?
+先看一下普通的 boolean circuit. Bob, 你可以不要用心算, 而是用這個網頁來 evaluate `(0 AND 1) XOR (1 OR 0)` 嗎?
 
 
 <a href="https://lcamel.github.io/MPC-Notes/boolean-circuit.html">
@@ -93,7 +93,7 @@ x x 🐮
 ```
 TBot: 你們的觀察很深入! 當拿到兩個 wire 的 input label 的時候, 我們必須能算出正確且唯一的 output label. 其他 output label 都必須隱藏起來.
 
-Bob, 你可以再當一次 Evaluator 來算看看 (? AND 1) XOR (? OR 0) 嗎?
+Bob, 你可以再當一次 Evaluator 來算看看 `(? AND 1) XOR (? OR 0)` 嗎?
 
 Bob: 這兩個 "?" 是 Alice 的 input 嗎?
 

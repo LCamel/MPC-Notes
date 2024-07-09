@@ -31,7 +31,7 @@ TBot: Let me check the records...
 
 TBot: Got it. About 40 years ago, someone called "Yao" invented <mark>"Garbled Circuit"</mark>. Not just for comparison, as long as you express the function you want to calculate as a boolean circuit, you can use the garbled circuit method to calculate it.
 
-First, let's look at a regular boolean circuit. Bob, instead of mental calculation, can you use this webpage to evaluate (0 AND 1) XOR (1 OR 0)?
+First, let's look at a regular boolean circuit. Bob, instead of mental calculation, can you use this webpage to evaluate `(0 AND 1) XOR (1 OR 0)`?
 
 
 <a href="https://lcamel.github.io/MPC-Notes/boolean-circuit.html">
@@ -94,7 +94,7 @@ x x 🐮
 ```
 TBot: Your observations are very insightful! When we get the input labels for two wires, we must be able to calculate the correct and unique output label. All other output labels must be hidden.
 
-Bob, can you be the Evaluator again and calculate (? AND 1) XOR (? OR 0)?
+Bob, can you be the Evaluator again and calculate `(? AND 1) XOR (? OR 0)`?
 
 Bob: Are these "?" Alice's inputs?
 
