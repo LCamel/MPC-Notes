@@ -218,7 +218,11 @@ TBot: 看起來你們有解法了. 為了方便找資料, 我還是講一下名�
 
 Bob: 有出現 "Label of 0 => 🐰 (OT)" 這樣的訊息.
 
-TBot: <mark>這種 "不知道對方收到什麼" 的傳送方式就叫做 "Oblivious Transfer" (OT).</mark> OT 有很多變種, 剛剛這種有人叫他 "chosen one-out-of-two OT", 由 Receiver 選 0 或 1, 而由 Sender 提供兩個資料. Sender 不會知道 Receiver 選的是 0 還是 1, Receiver 也不會知道另一筆沒選的資料. 如果不會混淆的話, 也有人寫成 "one-out-of-two OT", 或直接只寫 "OT".
+TBot: <mark>這種 "不知道對方收到什麼" 的傳送方式就叫做 "Oblivious Transfer" (OT).</mark>
+
+OT 有很多變種, 剛剛這種有人叫他 "chosen one-out-of-two OT": 由 Receiver 選 0 或 1, 而由 Sender 提供兩筆資料. Sender 不會知道 Receiver 選的是 0 還是 1, Receiver 也無法讀到另一筆沒選的資料.
+
+如果不會和其他 OT 弄混的話, 也常有人寫成 "one-out-of-two OT", "$\binom{2}{1}$ OT", 或直接只寫 "OT".
 
 Bob: 要是 TBot 你一直都在, 我們就把兩筆資料和 0 1 都給你, 你再把選到那筆給我就好了.
 
@@ -226,9 +230,9 @@ Alice: 要是 TBot 一直都在, 我們也不需要 Garbled Circuit 了.
 
 TBot: 那個能讓你們一直 trust, 又永遠存在的我, 大概只存在理想世界中吧? 啊哈哈哈哈.
 
-Alice: 啊哈哈哈哈.
+Alice: 啊哈哈哈哈
 
-Bob: 啊哈哈哈哈.
+Bob: 啊哈哈哈哈
 
 (Fin)
 
