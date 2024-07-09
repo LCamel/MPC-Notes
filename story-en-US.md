@@ -164,7 +164,13 @@ Alice: Based on our previous discussion, I modified the webpage TBot gave. As a 
 - Convert my inputs to labels and give them to Bob
 - Also give Bob the labels for the final result wire
 
-### [==> Garbled Circuit - Generator <==](https://lcamel.github.io/MPC-Notes/garbled-circuit.html)
+
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html">
+Garbled Circuit - Generator<br>
+<img src="generator.png" alt="generator.png" width="25%">
+<p>
+</a>
+
 
 Alice: That should be about it. But if TBot isn't here, we're still missing a feature...
 

@@ -164,7 +164,13 @@ Alice: 從前面的討論來看, 我把 TBot 給的網頁改了一下. 做為 Ge
 - 我的輸入換成 labels 也給 Bob
 - 最後結果的 wire 的 labels 也給 Bob
 
-### [==> Garbled Circuit - Generator <==](https://lcamel.github.io/MPC-Notes/garbled-circuit.html)
+
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html">
+Garbled Circuit - Generator<br>
+<img src="generator.png" alt="generator.png" width="25%">
+<p>
+</a>
+
 
 Alice: 大概是這些吧. 但如果 TBot 不在的話, 還少了個功能...
 
