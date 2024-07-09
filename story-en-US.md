@@ -1,4 +1,4 @@
-# A Brief Introduction to Garbled Circuit and Oblivious Transfer
+# An Introduction to Garbled Circuit and Oblivious Transfer
 
 Alice, Bob: Hi TBot.
 
