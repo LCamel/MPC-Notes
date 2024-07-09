@@ -33,7 +33,12 @@ TBot: Got it. About 40 years ago, someone called "Yao" invented <mark>"Garbled C
 
 First, let's look at a regular boolean circuit. Bob, instead of mental calculation, can you use this webpage to evaluate (0 AND 1) XOR (1 OR 0)?
 
-### [==> boolean circuit (please try it) <===](https://lcamel.github.io/MPC-Notes/boolean-circuit.html)
+
+<a href="https://lcamel.github.io/MPC-Notes/boolean-circuit.html">
+Boolean Circuit (try it)<br>
+<img src="boolean-circuit.png" alt="boolean-circuit.png" width="25%">
+<p>
+</a>
 
 
 Bob: The answer is 1. What's next?

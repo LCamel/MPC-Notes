@@ -33,7 +33,12 @@ TBot: 有了. 大概快 40 年前, 有一個叫 "Yao" 的人, 發明了 <mark>"G
 
 先看一下普通的 boolean circuit. Bob, 你可以不要用心算, 而是用這個網頁來 evaluate (0 AND 1) XOR (1 OR 0) 嗎?
 
-### [==> boolean cirucuit (請操作一次) <===](https://lcamel.github.io/MPC-Notes/boolean-circuit.html)
+
+<a href="https://lcamel.github.io/MPC-Notes/boolean-circuit.html">
+Boolean Circuit (try it)<br>
+<img src="boolean-circuit.png" alt="boolean-circuit.png" width="25%">
+<p>
+</a>
 
 
 Bob: 答案是 1. 然後呢?
