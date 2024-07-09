@@ -5,7 +5,7 @@
     .container {
         background-color: gray;
         font-family: 'Courier New', Courier, monospace;
-        font-size: 16px;
+        font-size: 20px;
         color: white;
         width: 80ch;
         line-height: 1em;
@@ -27,7 +27,6 @@
         height: 1lh;
         position: absolute;
         background-color: blue;
-        outline: 1px solid gray;
         cursor: pointer;
         transition: background-color 0.1s ease;
     }
@@ -37,7 +36,6 @@
     .txt {
         height: 1lh;
         position: absolute;
-        font-weight: bold;
     }
 </style>
 
@@ -57,7 +55,7 @@
        │    @N1        @E1  │   └──┤         XOR        │       
        │                    │      │                    │       
        └────────────────────┘      │   @c@f  0 0 0      │       
-                                   │         0 1 1   @G ├── @g  
+                                   │         0 1 1   @G ├── @g  @FIN
        ┌────────────────────┐      │         1 0 1      │       
        │                    │      │         1 1 0      │       
        │         OR         │   ┌──┤    @N3        @E3  │       
@@ -98,7 +96,7 @@ function parseBoard(s) {
     });
     return [replaced, locations];
 }
-var wires = [0, 0, 0, 0, 0, 0, 0];
+var wires = [0, 0, '', 0, 0, '', ''];
 var updaters = [];
 var barSel = [0, 0, 0];
 var errorMsg = "";
@@ -183,6 +181,8 @@ Button(loc["E3"], () => "►", () => {
     }
     updateUI();
 });
+
+Text(loc["FIN"], () => "" + wires[6] == '' ? '' : '🎉🎉🎉');
 
 updateUI();
 </script>
