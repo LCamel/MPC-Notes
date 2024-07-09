@@ -29,7 +29,7 @@ Bob: 聽說你可能有一陣子會不在? 這樣我們要找誰幫忙比大小�
 
 TBot: 讓我查一下資料...
 
-TBot: 有了. 大概快 40 年前, 有一個叫 "Yao" 的人, 發明了 "Garbled Circuit". 不光是比大小, 只要你們把想計算的 function 表達成 boolean circuit, 就可以用 garbled circuit 的方式來計算了.
+TBot: 有了. 大概快 40 年前, 有一個叫 "Yao" 的人, 發明了 <mark>"Garbled Circuit"</mark>. 不光是比大小, 只要你們把想計算的 function 表達成 boolean circuit, 就可以用 garbled circuit 的方式來計算了.
 
 先看一下普通的 boolean circuit. Bob, 你可以不要用心算, 而是用這個網頁來 evaluate (0 AND 1) XOR (1 OR 0) 嗎?
 
@@ -88,7 +88,7 @@ x x 🐮
 ```
 TBot: 你們的觀察很深入! 當拿到兩個 wire 的 input label 的時候, 我們必須能算出正確且唯一的 output label. 其他 output label 都必須隱藏起來.
 
-TBot: Bob, 你可以再當一次 Evaluator 來算看看 (? AND 1) XOR (? OR 0) 嗎?
+Bob, 你可以再當一次 Evaluator 來算看看 (? AND 1) XOR (? OR 0) 嗎?
 
 Bob: 這兩個 "?" 是 Alice 的 input 嗎?
 
@@ -218,7 +218,7 @@ TBot: 看起來你們有解法了. 為了方便找資料, 我還是講一下名�
 
 Bob: 有出現 "Label of 0 => 🐰 (OT)" 這樣的訊息.
 
-TBot: <mark>這種 "不知道對方收到什麼" 的傳送方式就叫做 "Oblivious Transfer" (OT).</mark>
+TBot: 這種 "不知道對方收到什麼" 的傳送方式就叫做 <mark>"Oblivious Transfer" (OT)</mark>.
 
 OT 有很多變種, 剛剛這種有人叫他 "chosen one-out-of-two OT": 由 Receiver 選 0 或 1, 而由 Sender 提供兩筆資料. Sender 不會知道 Receiver 選的是 0 還是 1, Receiver 也無法讀到另一筆沒選的資料.
 

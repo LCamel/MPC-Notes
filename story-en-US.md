@@ -29,16 +29,17 @@ Bob: I heard you might be away for a while? Who should we ask to help us compare
 
 TBot: Let me check the records...
 
-TBot: Got it. About 40 years ago, someone called "Yao" invented "Garbled Circuit". Not just for comparison, as long as you express the function you want to calculate as a boolean circuit, you can use the garbled circuit method to calculate it.
+TBot: Got it. About 40 years ago, someone called "Yao" invented <mark>"Garbled Circuit"</mark>. Not just for comparison, as long as you express the function you want to calculate as a boolean circuit, you can use the garbled circuit method to calculate it.
 
 First, let's look at a regular boolean circuit. Bob, instead of mental calculation, can you use this webpage to evaluate (0 AND 1) XOR (1 OR 0)?
 
-### [==> boolean circuit (please operate once) <===](https://lcamel.github.io/MPC-Notes/boolean-circuit.html)
+### [==> boolean circuit (please try it) <===](https://lcamel.github.io/MPC-Notes/boolean-circuit.html)
 
 
 Bob: The answer is 1. What's next?
 
-TBot: The idea of a garbled circuit is that if each wire transmits incomprehensible labels instead of 0 or 1, then calculations can be done without knowing the other party's secret.
+TBot: The idea of the Garbled Circuit is that if each wire carries a label instead of a 0 or 1, you can compute without knowing each other's secrets.
+
 
 For example, if we change the first AND Gate to this, can you tell what values the labels represent?
 ```
@@ -88,9 +89,9 @@ x x 🐮
 ```
 TBot: Your observations are very insightful! When we get the input labels for two wires, we must be able to calculate the correct and unique output label. All other output labels must be hidden.
 
-TBot: Bob, can you be the Evaluator again and calculate (? AND 1) XOR (? OR 0)?
+Bob, can you be the Evaluator again and calculate (? AND 1) XOR (? OR 0)?
 
-Bob: Are these two "?" Alice's inputs?
+Bob: Are these "?" Alice's inputs?
 
 TBot: Yes. Alice will send you her two inputs using labels. And 1 and 0 are your two inputs.
 
@@ -108,7 +109,7 @@ TBot: In a regular boolean circuit, we have a plaintext truth table for calculat
 
 In a garbled circuit, to calculate a unique output label and hide other labels, Yao used a technique, which is <mark>using two input labels as keys to encrypt the corresponding output label</mark>.
 
-During calculation, the two input labels are used to try to decrypt one by one, and the only one that can be decrypted is the correct output label.
+During the calculation, the two input labels are used to attempt to decrypt each ciphertext. The one that can be successfully decrypted contains the correct output label.
 
 So the gate's table becomes four values
 ```
@@ -140,7 +141,7 @@ Bob: So if I have the inputs 🐶 and 🐭 for this gate, I can only uniquely de
 
 TBot: Exactly! So you can only obtain the unique output 🐮. You can't deduce whether 🐮 is 0 or 1, nor can you deduce whether 🐶 and 🐭 are 0 or 1.
 
-Bob: I see. After operating the circuit above, I roughly know how to calculate. But when you're not around, where can we get this kind of encoded circuit?
+Bob: I see. After operating the circuit above, I roughly know how to calculate. But when you're not around, where can we get this kind of circuit?
 
 TBot: That's the Generator's job. The Generator will encode the 0 and 1 of each wire into corresponding labels. Then transmit the encrypted tables and input labels to you for calculation. Alice, can you try it?
 
@@ -153,9 +154,9 @@ TBot: OK.
 Alice: Based on our previous discussion, I modified the webpage TBot gave. As a Generator, I think I should
 - Pick a label for both 0 and 1 of each wire
 - Replace the 0 and 1 in the truth table with labels
-- Shuffle the four rows of the table
+- Shuffle the four rows of the tables
 - Encrypt the four outputs using the corresponding two inputs, so Bob can decrypt only one output to proceed
-- Give the encrypted results to Bob
+- Give the encrypted tables to Bob
 - Convert my inputs to labels and give them to Bob
 - Also give Bob the labels for the final result wire
 
@@ -203,7 +204,7 @@ Bob: I'll send you that public key. You use it to encrypt the label and send it 
 
 Alice: We still need a box that can't be opened.
 
-Bob: Then I'll randomly pick another number from the public key, for which I don't know the corresponding private key, so it can't be decrypted.
+Bob: Then I'll randomly pick another number from the public key space, for which I don't know the corresponding private key, so it can't be decrypted.
 
 Alice: That's good. Even if someone is peeking next to you, since you didn't generate a private key, they can't decrypt what I encrypted with this public key.
 
@@ -217,7 +218,7 @@ TBot: It seems you have a solution. To make it easier to find information, I'll 
 
 Bob: A message like "Label of 0 => 🐰 (OT)" appeared.
 
-TBot: <mark>This kind of "not knowing what the other party received" transmission method is called "Oblivious Transfer" (OT).</mark>
+TBot: This kind of "not knowing what the other party received" transmission method is called <mark>"Oblivious Transfer" (OT)</mark>.
 
 OT has many variants, the one you just described is sometimes called "chosen one-out-of-two OT": the Receiver chooses 0 or 1, and the Sender provides two pieces of data. The Sender won't know whether the Receiver chose 0 or 1, and the Receiver can't read the other piece of data they didn't choose.
 
