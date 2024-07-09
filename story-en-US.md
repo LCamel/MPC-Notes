@@ -96,7 +96,11 @@ Bob: Are these "?" Alice's inputs?
 TBot: Yes. Alice will send you her two inputs using labels. And 1 and 0 are your two inputs.
 
 
-### [==> Garbled Circuit - Evaluator <==](https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1)
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1">
+Garbled Circuit - Evaluator<br>
+<img src="evaluator.png" alt="evaluator.png" width="25%">
+<p>
+</a>
 
 
 Bob: I've finished the calculation, the answer is 1. Is this what you mentioned earlier: calculating with secure labels?

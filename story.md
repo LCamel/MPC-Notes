@@ -95,7 +95,11 @@ Bob: 這兩個 "?" 是 Alice 的 input 嗎?
 TBot: 是的. Alice 會用 label 把她的兩個 input 傳給你. 而 1 和 0 是你的兩個 input.
 
 
-### [==> Garbled Circuit - Evaluator <==](https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1)
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1">
+Garbled Circuit - Evaluator<br>
+<img src="evaluator.png" alt="evaluator.png" width="25%">
+<p>
+</a>
 
 
 Bob: 算完了, 答案是 1. 這就是稍早說的: 用保密的 label 來計算嗎?
