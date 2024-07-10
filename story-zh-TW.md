@@ -38,7 +38,6 @@ TBot: 有了. 大概快 40 年前, 有一個叫 "Yao" 的人, 發明了 <mark>"G
 Boolean Circuit (try it)<br>
 <img src="boolean-circuit.png" alt="boolean-circuit.png" width="25%">
 </a>
-<p>
 
 
 Bob: 答案是 1. 然後呢?
@@ -104,7 +103,6 @@ TBot: 是的. Alice 會用 label 把她的兩個 input 傳給你. 而 1 和 0 �
 Garbled Circuit - Evaluator<br>
 <img src="evaluator.png" alt="evaluator.png" width="25%">
 </a>
-<p>
 
 
 Bob: 算完了, 答案是 1. 這就是稍早說的: 用保密的 label 來計算嗎?
@@ -174,7 +172,6 @@ Alice: 從前面的討論來看, 我把 TBot 給的網頁改了一下. 做為 Ge
 Garbled Circuit - Generator<br>
 <img src="generator.png" alt="generator.png" width="25%">
 </a>
-<p>
 
 
 Alice: 大概是這些吧. 但如果 TBot 不在的話, 還少了個功能...

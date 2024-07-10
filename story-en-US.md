@@ -38,7 +38,6 @@ First, let's look at a regular boolean circuit. Bob, instead of mental calculati
 Boolean Circuit (try it)<br>
 <img src="boolean-circuit.png" alt="boolean-circuit.png" width="25%">
 </a>
-<p>
 
 
 Bob: The answer is 1. What's next?
@@ -105,7 +104,6 @@ TBot: Yes. Alice will send you her two inputs using labels. And 1 and 0 are your
 Garbled Circuit - Evaluator<br>
 <img src="evaluator.png" alt="evaluator.png" width="25%">
 </a>
-<p>
 
 
 Bob: I've finished the calculation, the answer is 1. Is this what you mentioned earlier: calculating with secure labels?
@@ -174,7 +172,6 @@ Alice: Based on our previous discussion, I modified the webpage TBot gave. As a 
 Garbled Circuit - Generator<br>
 <img src="generator.png" alt="generator.png" width="25%">
 </a>
-<p>
 
 
 Alice: That should be about it. But if TBot isn't here, we're still missing a feature...
