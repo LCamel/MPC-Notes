@@ -243,7 +243,7 @@ Bob: If you, TBot, were always here, we could just give you both pieces of data 
 
 Alice: If TBot were always here, we wouldn't need Garbled Circuit either.
 
-TBot: That version of me that you can always trust and that always exists probably only exists in an ideal world? Hahaha.
+TBot: The version of me that you can always trust probably only exists in an ideal world, right? Hahaha.
 
 Alice: Hahaha
 
