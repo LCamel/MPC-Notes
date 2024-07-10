@@ -197,6 +197,8 @@ Bob: Perhaps you could put the two labels in two boxes and send them to me, allo
 
 Alice: But I don't know which one you want to open, so the boxes should be prepared by you, with you deciding which one can be opened.
 
+<img src="reopen_and_not.png" width="200px">
+
 Bob: Then I'll prepare two boxes, one that can be opened after closing, and one that can't be opened after closing. I'll send you the two open boxes.
 
 Alice: I can't tell from the appearance which of these two boxes can be reopened, so I don't know which one you want to open. I'll put the 0 and 1 labels in order, close them, and send them to you.
@@ -204,6 +206,8 @@ Alice: I can't tell from the appearance which of these two boxes can be reopened
 Bob: If I originally wanted to get label 0, I would have put the box that can be reopened in front. This way, when you send them back, I can only open and get label 0.
 
 Alice: I also believe you're honest. You wouldn't give me two boxes that can both be reopened.
+
+<img src="OT_reopen.png" width="400px">
 
 Bob: It seems this could work. But using physical boxes is a bit inconvenient, can we do it digitally?
 
@@ -228,6 +232,8 @@ Bob: So at the very beginning, I generate two numbers that look like public keys
 Alice: I use these two numbers that look like public keys to encrypt two labels separately and send them to you, but I won't know which one you can decrypt.
 
 Bob: I decrypt the label that corresponds to the private key I have, and I can't decrypt the other one, so it won't leak information. That's it.
+
+<img src="OT_pubkey.png" width="450px">
 
 TBot: It seems you have a solution. To make it easier to find information, I'll still mention the name. Bob, do you remember what message the system displayed when you were the Evaluator getting your own input label?
 
