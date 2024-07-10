@@ -251,4 +251,13 @@ Bob: 啊哈哈哈哈
 
 (Fin)
 
+<br>
+<br>
+<br>
+
+---
+
+#### 參考資料
+
+[A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/)
 

@@ -250,3 +250,13 @@ Alice: Hahaha
 Bob: Hahaha
 
 (Fin)
+
+<br>
+<br>
+<br>
+
+---
+
+#### References
+
+[A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/)
