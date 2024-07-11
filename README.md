@@ -30,7 +30,7 @@ Garbled Circuit - Point-and-Permute - Evaluator<br>
 </a>
 <br>
 
-<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html&pointAndPermute=1">
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?pointAndPermute=1">
 Garbled Circuit - Point-and-Permute - Generator<br>
 <img src="images/point-and-permute-generator.png" alt="generator.png" width="25%">
 </a>
