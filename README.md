@@ -26,6 +26,12 @@ Garbled Circuit - Point-and-Permute<br>
 </a>
 <p>
 
+<a href="debug.png">
+(Learning the inner works)<br>
+<img src="debug.png" alt="debug.png" width="25%">
+</a>
+<p>
+
 ## Articles
 In English:
 [An Introduction to Garbled Circuit and Oblivious Transfer](story-en-US.md)
