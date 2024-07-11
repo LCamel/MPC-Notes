@@ -36,7 +36,7 @@ TBot: 有了. 大概快 40 年前, 有一個叫 "Yao" 的人, 發明了 <mark>"G
 
 <a href="https://lcamel.github.io/MPC-Notes/boolean-circuit.html">
 Boolean Circuit (try it)<br>
-<img src="boolean-circuit.png" alt="boolean-circuit.png" width="25%">
+<img src="images/boolean-circuit.png" alt="boolean-circuit.png" width="25%">
 </a>
 
 
@@ -101,7 +101,7 @@ TBot: 是的. Alice 會用 label 把她的兩個 input 傳給你. 而 1 和 0 �
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1">
 Garbled Circuit - Evaluator<br>
-<img src="evaluator.png" alt="evaluator.png" width="25%">
+<img src="images/evaluator.png" alt="evaluator.png" width="25%">
 </a>
 
 
@@ -170,7 +170,7 @@ Alice: 從前面的討論來看, 我把 TBot 給的網頁改了一下. 做為 Ge
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html">
 Garbled Circuit - Generator<br>
-<img src="generator.png" alt="generator.png" width="25%">
+<img src="images/generator.png" alt="generator.png" width="25%">
 </a>
 
 
@@ -194,7 +194,7 @@ Bob: 或許你可以把兩個 label 裝兩箱送給我, 而讓我只開的了其
 
 Alice: 但我不知道你想開哪個, 所以箱子應該由你準備, 由你決定哪個是可以開的.
 
-<img src="reopen_and_not.png" width="200px">
+<img src="images/reopen_and_not.png" width="200px">
 
 Bob: 那由我準備兩個箱子, 一個是關起來以後打的開的, 一個是關起來以後打不開的. 把兩個箱子開著送給你.
 
@@ -204,7 +204,7 @@ Bob: 如果當初我想拿 label 0, 我就會在前面放可以再打開的箱�
 
 Alice: 我也相信你是誠實的. 不會拿兩個都能再開的箱子給我.
 
-<img src="OT_reopen.png" width="400px">
+<img src="images/OT_reopen.png" width="400px">
 
 Bob: 看來這樣可行. 不過用實體的箱子比較麻煩, 能不能用數位的方式呢?
 
@@ -230,7 +230,7 @@ Alice: 我用這兩個看起來是 public key 的數字分別加密兩個 label 
 
 Bob: 我解開有 private key 對應的的那個 label, 另外一個我解不開, 不會洩密. 就這樣.
 
-<img src="OT_pubkey.png" width="450px">
+<img src="images/OT_pubkey.png" width="450px">
 
 TBot: 看起來你們有解法了. 為了方便找資料, 我還是講一下名字好了. Bob, 還記得之前你當 Evaluator 取得自己 input label 的時候, 系統顯示什麼訊息嗎?
 

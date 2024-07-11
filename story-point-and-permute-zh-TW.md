@@ -28,7 +28,7 @@ Alice: 這有點抽象. 我操作看看...
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w1=1&point-and-permute=1">
 Garbled Circuit: Point-and-Permute (Evaluator)<br>
-<img src="point-and-permute-evaluator.png" alt="point-and-permute-evaluator.png" width="25%">
+<img src="images/point-and-permute-evaluator.png" alt="point-and-permute-evaluator.png" width="25%">
 </a>
 
 Alice: 可以耶! 只要對照右上角的顏色, 一次就解開了!
@@ -41,7 +41,7 @@ Bob: 沒錯. 🔴 就是 pointer bit = 0, 🔵 就是 pointer bit = 1.
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?pointAndPermute=1">
 Garbled Circuit: Point-and-Permute (Generator)<br>
-<img src="point-and-permute.png" alt="point-and-permute.png" width="25%">
+<img src="images/point-and-permute.png" alt="point-and-permute.png" width="25%">
 </a>
 
 Alice: 我按了好幾次 "Generate Wire Labels", 以前第一個 wire 只有 🐱🐶 或 🐶🐱, 現在後面還可以接 🔴🔵 或 🔵🔴 , 所以應該有這四種組合:
@@ -103,5 +103,5 @@ Alice: 也謝謝你. 下次見!
 
 [A Brief History of Practical Garbled Circuit Optimizations](https://youtu.be/FTxh908u9y8?t=828)<br>
 <a href="https://youtu.be/FTxh908u9y8?t=828">
-<img src="point-and-permute-rosulek.png" alt="point-and-permute-rosulek.png" width="25%">
+<img src="images/point-and-permute-rosulek.png" alt="point-and-permute-rosulek.png" width="25%">
 </a>

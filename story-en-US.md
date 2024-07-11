@@ -36,7 +36,7 @@ First, let's look at a regular boolean circuit. Bob, instead of mental calculati
 
 <a href="https://lcamel.github.io/MPC-Notes/boolean-circuit.html">
 Boolean Circuit (try it)<br>
-<img src="boolean-circuit.png" alt="boolean-circuit.png" width="25%">
+<img src="images/boolean-circuit.png" alt="boolean-circuit.png" width="25%">
 </a>
 
 
@@ -102,7 +102,7 @@ TBot: Yes. Alice will send you her two inputs using labels. And 1 and 0 are your
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1">
 Garbled Circuit - Evaluator<br>
-<img src="evaluator.png" alt="evaluator.png" width="25%">
+<img src="images/evaluator.png" alt="evaluator.png" width="25%">
 </a>
 
 
@@ -170,7 +170,7 @@ Alice: Based on our previous discussion, I modified the webpage TBot gave. As a 
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html">
 Garbled Circuit - Generator<br>
-<img src="generator.png" alt="generator.png" width="25%">
+<img src="images/generator.png" alt="generator.png" width="25%">
 </a>
 
 
@@ -194,7 +194,7 @@ Bob: Perhaps you could put the two labels in two boxes and send them to me, allo
 
 Alice: But I don't know which one you want to open, so the boxes should be prepared by you, with you deciding which one can be opened.
 
-<img src="reopen_and_not.png" width="200px">
+<img src="images/reopen_and_not.png" width="200px">
 
 Bob: Then I'll prepare two boxes, one that can be opened after closing, and one that can't be opened after closing. I'll send you the two open boxes.
 
@@ -204,7 +204,7 @@ Bob: If I originally wanted to get label 0, I would have put the box that can be
 
 Alice: I also believe you're honest. You wouldn't give me two boxes that can both be reopened.
 
-<img src="OT_reopen.png" width="400px">
+<img src="images/OT_reopen.png" width="400px">
 
 Bob: It seems this could work. But using physical boxes is a bit inconvenient, can we do it digitally?
 
@@ -230,7 +230,7 @@ Alice: I use these two numbers that look like public keys to encrypt two labels 
 
 Bob: I decrypt the label that corresponds to the private key I have, and I can't decrypt the other one, so it won't leak information. That's it.
 
-<img src="OT_pubkey.png" width="450px">
+<img src="images/OT_pubkey.png" width="450px">
 
 TBot: It seems you have a solution. To make it easier to find information, I'll still mention the name. Bob, do you remember what message the system displayed when you were the Evaluator getting your own input label?
 
