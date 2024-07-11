@@ -41,8 +41,10 @@ Bob: 沒錯. 🔴 就是 pointer bit = 0, 🔵 就是 pointer bit = 1.
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?pointAndPermute=1">
 Garbled Circuit: Point-and-Permute (Generator)<br>
-<img src="images/point-and-permute.png" alt="point-and-permute.png" width="25%">
+<img src="images/point-and-permute-generator.png" alt="point-and-permute-generator.png" width="25%">
 </a>
+<br>
+<br>
 
 Alice: 我按了好幾次 "Generate Wire Labels", 以前第一個 wire 只有 🐱🐶 或 🐶🐱, 現在後面還可以接 🔴🔵 或 🔵🔴 , 所以應該有這四種組合:
 ```

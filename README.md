@@ -7,6 +7,8 @@ Boolean Circuit<br>
 <img src="images/boolean-circuit.png" alt="boolean-circuit.png" width="25%">
 </a>
 <br>
+<br>
+
 
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1">
 Garbled Circuit - Evaluator<br>
@@ -19,12 +21,22 @@ Garbled Circuit - Generator<br>
 <img src="images/generator.png" alt="generator.png" width="25%">
 </a>
 <br>
+<br>
 
-<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?pointAndPermute=1">
-Garbled Circuit - Point-and-Permute<br>
-<img src="images/point-and-permute.png" alt="point-and-permute.png" width="25%">
+
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1&pointAndPermute=1">
+Garbled Circuit - Point-and-Permute - Evaluator<br>
+<img src="images/point-and-permute-evaluator.png" alt="evaluator.png" width="25%">
 </a>
 <br>
+
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html&pointAndPermute=1">
+Garbled Circuit - Point-and-Permute - Generator<br>
+<img src="images/point-and-permute-generator.png" alt="generator.png" width="25%">
+</a>
+<br>
+<br>
+
 
 <a href="debug.png">
 (Learning the inner works)<br>
