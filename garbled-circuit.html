@@ -132,7 +132,7 @@ var gates = [
 ];
 function generateTable(in0Labels, in1Labels, outLabels, fn) {
     return [[0, 0], [0, 1], [1, 0], [1, 1]]
-        .map(([v1, v2]) => in0Labels[v1] + in1Labels[v2] + outLabels[fn(v1, v2)]);
+        .map(([v1, v2]) => [in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]]);
 }
 function generateTabels() {
     tables = gates.map(([name, in0, in1, out, fn]) => generateTable(labels[in0], labels[in1], labels[out], fn));
@@ -262,14 +262,15 @@ var inputValues = [0, 0,  , 0, 0,  ,  ]; // Generator wires: 0, 3  Evaluator wir
     });
 });
 
+function displayTable() { setDisplay((i, j) => tables[i][j].join('')); }
 Button("GL", () => "Generate Wire Labels", () => generateWireLabels());
 Button("GT", () => "Generate Tables", () => {
     generateTabels();
-    setDisplay((i, j) => tables[i][j]);
+    displayTable();
 });
 Button("ST", () => "Shuffle Tables", () => {
     shuffleTables();
-    setDisplay((i, j) => tables[i][j]);
+    displayTable();
 });
 Button("ET", () => "Encrypt Tables", () => {
     generateCiphertexts();
