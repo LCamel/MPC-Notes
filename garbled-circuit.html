@@ -143,14 +143,13 @@ function generateTable(in0Labels, in1Labels, outLabels, fn) {
 function generateTabels() {
     tables = gates.map(([name, in0, in1, out, fn]) => generateTable(labels[in0], labels[in1], labels[out], fn));
 }
-function tableRowLabels(row) {
-    var [l0, l1, _] = row;
-    return [...l0].slice(-1) + [...l1].slice(-1);
+function sortTableRowsByPointers(t) {
+    var pointers = ([l0, l1, _]) => [...l0].slice(-1) + [...l1].slice(-1);
+    t.sort((rowA, rowB) => pointers(rowA).localeCompare(pointers(rowB)));
 }
 function shuffleTables() {
     tables.forEach(shuffle);
-    //tables.forEach(t => shuffle(t));
-    tables.forEach(t => t.sort((rowA, rowB) => tableRowLabels(rowA).localeCompare(tableRowLabels(rowB))));
+    tables.forEach(sortTableRowsByPointers);
 }
 function generateCiphertexts() {
     ciphertexts = tables.map(t => t.map(row => encrypt(...row)));
