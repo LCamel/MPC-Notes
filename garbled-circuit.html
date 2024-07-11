@@ -1,19 +1,17 @@
 <html>
 <body>
 <style>
+    body {
+        background-color: black;
+        color: white;
+    }
     .container {
-        background-color: gray;
         font-family: 'Courier New', Courier, monospace;
         font-size: 20px;
-        color: white;
         position: relative; /* for its "absolute" child */
-    }
-    .board {
-        white-space: pre;
-        background-color: black;
+        white-space: pre; /* mind the spaces in the html */
     }
     .overlay {
-        white-space: pre;        
         z-index: 1;
         position: absolute;
         top: 0px;
@@ -22,7 +20,7 @@
     .btn {
         height: 1lh;
         position: absolute;
-        background-color: blue;
+        background-color: #404040;
         cursor: pointer;
         transition: background-color 0.1s ease;
     }
@@ -32,16 +30,13 @@
     .txt {
         height: 1lh;
         position: absolute;
-        /*font-weight: bold;*/
     }
     .hide {
         display: none;
     }
 </style>
-
-<div class="container">
-
-<div class="board" id="board">
+<!-- mind the spaces -->
+<div class="container"><div class="board" id="board">
             #message                                                   
                                                                         
             ┌────────────────────┐                                      
@@ -64,17 +59,15 @@
             │         #DSP11  @5_├───┘                                  
     !L40!L41│         #DSP12     │!L50!L51   !GL                            
  @S4@v4@4_──┤         #DSP13     │           !GT                 
-       @OT4 │    @ROW1      @E1  │           !ST                    
+       @OT4 │    @ROW1      @E1  │           !RT                    
             │                    │           !ET                    
             └────────────────────┘           !SI                   
                                              !SEND                                                                       
 </div>
-
 <div class="overlay">
 <div class="btn protoBtn" style="top: -1000lh; left: -1000ch">B</div>
-<div class="txt protoTxt" style="top: -1000lh; left: -1001ch">L</div>
+<div class="txt protoTxt" style="top: -1000lh; left: -1001ch">T</div>
 </div>
-
 </div>
 <script>
 function parseBoard(s) {
@@ -113,6 +106,7 @@ function decrypt(ciphertext, key1, key2) {
     var prefix = `E,${key1},${key2},`;
     return ciphertext.startsWith(prefix) ? ciphertext.replace(prefix, "") : "";
 }
+var pointers = ['🔴', '🔵'];
 function generateWireLabels() {
     labels = [
         [ '🐱', '🐶' ],
@@ -122,7 +116,14 @@ function generateWireLabels() {
         [ '🐻', '🐵' ],
         [ '🦁', '🦊' ],
         [ '🐪', '🦙' ],
-    ].map(row => shuffle(row));
+    ].map(twoLabels => shuffle(twoLabels));
+    if (pointAndPermute) {
+        labels.forEach((twoLabels) => {
+            let p = shuffle(pointers.slice());
+            twoLabels[0] += p[0];
+            twoLabels[1] += p[1];
+        });
+    }
     console.log("labels: ", labels);
 }
 var gates = [
@@ -132,13 +133,17 @@ var gates = [
 ];
 function generateTable(in0Labels, in1Labels, outLabels, fn) {
     return [[0, 0], [0, 1], [1, 0], [1, 1]]
-        .map(([v1, v2]) => in0Labels[v1] + in1Labels[v2] + outLabels[fn(v1, v2)]);
+        .map(([v1, v2]) => [in0Labels[v1], in1Labels[v2], outLabels[fn(v1, v2)]]);
 }
 function generateTabels() {
     tables = gates.map(([name, in0, in1, out, fn]) => generateTable(labels[in0], labels[in1], labels[out], fn));
 }
-function shuffleTables() {
-    tables.forEach(t => shuffle(t));
+function sortTableRowsByPointers(t) {
+    var pointers = ([l0, l1, _]) => [...l0].slice(-1) + [...l1].slice(-1);
+    t.sort((rowA, rowB) => pointers(rowA).localeCompare(pointers(rowB)));
+}
+function reorderTables() {
+    tables.forEach(!pointAndPermute ? shuffle : sortTableRowsByPointers);
 }
 function generateCiphertexts() {
     ciphertexts = tables.map(t => t.map(row => encrypt(...row)));
@@ -262,14 +267,15 @@ var inputValues = [0, 0,  , 0, 0,  ,  ]; // Generator wires: 0, 3  Evaluator wir
     });
 });
 
+function displayTable() { setDisplay((i, j) => tables[i][j].join('')); }
 Button("GL", () => "Generate Wire Labels", () => generateWireLabels());
 Button("GT", () => "Generate Tables", () => {
     generateTabels();
-    setDisplay((i, j) => tables[i][j]);
+    displayTable();
 });
-Button("ST", () => "Shuffle Tables", () => {
-    shuffleTables();
-    setDisplay((i, j) => tables[i][j]);
+Button("RT", () => "Reorder Tables", () => {
+    reorderTables();
+    displayTable();
 });
 Button("ET", () => "Encrypt Tables", () => {
     generateCiphertexts();
@@ -293,8 +299,9 @@ Button("SEND", () => "Send to the Evaluator", () => {
 
 Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
 
-// ?startFrom=evaluator&w0=1&w3=0
+// ?startFrom=evaluator&w0=1&w3=0&pointAndPermute=1
 var params = new URLSearchParams(document.location.search);
+var pointAndPermute = params.get("pointAndPermute") == 1;
 if (params.get("startFrom") != "evaluator") {
     setMessage("Garbled Circuit (Generator)");
     document.querySelectorAll(".evaluatorOnly").forEach(n => n.classList.add("hide"));
@@ -303,7 +310,7 @@ if (params.get("startFrom") != "evaluator") {
     document.querySelectorAll(".generatorOnly").forEach(n => n.classList.add("hide"));
     generateWireLabels();
     generateTabels();
-    shuffleTables();
+    reorderTables();
     generateCiphertexts();
     setDisplay((i, j) => "🔒🔒🧳");
     wires[0] = labels[0][params.get("w0") || 0]; // default input for the generator
