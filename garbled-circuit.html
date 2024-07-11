@@ -64,7 +64,7 @@
             │         #DSP11  @5_├───┘                                  
     !L40!L41│         #DSP12     │!L50!L51   !GL                            
  @S4@v4@4_──┤         #DSP13     │           !GT                 
-       @OT4 │    @ROW1      @E1  │           !ST                    
+       @OT4 │    @ROW1      @E1  │           !RT                    
             │                    │           !ET                    
             └────────────────────┘           !SI                   
                                              !SEND                                                                       
@@ -149,7 +149,7 @@ function sortTableRowsByPointers(t) {
     var pointers = ([l0, l1, _]) => [...l0].slice(-1) + [...l1].slice(-1);
     t.sort((rowA, rowB) => pointers(rowA).localeCompare(pointers(rowB)));
 }
-function shuffleTables() {
+function reorderTables() {
     tables.forEach(!pointAndPermute ? shuffle : sortTableRowsByPointers);
 }
 function generateCiphertexts() {
@@ -280,8 +280,8 @@ Button("GT", () => "Generate Tables", () => {
     generateTabels();
     displayTable();
 });
-Button("ST", () => "Shuffle Tables", () => {
-    shuffleTables();
+Button("RT", () => "Reorder Tables", () => {
+    reorderTables();
     displayTable();
 });
 Button("ET", () => "Encrypt Tables", () => {
@@ -317,7 +317,7 @@ if (params.get("startFrom") != "evaluator") {
     document.querySelectorAll(".generatorOnly").forEach(n => n.classList.add("hide"));
     generateWireLabels();
     generateTabels();
-    shuffleTables();
+    reorderTables();
     generateCiphertexts();
     setDisplay((i, j) => "🔒🔒🧳");
     wires[0] = labels[0][params.get("w0") || 0]; // default input for the generator
