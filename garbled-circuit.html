@@ -99,11 +99,15 @@ function shuffle(arr) {
     }
     return arr;
 }
-function encrypt(key1, key2, plaintext) {
-    return `E,${key1},${key2},${plaintext}`;
+// it's more "authentic" to remove the pointer bits in encryption
+function noPTR(s) {
+    return [...s].filter(c => !pointers.includes(c)).join('');
 }
-function decrypt(ciphertext, key1, key2) {
-    var prefix = `E,${key1},${key2},`;
+function encrypt(inLabel0, inLabel1, outLabel) {
+    return `E,${noPTR(inLabel0)},${noPTR(inLabel1)},${outLabel}`;
+}
+function decrypt(inLabel0, inLabel1, ciphertext) {
+    var prefix = `E,${noPTR(inLabel0)},${noPTR(inLabel1)},`;
     return ciphertext.startsWith(prefix) ? ciphertext.replace(prefix, "") : "";
 }
 var pointers = ['🔴', '🔵'];
@@ -222,7 +226,7 @@ gates.forEach(([name, in0, in1, out, fn], g) => {
     });
     Button("E" + g, () => "►", () => { // eval
         let r = rowOfGate[g];
-        if (plaintext = decrypt(ciphertexts[g][r], wires[in0], wires[in1])) {
+        if (plaintext = decrypt(wires[in0], wires[in1], ciphertexts[g][r])) {
             wires[out] = plaintext;
             setMessage(`Decrypted!  ${wires[in0]} ${name} ${wires[in1]} = ${wires[out]}`);
             display[g][r] = "";
