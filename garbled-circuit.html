@@ -113,6 +113,7 @@ function decrypt(ciphertext, key1, key2) {
     var prefix = `E,${key1},${key2},`;
     return ciphertext.startsWith(prefix) ? ciphertext.replace(prefix, "") : "";
 }
+var pointers = ['🔴', '🔵'];
 function generateWireLabels() {
     labels = [
         [ '🐱', '🐶' ],
@@ -122,7 +123,12 @@ function generateWireLabels() {
         [ '🐻', '🐵' ],
         [ '🦁', '🦊' ],
         [ '🐪', '🦙' ],
-    ].map(row => shuffle(row));
+    ].map(twoLabels => shuffle(twoLabels));
+    labels.forEach((twoLabels) => {
+        let p = shuffle(pointers.slice());
+        twoLabels[0] += p[0];
+        twoLabels[1] += p[1];
+    });
     console.log("labels: ", labels);
 }
 var gates = [
@@ -137,8 +143,14 @@ function generateTable(in0Labels, in1Labels, outLabels, fn) {
 function generateTabels() {
     tables = gates.map(([name, in0, in1, out, fn]) => generateTable(labels[in0], labels[in1], labels[out], fn));
 }
+function tableRowLabels(row) {
+    var [l0, l1, _] = row;
+    return [...l0].slice(-1) + [...l1].slice(-1);
+}
 function shuffleTables() {
-    tables.forEach(t => shuffle(t));
+    tables.forEach(shuffle);
+    //tables.forEach(t => shuffle(t));
+    tables.forEach(t => t.sort((rowA, rowB) => tableRowLabels(rowA).localeCompare(tableRowLabels(rowB))));
 }
 function generateCiphertexts() {
     ciphertexts = tables.map(t => t.map(row => encrypt(...row)));
