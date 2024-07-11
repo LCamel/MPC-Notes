@@ -37,7 +37,7 @@
 </style>
 <!-- mind the spaces -->
 <div class="container"><div class="board" id="board">
-            #message                                                   
+            #message                                             #PTR  
                                                                         
             ┌────────────────────┐                                      
             │                    │                                      
@@ -302,6 +302,10 @@ Button("SEND", () => "Send to the Evaluator", () => {
 });
 
 Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
+
+Text("PTR", () => !pointAndPermute ? '' :
+    pointers[0] + pointers[0] + "\n" + pointers[0] + pointers[1] + "\n"
+    + pointers[1] + pointers[0] + "\n" + pointers[1] + pointers[1]);
 
 // ?startFrom=evaluator&w0=1&w3=0&pointAndPermute=1
 var params = new URLSearchParams(document.location.search);
