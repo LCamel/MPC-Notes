@@ -1,19 +1,17 @@
 <html>
 <body>
 <style>
+    body {
+        background-color: black;
+        color: white;
+    }
     .container {
-        background-color: gray;
         font-family: 'Courier New', Courier, monospace;
         font-size: 20px;
-        color: white;
         position: relative; /* for its "absolute" child */
-    }
-    .board {
-        white-space: pre;
-        background-color: black;
+        white-space: pre; /* mind the spaces in the html */
     }
     .overlay {
-        white-space: pre;        
         z-index: 1;
         position: absolute;
         top: 0px;
@@ -22,7 +20,7 @@
     .btn {
         height: 1lh;
         position: absolute;
-        background-color: blue;
+        background-color: #404040;
         cursor: pointer;
         transition: background-color 0.1s ease;
     }
@@ -32,16 +30,13 @@
     .txt {
         height: 1lh;
         position: absolute;
-        /*font-weight: bold;*/
     }
     .hide {
         display: none;
     }
 </style>
-
-<div class="container">
-
-<div class="board" id="board">
+<!-- mind the spaces -->
+<div class="container"><div class="board" id="board">
             #message                                                   
                                                                         
             ┌────────────────────┐                                      
@@ -69,12 +64,10 @@
             └────────────────────┘           !SI                   
                                              !SEND                                                                       
 </div>
-
 <div class="overlay">
 <div class="btn protoBtn" style="top: -1000lh; left: -1000ch">B</div>
-<div class="txt protoTxt" style="top: -1000lh; left: -1001ch">L</div>
+<div class="txt protoTxt" style="top: -1000lh; left: -1001ch">T</div>
 </div>
-
 </div>
 <script>
 function parseBoard(s) {
@@ -306,7 +299,7 @@ Button("SEND", () => "Send to the Evaluator", () => {
 
 Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
 
-// ?startFrom=evaluator&w0=1&w3=0
+// ?startFrom=evaluator&w0=1&w3=0&pointAndPermute=1
 var params = new URLSearchParams(document.location.search);
 var pointAndPermute = params.get("pointAndPermute") == 1;
 if (params.get("startFrom") != "evaluator") {
