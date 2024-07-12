@@ -34,6 +34,14 @@
     .hide {
         display: none;
     }
+    .blinking-border {
+        animation: blink-border 0.8s steps(1, end) forwards;
+        z-index: 2;
+    }
+    @keyframes blink-border {
+        0%, 66% { outline: 2px solid white; }
+        33%, 100% { outline: none; }
+    }
 </style>
 <!-- mind the spaces -->
 <div class="container"><div class="board" id="board">
@@ -313,6 +321,7 @@ var pointAndPermute = params.get("pointAndPermute") == 1;
 if (params.get("startFrom") != "evaluator") {
     setMessage("Garbled Circuit (Generator)");
     document.querySelectorAll(".evaluatorOnly").forEach(n => n.classList.add("hide"));
+    byName("GL").classList.add("blinking-border");
 } else {
     setMessage("Garbled Circuit (Evaluator)");
     document.querySelectorAll(".generatorOnly").forEach(n => n.classList.add("hide"));
