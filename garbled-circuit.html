@@ -35,12 +35,15 @@
         display: none;
     }
     .blinking-border {
-        animation: blink-border 0.8s steps(1, end) forwards;
+        animation: blink-border 1.2s steps(1, end) forwards;
         z-index: 2;
     }
     @keyframes blink-border {
-        0%, 66% { outline: 2px solid white; }
-        33%, 100% { outline: none; }
+        0%, 40%, 80% { outline: 2px solid white; }
+        20%, 60%, 100% { outline: none; }
+    }
+    .protoTxt {
+        background: rgba(0, 0, 0, 0.3); /* for the overlapping parts */
     }
 </style>
 <!-- mind the spaces -->
