@@ -50,6 +50,10 @@ In English:
 
 [An Introduction to Garbled Circuit and Oblivious Transfer](story-en-US.md)
 
+[Point-and-Permute](story-point-and-permute-en-US.md)
+
 In Chinese:
 
 [淺談 Garbled Circult 與 Oblivious Transfer](story-zh-TW.md)
+
+[Point-and-Permute](story-point-and-permute-zh-TW.md)
