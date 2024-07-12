@@ -307,6 +307,7 @@ Button("SEND", () => "Send to the Evaluator", () => {
     setMessage("Garbled Circuit (Evaluator)");
     document.querySelectorAll(".generatorOnly").forEach(n => n.classList.add("hide"));
     document.querySelectorAll(".evaluatorOnly").forEach(n => n.classList.remove("hide"));
+    byName("S1").classList.add("blinking-border");
 });
 
 Text("FIN", () => wires[6] == '' ? '' : '🎉🎉🎉');
@@ -332,6 +333,7 @@ if (params.get("startFrom") != "evaluator") {
     setDisplay((i, j) => "🔒🔒🧳");
     wires[0] = labels[0][params.get("w0") || 0]; // default input for the generator
     wires[3] = labels[3][params.get("w3") || 0]; // default input for the generator
+    byName("S1").classList.add("blinking-border");
 }
 updateUI();
 </script>
