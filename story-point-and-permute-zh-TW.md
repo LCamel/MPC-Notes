@@ -8,7 +8,7 @@ Bob: 最近有看到 TBot 嗎?
 
 Alice: 沒有耶, 怎麼了嗎?
 
-Bob: 記不記得上次我們討論 Garbled Circuit 的時候, 我當 Evaluator, 不是每個 gate 都要在那邊硬 try 嗎?
+Bob: 記不記得上次我們三個討論 Garbled Circuit 的時候, 我當 Evaluator, 不是每個 row 都要在那邊硬 try 嗎?
 
 Alice: 對啊. 每個 gate 你平均要 try 2.5 次, 很不方便.
 
@@ -22,7 +22,7 @@ Alice: 我大概看完了. 對了, 你該不會把程式也改過了吧?
 
 Bob: 你真了解我! 我想說有程式互動比較好懂, 就拿你上次寫的來改了一下 😅
 
-剛剛不是說本來要每個 row 在那邊一個一個 try 嗎? 有個叫 Beaver 的人和幾個朋友想到, 如果在原來的 label 最後面多加一個 pointer bit, 那這樣在 evaluate 的時候, 就用可以用兩個 input label 尾巴的兩個 pointer bit 直接跳到對的那個 row 了!
+剛剛不是說本來要每個 row 在那邊一個一個 try 嗎? 我看到有個叫 Beaver 的人說, 如果在 label 最後面多加一個 pointer bit, 那這樣在 evaluate 的時候, 就用可以用兩個 input label 尾巴的兩個 pointer bit 直接跳到對的那個 row 了!
 
 Alice: 這有點抽象. 我操作看看...
 
@@ -64,7 +64,7 @@ _ _ _ _
 _ _ 🐱🔴  🐱 = 1
 ```
 
-Alice: 我又按了 "Generate Tables", 這邊把顏色遮起來只看動物的話, 就只是普通的 truth table. AND gate 的 output 還是 "3 個 ~ 1 個", 而 OR gate 的 output 還是 "1 個 ~ 3 個".
+Alice: 我又按了 "Generate Tables", 這邊把顏色遮起來只看動物的話, 就只是普通的 truth table. AND gate 的 output 還是 "3 個 / 1 個", 而 OR gate 的 output 還是 "1 個 / 3 個".
 
 Bob: 主要是差在下一步 "Reorder Tables". 就像你前面說的, 以前是隨機 shuffle rows, 而現在是照 input label 的顏色來 sort rows. 所以顏色順序就是和右上角的一樣.
 ```
@@ -74,13 +74,13 @@ Bob: 主要是差在下一步 "Reorder Tables". 就像你前面說的, 以前是
 🔵🔵
 ```
 
-Alice: 好像可以這樣想: 以前我們丟銅板決定兩個東西要排成 AB 還是 BA. 現在則是我們先丟銅板決定顏色的排列, 把顏色貼在 A B 上面, 再用顏色來排序 A B, 等於是間接 shuffle 了 A 和 B.
+Alice: 好像也可以這樣想: 以前我們用丟銅板來決定兩個東西會 shuffle 成 AB 還是 BA. 現在則是我們先丟銅板決定顏色的排列, 把顏色貼在 A B 上面, 再用顏色來排序 A B, 等於是間接 shuffle 了 A 和 B.
 
 Bob: 的確, 這些顏色只是單純 sort 用的. 而且因為顏色貼在什麼東西上是隨機決定的, 所以即便照著顏色排了, 也還是不會洩漏原本的資訊.
 
 Alice: 再來就和原本很像了吧? 用兩個 input labels 加密 output label. 四個 output 只有一個會被解開.
 
-不同的地方就是現在 table 是照 input label 的顏色 sort 過的, 所以到時候 evaluator 可以直接到兩個 input label 的顏色指到的那個 row, 一次就解開了! 真好!
+不同的地方就是現在 table 是照 input label 的顏色 sort 過的, 所以到時候 evaluator 可以直接到兩個 input label 的顏色 point 到的那個 row, 一次就解開了! 真好!
 
 Bob: 然後解開的 output label 也有顏色, 所以到下一個 gate 也還是可以一次就解開來.
 
