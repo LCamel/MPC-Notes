@@ -38,7 +38,7 @@ Garbled Circuit - Point-and-Permute - Generator<br>
 <br>
 
 
-<a href="debug.png">
+<a href="images/debug.png">
 (Learning the inner works)<br>
 <img src="images/debug.png" alt="debug.png" width="25%">
 </a>
