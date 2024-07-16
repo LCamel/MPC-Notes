@@ -6,6 +6,7 @@
         <title>My first three.js app</title>
         <style>
             body { margin: 0; }
+            #THE_CONTAINER { width: 500px; height: 500px; background-color: gray; margin: 0; }
         </style>
     </head>
     <body>
@@ -17,9 +18,11 @@
             function inputR() {
                 var rStr = prompt("Input r:\nExample:\n1\n0\n101\n01001011001");
                 console.log(rStr);
+                main.setContainer(document.getElementById("THE_CONTAINER"));
                 main.setR([...rStr]);
             }
         </script>
         <button onclick="inputR()">input r</button>
+        <div id="THE_CONTAINER"></div>
     </body>
 </html>
