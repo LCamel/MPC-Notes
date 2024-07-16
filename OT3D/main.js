@@ -13,10 +13,10 @@ export let ROW;
 export let r;
 export let COL = 3;
 export let T;
-export let T_XOR_R;
+export let T_XOR_r;
 export let s;
-export let q;
-export let Q_XOR_S;
+export let Q;
+export let Q_XOR_s;
 
 export function setContainer(c) {
     container = c;
@@ -70,10 +70,10 @@ export function setR(rArr) {
 
     makeR(rArr);
     makeT();
-    makeT_XOR_R();
+    makeT_XOR_r();
     makeS();
     makeQ();
-    makeQ_XOR_S();
+    makeQ_XOR_s();
 }
 
 function makeCube(x, y, z, material) {
@@ -111,12 +111,12 @@ export function makeT() {
         }
     }
 }
-export function makeT_XOR_R() {
-    T_XOR_R = new Array(ROW);
+export function makeT_XOR_r() {
+    T_XOR_r = new Array(ROW);
     for (let i = 0; i < ROW; i++) {
-        T_XOR_R[i] = new Array(COL);
+        T_XOR_r[i] = new Array(COL);
         for (let j = 0; j < COL; j++) {
-            T_XOR_R[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
+            T_XOR_r[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
         }
     }
 }
@@ -127,20 +127,20 @@ export function makeS() {
     }
 }
 export function makeQ() {
-    q = new Array(ROW);
+    Q = new Array(ROW);
     for (let i = 0; i < ROW; i++) {
-        q[i] = new Array(COL);
+        Q[i] = new Array(COL);
         for (let j = 0; j < COL; j++) {
-            q[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 0);
+            Q[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 0);
         }
     }
 }
-export function makeQ_XOR_S() {
-    Q_XOR_S = new Array(ROW);
+export function makeQ_XOR_s() {
+    Q_XOR_s = new Array(ROW);
     for (let i = 0; i < ROW; i++) {
-        Q_XOR_S[i] = new Array(COL);
+        Q_XOR_s[i] = new Array(COL);
         for (let j = 0; j < COL; j++) {
-            Q_XOR_S[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 1);
+            Q_XOR_s[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 1);
         }
     }
 }
@@ -155,10 +155,10 @@ export function generateT() {
         }
     }
 }
-export function computeT_XOR_R() {
+export function computeT_XOR_r() {
     for (let i = 0; i < ROW; i++) {
         for (let j = 0; j < COL; j++) {
-            T_XOR_R[i][j].setV(T[i][j].v ^ r[i].v);
+            T_XOR_r[i][j].setV(T[i][j].v ^ r[i].v);
         }
     }
 }
@@ -169,20 +169,20 @@ export function generateS() {
 }
 export function obliviousTransferQ() {
     for (let j = 0; j < COL; j++) {
-        let src = (s[j].v == 0) ? T : T_XOR_R;
+        let src = (s[j].v == 0) ? T : T_XOR_r;
         for (let i = 0; i < ROW; i++) {
-            q[i][j].setV(src[i][j].v);
+            Q[i][j].setV(src[i][j].v);
         }
-        let other = (s[j].v == 0) ? T_XOR_R : T;
+        let other = (s[j].v == 0) ? T_XOR_r : T;
         for (let i = 0; i < ROW; i++) {
             other[i][j].cube.visible = false;
         }
     }
 }
-export function computeQ_XOR_S() {
+export function computeQ_XOR_s() {
     for (let i = 0; i < ROW; i++) {
         for (let j = 0; j < COL; j++) {
-            Q_XOR_S[i][j].setV(q[i][j].v ^ s[j].v);
+            Q_XOR_s[i][j].setV(Q[i][j].v ^ s[j].v);
         }
     }
 }
