@@ -11,8 +11,9 @@ const MATERIALS = [
 
 export let ROW;
 export let r;
-export let COL = 6;
-
+export let COL = 3;
+export let T;
+export let T_XOR_R;
 
 export function setContainer(c) {
     container = c;
@@ -68,9 +69,14 @@ export function setR(rArr) {
 
     r = new Array(ROW);
     for (let i = 0; i < ROW; i++) {
-        r[i] = new Cell(rArr[i], 1, ROW - i - 1, 0.5);
+        r[i] = new Cell(rArr[i], 0.5, ROW - i - 1, 0.5);
     }
     //makeCube(0, 0, 0, MATERIALS[2]);
+
+    makeT();
+    makeT_XOR_R();
+    T[0][0].setV(0);
+    T[0][1].setV(1);
 }
 
 function makeCube(x, y, z, material) {
@@ -89,8 +95,44 @@ class Cell {
     setV(v) {
         this.v = v;
         this.cube.visible = (v != undefined);
-        this.cube.material = MATERIALS[v || 2]; // 0 1 undefined
+        this.cube.material = MATERIALS[(v != undefined) ? v : 2]; // 0 1 undefined
     }
 }
 
+export function makeT() {
+    T = new Array(ROW);
+    for (let i = 0; i < ROW; i++) {
+        T[i] = new Array(COL);
+        for (let j = 0; j < COL; j++) {
+            T[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 0);
+        }
+    }
+}
+export function makeT_XOR_R() {
+    T_XOR_R = new Array(ROW);
+    for (let i = 0; i < ROW; i++) {
+        T_XOR_R[i] = new Array(COL);
+        for (let j = 0; j < COL; j++) {
+            T_XOR_R[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
+        }
+    }
+}
+
+export function randomBit() {
+    return Math.random() < 0.5 ? 0 : 1;
+}
+export function generateT() {
+    for (let i = 0; i < ROW; i++) {
+        for (let j = 0; j < COL; j++) {
+            T[i][j].setV(randomBit());
+        }
+    }
+}
+export function computeT_XOR_R() {
+    for (let i = 0; i < ROW; i++) {
+        for (let j = 0; j < COL; j++) {
+            T_XOR_R[i][j].setV(T[i][j].v ^ r[i].v);
+        }
+    }
+}
 // export { setR };
