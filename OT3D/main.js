@@ -6,7 +6,7 @@ export let scene;
 const MATERIALS = [
     new THREE.MeshPhongMaterial({ color: 0xFF0000, transparent: true, opacity: 0.6, shininess: 100 }),
     new THREE.MeshPhongMaterial({ color: 0x0000FF, transparent: true, opacity: 0.6, shininess: 100 }),
-    new THREE.MeshPhongMaterial({ color: 0x888888, transparent: true, opacity: 0.6, shininess: 100 }),
+    new THREE.MeshPhongMaterial({ color: 0x888888, transparent: true, opacity: 0.05, shininess: 100 }),
 ];
 
 export let ROW;
@@ -91,7 +91,6 @@ class Cell {
     }
     setV(v) {
         this.v = v;
-        this.cube.visible = (v != undefined);
         this.cube.material = MATERIALS[(v != undefined) ? v : 2]; // 0 1 undefined
     }
 }
