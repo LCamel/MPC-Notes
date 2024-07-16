@@ -27,10 +27,15 @@ function init(container) {
     let camera;
     {
         let ratio = W / H;
-        let w = 40;
+        let w = 20;
         let h = w / ratio;
         camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 1000 );
-        camera.position.set(20, 20, 20);
+        camera.position.set(10, 10, 10);
+    }
+    {
+        const controls = new OrbitControls(camera, container);
+        controls.target.set(0, 0, 0);
+        controls.update();
     }
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -48,12 +53,6 @@ function init(container) {
         const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
         scene.add(light);
     }
-    {
-        const controls = new OrbitControls(camera, container);
-        //controls.target.set(0, 0, 0);
-        controls.target.set(0, 10, 0);
-        controls.update();
-    }
     function animate() {
         renderer.render( scene, camera );
     }
@@ -62,20 +61,36 @@ function init(container) {
 export function setR(rArr) {
     console.log("rArr: ", rArr);
     ROW = rArr.length;
-    r = rArr.slice();
 
     init(container);
 
-    makeCube(1, 1, 1, MATERIALS[0]);
-    makeCube(2, 1, 1, MATERIALS[1]);
+    r = rArr.slice();
+
+    r = new Array(ROW);
+    for (let i = 0; i < ROW; i++) {
+        r[i] = new Cell(rArr[i], 1, ROW - i - 1, 0.5);
+    }
+    //makeCube(0, 0, 0, MATERIALS[2]);
 }
 
 function makeCube(x, y, z, material) {
     const g = new THREE.BoxGeometry(1, 1, 1);
     const cube = new THREE.Mesh(g, material);
-    cube.position.set(x, y, z);
+    cube.position.set(x + 0.5, y + 0.5, z + 0.5); // shift
     scene.add(cube);
     return cube;
+}
+
+class Cell {
+    constructor(v, x, y, z) {
+        this.cube = makeCube(x, y, z, MATERIALS[2]);
+        this.setV(v);
+    }
+    setV(v) {
+        this.v = v;
+        this.cube.visible = (v != undefined);
+        this.cube.material = MATERIALS[v || 2]; // 0 1 undefined
+    }
 }
 
 // export { setR };
