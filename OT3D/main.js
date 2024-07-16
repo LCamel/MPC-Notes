@@ -3,9 +3,15 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
 export let container;
 export let scene;
+const MATERIALS = [
+    new THREE.MeshPhongMaterial({ color: 0xFF0000, transparent: true, opacity: 0.6, shininess: 100 }),
+    new THREE.MeshPhongMaterial({ color: 0x0000FF, transparent: true, opacity: 0.6, shininess: 100 }),
+    new THREE.MeshPhongMaterial({ color: 0x888888, transparent: true, opacity: 0.6, shininess: 100 }),
+];
 
 export let ROW;
 export let r;
+export let COL = 6;
 
 
 export function setContainer(c) {
@@ -24,9 +30,7 @@ function init(container) {
         let w = 40;
         let h = w / ratio;
         camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 1000 );
-        camera.position.x = 20;
-        camera.position.y = 20;
-        camera.position.z = 20;
+        camera.position.set(20, 20, 20);
     }
 
     const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -61,5 +65,17 @@ export function setR(rArr) {
     r = rArr.slice();
 
     init(container);
+
+    makeCube(1, 1, 1, MATERIALS[0]);
+    makeCube(2, 1, 1, MATERIALS[1]);
 }
+
+function makeCube(x, y, z, material) {
+    const g = new THREE.BoxGeometry(1, 1, 1);
+    const cube = new THREE.Mesh(g, material);
+    cube.position.set(x, y, z);
+    scene.add(cube);
+    return cube;
+}
+
 // export { setR };
