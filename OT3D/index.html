@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<!--<script type="module" src="/main.js"></script>-->
+		<script type="module">
+			import * as tmp from "./main.js";
+			Object.keys(tmp).forEach(key => { window[key] = tmp[key]; });
+		</script>
+		<button onclick="setR()">OK</button>
+	</body>
+</html>
