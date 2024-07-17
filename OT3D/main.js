@@ -193,15 +193,21 @@ export function obliviousTransferQ() {
         for (let i = 0; i < ROW; i++) {
             Q[i][j].setV(src[i][j].v);
         }
-        /*
-        let other = (s[j].v == 0) ? T_XOR_r : T;
-        for (let i = 0; i < ROW; i++) {
-            other[i][j].cube.visible = false;
-        }
-            */
         let selected = (s[j].v == 0) ? T : T_XOR_r;
         selected.columnWireframe[j].visible = true;
     }
+}
+export function obliviousTransferQColumn(j) {
+    let src = (s[j].v == 0) ? T : T_XOR_r;
+    let zOffset = (s[j].v == 0) ? -0.2 : 0.2;
+    s[j].cube.position.z += zOffset;
+    src.columnWireframe[j].visible = true;
+    setTimeout(() => {
+        for (let i = 0; i < ROW; i++) {
+            Q[i][j].setV(src[i][j].v);
+        }
+        s[j].cube.position.z -= zOffset;
+    }, 500);
 }
 export function computeQ_XOR_s() {
     for (let i = 0; i < ROW; i++) {
