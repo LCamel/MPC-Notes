@@ -5,6 +5,8 @@ import {Text} from 'troika-three-text';
 
 export let container;
 export let scene;
+export let camera;
+
 const MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF0000 }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
@@ -31,14 +33,14 @@ function init(container) {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x202020);
 
-    let camera;
     {
         let ratio = W / H;
         let w = 20;
         let h = w / ratio;
         camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 1000 );
-        //camera.position.set(10, 10, 10);
-        camera.position.set(0, 10, 0);
+        camera.position.set(0, 10, 0); // or 10,10,10
+        camera.zoom = 1.5;
+        camera.updateProjectionMatrix();
     }
     {
         const controls = new OrbitControls(camera, container);
@@ -52,7 +54,7 @@ function init(container) {
 
     {
         let axesHelper = new THREE.AxesHelper(5);
-        scene.add(axesHelper);
+        //scene.add(axesHelper);
     }
     {
         // ref: https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping.html
@@ -90,7 +92,7 @@ export function setR(rArr) {
 export function makeWireframe(cell1, cell2, color) {
     let pos1 = cell1.cube.position;
     let pos2 = cell2.cube.position;
-    let g = new THREE.EdgesGeometry(new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1));
+    let g = new THREE.EdgesGeometry(new THREE.BoxGeometry(pos2.x - pos1.x + 1 - 0.01, pos2.y - pos1.y + 1 - 0.01, pos2.z - pos1.z + 1 - 0.01));
     let mat = new THREE.LineBasicMaterial( { color: color } );
     let wireframe = new THREE.LineSegments( g, mat );
     wireframe.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
