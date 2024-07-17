@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
+import {Text} from 'troika-three-text';
+
 export let container;
 export let scene;
 const MATERIALS = [
@@ -35,7 +37,8 @@ function init(container) {
         let w = 20;
         let h = w / ratio;
         camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 1000 );
-        camera.position.set(10, 10, 10);
+        //camera.position.set(10, 10, 10);
+        camera.position.set(0, 10, 0);
     }
     {
         const controls = new OrbitControls(camera, container);
@@ -119,6 +122,8 @@ export function makeR(rArr) {
     for (let i = 0; i < ROW; i++) {
         r[i] = new Cell(rArr[i], 0.5, ROW - i - 1, 0.5);
     }
+    let pos = r[ROW - 1].cube.position;
+    makeText("r", pos.x - 0.05, 0, pos.z + 0.5);
 }
 export function makeT() {
     T = new Array(ROW);
@@ -129,6 +134,8 @@ export function makeT() {
         }
     }
     T.columnWireframe = T[ROW - 1].map((cell1, j) => makeWireframe(cell1, T[0][j], MATERIALS[0].color));
+    let pos = T[ROW - 1][COL - 1].cube.position;
+    makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
 }
 export function makeT_XOR_r() {
     T_XOR_r = new Array(ROW);
@@ -139,12 +146,17 @@ export function makeT_XOR_r() {
         }
     }
     T_XOR_r.columnWireframe = T_XOR_r[ROW - 1].map((cell1, j) => makeWireframe(cell1, T_XOR_r[0][j], MATERIALS[1].color));
+    let pos = T_XOR_r[ROW - 1][COL - 1].cube.position;
+    makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
 }
 export function makeS() {
     s = new Array(COL);
     for (let j = 0; j < COL; j++) {
         s[j] = new Cell(undefined, j - COL, ROW, -1.5);
     }
+    let pos = s[0].cube.position;
+    makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
+
 }
 export function makeQ() {
     Q = new Array(ROW);
@@ -154,6 +166,8 @@ export function makeQ() {
             Q[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 0);
         }
     }
+    let pos = Q[ROW - 1][0].cube.position;
+    makeText("Q", pos.x - 1, 0, pos.z - 0.3);
 }
 export function makeQ_XOR_s() {
     Q_XOR_s = new Array(ROW);
@@ -163,6 +177,8 @@ export function makeQ_XOR_s() {
             Q_XOR_s[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 1);
         }
     }
+    let pos = Q_XOR_s[ROW - 1][0].cube.position;
+    makeText("Q⊕s", pos.x - 1.6, 0, pos.z - 0.35);
 }
 
 export function randomBit() {
@@ -226,4 +242,20 @@ export function hideShowRows(fn) {
             Q_XOR_s[i][j].cube.visible = show;
         }
     }
+}
+// https://protectwise.github.io/troika/troika-three-text/
+export function makeText(str, x, y, z) {
+    const myText = new Text();
+    scene.add(myText);
+
+    // Set properties to configure:
+    myText.text = str;
+    myText.fontSize = 0.5;
+    myText.position.set(x, y, z);
+    myText.color = 0x9966FF;
+
+    myText.rotation.set(-Math.PI / 2, 0, 0);
+
+    // Update the rendering:
+    myText.sync();
 }
