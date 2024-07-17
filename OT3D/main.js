@@ -84,14 +84,16 @@ export function setR(rArr) {
     makeQ_XOR_s();
 
 }
-export function makeWireframe(cell1, cell2) {
+export function makeWireframe(cell1, cell2, color) {
     let pos1 = cell1.cube.position;
     let pos2 = cell2.cube.position;
     let g = new THREE.EdgesGeometry(new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1));
-    let mat = new THREE.LineBasicMaterial( { color: 0xffffff } );
+    let mat = new THREE.LineBasicMaterial( { color: color } );
     let wireframe = new THREE.LineSegments( g, mat );
     wireframe.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
+    wireframe.visible = false; // !!
     scene.add(wireframe);
+    return wireframe;
 }
 function makeCube(x, y, z, material) {
     const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
@@ -126,6 +128,7 @@ export function makeT() {
             T[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 0);
         }
     }
+    T.columnWireframe = T[ROW - 1].map((cell1, j) => makeWireframe(cell1, T[0][j], MATERIALS[0].color));
 }
 export function makeT_XOR_r() {
     T_XOR_r = new Array(ROW);
@@ -135,6 +138,7 @@ export function makeT_XOR_r() {
             T_XOR_r[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
         }
     }
+    T_XOR_r.columnWireframe = T_XOR_r[ROW - 1].map((cell1, j) => makeWireframe(cell1, T_XOR_r[0][j], MATERIALS[1].color));
 }
 export function makeS() {
     s = new Array(COL);
@@ -189,10 +193,14 @@ export function obliviousTransferQ() {
         for (let i = 0; i < ROW; i++) {
             Q[i][j].setV(src[i][j].v);
         }
+        /*
         let other = (s[j].v == 0) ? T_XOR_r : T;
         for (let i = 0; i < ROW; i++) {
             other[i][j].cube.visible = false;
         }
+            */
+        let selected = (s[j].v == 0) ? T : T_XOR_r;
+        selected.columnWireframe[j].visible = true;
     }
 }
 export function computeQ_XOR_s() {
