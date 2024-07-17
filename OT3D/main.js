@@ -52,6 +52,7 @@ function init(container) {
         scene.add(axesHelper);
     }
     {
+        // ref: https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping.html
         scene.add( new THREE.AmbientLight( 0xcccccc ) );
 
         const spotLight = new THREE.SpotLight( 0xffffff, 100 );
