@@ -82,8 +82,17 @@ export function setR(rArr) {
     makeS();
     makeQ();
     makeQ_XOR_s();
-}
 
+}
+export function makeWireframe(cell1, cell2) {
+    let pos1 = cell1.cube.position;
+    let pos2 = cell2.cube.position;
+    let g = new THREE.EdgesGeometry(new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1));
+    let mat = new THREE.LineBasicMaterial( { color: 0xffffff } );
+    let wireframe = new THREE.LineSegments( g, mat );
+    wireframe.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
+    scene.add(wireframe);
+}
 function makeCube(x, y, z, material) {
     const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
     const cube = new THREE.Mesh(g, material);
