@@ -4,9 +4,9 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 export let container;
 export let scene;
 const MATERIALS = [
-    new THREE.MeshPhongMaterial({ color: 0xFF0000, transparent: true, opacity: 0.6, shininess: 100 }),
-    new THREE.MeshPhongMaterial({ color: 0x0000FF, transparent: true, opacity: 0.6, shininess: 100 }),
-    new THREE.MeshPhongMaterial({ color: 0x888888, transparent: true, opacity: 0.05, shininess: 100 }),
+    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF0000 }),
+    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
+    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.05 }),
 ];
 
 export let ROW;
@@ -27,6 +27,7 @@ function init(container) {
     let H = container.clientHeight;
 
     scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x202020);
 
     let camera;
     {
@@ -51,11 +52,17 @@ function init(container) {
         scene.add(axesHelper);
     }
     {
-        const skyColor = 0xB1E1FF;  // light blueconst intensity = 1;
-        const groundColor = 0xB97A20;  // brownish orange
-        const intensity = 5;
-        const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-        scene.add(light);
+        scene.add( new THREE.AmbientLight( 0xcccccc ) );
+
+        const spotLight = new THREE.SpotLight( 0xffffff, 100 );
+        spotLight.angle = Math.PI / 5;
+        spotLight.penumbra = 0.2;
+        spotLight.position.set( 10, 15, 15 );
+        scene.add(spotLight);
+
+        const dirLight = new THREE.DirectionalLight( 0x55505a, 20 );
+        dirLight.position.set( 0, 3, 0 );
+        scene.add(dirLight);
     }
     function animate() {
         renderer.render( scene, camera );
@@ -77,7 +84,7 @@ export function setR(rArr) {
 }
 
 function makeCube(x, y, z, material) {
-    const g = new THREE.BoxGeometry(1, 1, 1);
+    const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
     const cube = new THREE.Mesh(g, material);
     cube.position.set(x + 0.5, y + 0.5, z + 0.5); // shift
     scene.add(cube);
