@@ -199,14 +199,13 @@ export function obliviousTransferQ() {
 }
 export function obliviousTransferQColumn(j) {
     let src = (s[j].v == 0) ? T : T_XOR_r;
-    let zOffset = (s[j].v == 0) ? -0.2 : 0.2;
-    s[j].cube.position.z += zOffset;
+    s[j].cube.position.y += 0.2;
     src.columnWireframe[j].visible = true;
     setTimeout(() => {
         for (let i = 0; i < ROW; i++) {
             Q[i][j].setV(src[i][j].v);
         }
-        s[j].cube.position.z -= zOffset;
+        s[j].cube.position.y -= 0.2;
     }, 500);
 }
 export function computeQ_XOR_s() {
