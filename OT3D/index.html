@@ -27,6 +27,12 @@
                 nextOTColumn = (nextOTColumn + 1) % main.COL;
                 return ans;
             }
+            var hideIfLessThan = 0;
+            function getNextHideShowFn() {
+                let ans = (i) => i >= hideIfLessThan;
+                hideIfLessThan = (hideIfLessThan + 1) % main.ROW;
+                return ans;
+            }
         </script>
         <button onclick="inputR()">input r</button>
         <button onclick="main.generateT()">generate T</button>
@@ -35,6 +41,7 @@
         <!-- <button onclick="main.obliviousTransferQ()">Oblivious Transfer q</button> -->
         <button onclick="main.obliviousTransferQColumn(getNextOTColumn())">Oblivious Transfer q *</button>
         <button onclick="main.computeQ_XOR_s()">compute Q⊕s</button>
+        <button onclick="main.hideShowRows(getNextHideShowFn())">examine layers *</button>
         <div id="THE_CONTAINER"></div>
     </body>
 </html>

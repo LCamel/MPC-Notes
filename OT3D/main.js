@@ -216,3 +216,15 @@ export function computeQ_XOR_s() {
         }
     }
 }
+export function hideShowRows(fn) {
+    for (let i = 0; i < ROW; i++) {
+        var show = fn(i);
+        for (let j = 0; j < COL; j++) {
+            r[i].cube.visible =
+            T[i][j].cube.visible =
+            T_XOR_r[i][j].cube.visible =
+            Q[i][j].cube.visible =
+            Q_XOR_s[i][j].cube.visible = show;
+        }
+    }
+}
