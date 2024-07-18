@@ -93,15 +93,15 @@ export function setR(rArr) {
     makeQ_XOR_s();
     makeOTText();
 }
-export function makeWireframe(cell1, cell2, mat) {
+export function makeOTColumn(cell1, cell2, mat) {
     let pos1 = cell1.cube.position;
     let pos2 = cell2.cube.position;
     let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
-    let wireframe = new THREE.Mesh(g, mat);
-    wireframe.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
-    wireframe.visible = false; // !!
-    scene.add(wireframe);
-    return wireframe;
+    let OTColumn = new THREE.Mesh(g, mat);
+    OTColumn.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
+    OTColumn.visible = false; // !!
+    scene.add(OTColumn);
+    return OTColumn;
 }
 function makeCube(x, y, z, material) {
     const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
@@ -138,7 +138,7 @@ export function makeT() {
             T[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 0);
         }
     }
-    T.columnWireframe = T[ROW - 1].map((cell1, j) => makeWireframe(cell1, T[0][j], OT_COLUMN_MATERIALS[0]));
+    T.OTColumn = T[ROW - 1].map((cell1, j) => makeOTColumn(cell1, T[0][j], OT_COLUMN_MATERIALS[0]));
     let pos = T[ROW - 1][COL - 1].cube.position;
     makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
 }
@@ -150,7 +150,7 @@ export function makeT_XOR_r() {
             T_XOR_r[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
         }
     }
-    T_XOR_r.columnWireframe = T_XOR_r[ROW - 1].map((cell1, j) => makeWireframe(cell1, T_XOR_r[0][j], OT_COLUMN_MATERIALS[1]));
+    T_XOR_r.OTColumn = T_XOR_r[ROW - 1].map((cell1, j) => makeOTColumn(cell1, T_XOR_r[0][j], OT_COLUMN_MATERIALS[1]));
     let pos = T_XOR_r[ROW - 1][COL - 1].cube.position;
     makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
 }
@@ -218,8 +218,8 @@ export function generateS() {
 export function obliviousTransferQColumn(j) {
     let src = (s[j].v == 0) ? T : T_XOR_r;
     //s[j].cube.position.y += 0.2;
-    src.columnWireframe[j].visible = true;
-    OTText[j].color = src.columnWireframe[j].material.color;
+    src.OTColumn[j].visible = true;
+    OTText[j].color = src.OTColumn[j].material.color;
     OTText[j].visible = true;
     setTimeout(() => {
         for (let i = 0; i < ROW; i++) {
