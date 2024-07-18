@@ -12,7 +12,7 @@ const MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.02, depthWrite: false }),
 ];
-const OT_COLUMN_MATERIALS = [
+const WRAPPING_BOX_MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x8888FF, transparent: true, opacity: 0.3 }),
 ];
@@ -95,7 +95,7 @@ export function setR(rArr) {
     makeTarget(); // after Q and Q_XOR_s
     makeOTText();
 }
-export function makeOTColumn(cell1, cell2, mat) {
+export function makeWrappingBox(cell1, cell2, mat) {
     let pos1 = cell1.cube.position;
     let pos2 = cell2.cube.position;
     let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
@@ -140,7 +140,7 @@ export function makeT() {
             T[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 0);
         }
     }
-    T.OTColumn = T[ROW - 1].map((cell1, j) => makeOTColumn(cell1, T[0][j], OT_COLUMN_MATERIALS[0]));
+    T.OTColumn = T[ROW - 1].map((cell1, j) => makeWrappingBox(cell1, T[0][j], WRAPPING_BOX_MATERIALS[0]));
     let pos = T[ROW - 1][COL - 1].cube.position;
     makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
 }
@@ -152,7 +152,7 @@ export function makeT_XOR_r() {
             T_XOR_r[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
         }
     }
-    T_XOR_r.OTColumn = T_XOR_r[ROW - 1].map((cell1, j) => makeOTColumn(cell1, T_XOR_r[0][j], OT_COLUMN_MATERIALS[1]));
+    T_XOR_r.OTColumn = T_XOR_r[ROW - 1].map((cell1, j) => makeWrappingBox(cell1, T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1]));
     let pos = T_XOR_r[ROW - 1][COL - 1].cube.position;
     makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
 }
@@ -190,7 +190,7 @@ export function makeQ_XOR_s() {
 export function makeTarget() {
     Target = r.map((_r, i) => {
         let arr = (_r.v == 0) ? Q : Q_XOR_s;
-        return makeOTColumn(arr[i][0], arr[i][COL - 1], OT_COLUMN_MATERIALS[_r.v]);
+        return makeWrappingBox(arr[i][0], arr[i][COL - 1], WRAPPING_BOX_MATERIALS[_r.v]);
     })
 }
 export function makeOTText() {
