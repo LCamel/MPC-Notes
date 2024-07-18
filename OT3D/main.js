@@ -36,12 +36,11 @@ function init(container) {
 
     {
         let ratio = W / H;
-        let w = 20;
+        let w = 13;
         let h = w / ratio;
         camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 1000 );
         camera.position.set(0, 10, 0); // or 10,10,10
-        camera.zoom = 1.5;
-        camera.updateProjectionMatrix(); // for zoom
+        camera.setViewOffset(w, h, 1, -1, w, h);
     }
     {
         const controls = new OrbitControls(camera, container);
