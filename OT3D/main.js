@@ -10,7 +10,7 @@ export let camera;
 const MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF0000 }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
-    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.05 }),
+    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.02, depthWrite: false }),
 ];
 const OT_COLUMN_MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
@@ -26,6 +26,7 @@ export let s;
 export let Q;
 export let Q_XOR_s;
 export let OTText;
+export let Target;
 
 export function setContainer(c) {
     container = c;
@@ -91,6 +92,7 @@ export function setR(rArr) {
     makeS();
     makeQ();
     makeQ_XOR_s();
+    makeTarget(); // after Q and Q_XOR_s
     makeOTText();
 }
 export function makeOTColumn(cell1, cell2, mat) {
@@ -157,7 +159,7 @@ export function makeT_XOR_r() {
 export function makeS() {
     s = new Array(COL);
     for (let j = 0; j < COL; j++) {
-        s[j] = new Cell(undefined, j - COL, ROW, -1.5);
+        s[j] = new Cell(undefined, j - COL - 0.4, ROW, -1.5);
     }
     let pos = s[0].cube.position;
     makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
@@ -168,7 +170,7 @@ export function makeQ() {
     for (let i = 0; i < ROW; i++) {
         Q[i] = new Array(COL);
         for (let j = 0; j < COL; j++) {
-            Q[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 0);
+            Q[i][j] = new Cell(undefined, j - COL - 0.4, ROW - i - 1, 0);
         }
     }
     let pos = Q[ROW - 1][0].cube.position;
@@ -179,11 +181,17 @@ export function makeQ_XOR_s() {
     for (let i = 0; i < ROW; i++) {
         Q_XOR_s[i] = new Array(COL);
         for (let j = 0; j < COL; j++) {
-            Q_XOR_s[i][j] = new Cell(undefined, j - COL, ROW - i - 1, 1);
+            Q_XOR_s[i][j] = new Cell(undefined, j - COL - 0.4, ROW - i - 1, 1);
         }
     }
     let pos = Q_XOR_s[ROW - 1][0].cube.position;
     makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
+}
+export function makeTarget() {
+    Target = r.map((_r, i) => {
+        let arr = (_r.v == 0) ? Q : Q_XOR_s;
+        return makeOTColumn(arr[i][0], arr[i][COL - 1], OT_COLUMN_MATERIALS[_r.v]);
+    })
 }
 export function makeOTText() {
     OTText = new Array(COL);
@@ -246,6 +254,11 @@ export function hideShowRows(fn) {
             Q[i][j].cube.visible =
             Q_XOR_s[i][j].cube.visible = show;
         }
+    }
+}
+export function hideShowTargets(fn) {
+    for (let i = 0; i < ROW; i++) {
+        Target[i].visible = fn(i);
     }
 }
 // https://protectwise.github.io/troika/troika-three-text/
