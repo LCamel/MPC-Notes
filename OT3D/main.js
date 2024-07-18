@@ -224,9 +224,10 @@ export function generateS() {
     }
 }
 export function obliviousTransferQColumn(j) {
-    let src = (s[j].v == 0) ? T : T_XOR_r;
+    let [src, other] = (s[j].v == 0) ? [T, T_XOR_r] : [T_XOR_r, T];
     //s[j].cube.position.y += 0.2;
     src.OTColumn[j].visible = true;
+    other.OTColumn[j].visible = false; // nice to have (when repeating with a different "s")
     OTText[j].color = src.OTColumn[j].material.color;
     OTText[j].visible = true;
     setTimeout(() => {
