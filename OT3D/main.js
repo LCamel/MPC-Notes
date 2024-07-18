@@ -71,8 +71,8 @@ export let T_XOR_r;
 export let s;
 export let Q;
 export let Q_XOR_s;
+export let QQRows;
 export let OTText;
-export let Target;
 
 export function init(container, row, col) {
     initDisplay(container);
@@ -85,7 +85,7 @@ export function init(container, row, col) {
     makeS();
     makeQ();
     makeQ_XOR_s();
-    //makeTarget(); // after Q and Q_XOR_s
+    makeQQRows(); // after Q and Q_XOR_s
     makeOTText();
 
 }
@@ -182,11 +182,14 @@ export function makeQ_XOR_s() {
     let pos = Q_XOR_s[ROW - 1][0].cube.position;
     makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
 }
-export function makeTarget() {
-    Target = r.map((_r, i) => {
-        let arr = (_r.v == 0) ? Q : Q_XOR_s;
-        return makeWrappingBox(arr[i][0], arr[i][COL - 1], WRAPPING_BOX_MATERIALS[_r.v]);
-    })
+export function makeQQRows() {
+    QQRows = [];
+    for (let i = 0; i < ROW; i++) {
+        QQRows.push([
+            makeWrappingBox(Q[i][0], Q[i][COL - 1], WRAPPING_BOX_MATERIALS[0]),
+            makeWrappingBox(Q_XOR_s[i][0], Q_XOR_s[i][COL - 1], WRAPPING_BOX_MATERIALS[1])
+        ]);
+    }
 }
 export function makeOTText() {
     OTText = new Array(COL);
@@ -248,19 +251,23 @@ export function computeQ_XOR_s() {
 }
 export function hideShowRows(fn) {
     for (let i = 0; i < ROW; i++) {
-        var show = fn(i);
+        var showLayer = fn(i);
         for (let j = 0; j < COL; j++) {
             r[i].cube.visible =
             T[i][j].cube.visible =
             T_XOR_r[i][j].cube.visible =
             Q[i][j].cube.visible =
-            Q_XOR_s[i][j].cube.visible = show;
+            Q_XOR_s[i][j].cube.visible = showLayer;
         }
     }
 }
+// not only layer but also "r"
 export function hideShowTargets(fn) {
     for (let i = 0; i < ROW; i++) {
-        Target[i].visible = fn(i);
+        let showLayer = fn(i);
+        for (let k = 0; k < 2; k++) {
+            QQRows[i][k].visible = showLayer && (r[i].v == k);
+        }
     }
 }
 // https://protectwise.github.io/troika/troika-three-text/
