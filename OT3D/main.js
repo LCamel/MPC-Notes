@@ -12,6 +12,10 @@ const MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.05 }),
 ];
+const OT_COLUMN_MATERIALS = [
+    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
+    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x8888FF, transparent: true, opacity: 0.3 }),
+];
 
 export let ROW;
 export let r;
@@ -89,12 +93,11 @@ export function setR(rArr) {
     makeQ_XOR_s();
     makeOTText();
 }
-export function makeWireframe(cell1, cell2, color) {
+export function makeWireframe(cell1, cell2, mat) {
     let pos1 = cell1.cube.position;
     let pos2 = cell2.cube.position;
-    let g = new THREE.EdgesGeometry(new THREE.BoxGeometry(pos2.x - pos1.x + 1 - 0.01, pos2.y - pos1.y + 1 - 0.01, pos2.z - pos1.z + 1 - 0.01));
-    let mat = new THREE.LineBasicMaterial( { color: color } );
-    let wireframe = new THREE.LineSegments( g, mat );
+    let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
+    let wireframe = new THREE.Mesh(g, mat);
     wireframe.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
     wireframe.visible = false; // !!
     scene.add(wireframe);
@@ -135,7 +138,7 @@ export function makeT() {
             T[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 0);
         }
     }
-    T.columnWireframe = T[ROW - 1].map((cell1, j) => makeWireframe(cell1, T[0][j], MATERIALS[0].color));
+    T.columnWireframe = T[ROW - 1].map((cell1, j) => makeWireframe(cell1, T[0][j], OT_COLUMN_MATERIALS[0]));
     let pos = T[ROW - 1][COL - 1].cube.position;
     makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
 }
@@ -147,7 +150,7 @@ export function makeT_XOR_r() {
             T_XOR_r[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
         }
     }
-    T_XOR_r.columnWireframe = T_XOR_r[ROW - 1].map((cell1, j) => makeWireframe(cell1, T_XOR_r[0][j], MATERIALS[1].color));
+    T_XOR_r.columnWireframe = T_XOR_r[ROW - 1].map((cell1, j) => makeWireframe(cell1, T_XOR_r[0][j], OT_COLUMN_MATERIALS[1]));
     let pos = T_XOR_r[ROW - 1][COL - 1].cube.position;
     makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
 }
