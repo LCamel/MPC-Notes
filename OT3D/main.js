@@ -21,6 +21,7 @@ export let T_XOR_r;
 export let s;
 export let Q;
 export let Q_XOR_s;
+export let OTText;
 
 export function setContainer(c) {
     container = c;
@@ -40,7 +41,7 @@ function init(container) {
         camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 1000 );
         camera.position.set(0, 10, 0); // or 10,10,10
         camera.zoom = 1.5;
-        camera.updateProjectionMatrix();
+        camera.updateProjectionMatrix(); // for zoom
     }
     {
         const controls = new OrbitControls(camera, container);
@@ -87,7 +88,7 @@ export function setR(rArr) {
     makeS();
     makeQ();
     makeQ_XOR_s();
-
+    makeOTText();
 }
 export function makeWireframe(cell1, cell2, color) {
     let pos1 = cell1.cube.position;
@@ -125,7 +126,7 @@ export function makeR(rArr) {
         r[i] = new Cell(rArr[i], 0.5, ROW - i - 1, 0.5);
     }
     let pos = r[ROW - 1].cube.position;
-    makeText("r", pos.x - 0.05, 0, pos.z + 0.5);
+    makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
 }
 export function makeT() {
     T = new Array(ROW);
@@ -180,9 +181,16 @@ export function makeQ_XOR_s() {
         }
     }
     let pos = Q_XOR_s[ROW - 1][0].cube.position;
-    makeText("Q⊕s", pos.x - 1.6, 0, pos.z - 0.35);
+    makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
 }
-
+export function makeOTText() {
+    OTText = new Array(COL);
+    for (let j = 0; j < COL; j++) {
+        let pos = T_XOR_r[ROW - 1][j].cube.position;
+        OTText[j] = makeText("OT", pos.x - 0.34, 0, pos.z + 0.45);
+        OTText[j].visible = false;
+    }
+}
 export function randomBit() {
     return Math.random() < 0.5 ? 0 : 1;
 }
@@ -205,26 +213,19 @@ export function generateS() {
         s[j].setV(randomBit());
     }
 }
-export function obliviousTransferQ() {
-    for (let j = 0; j < COL; j++) {
-        let src = (s[j].v == 0) ? T : T_XOR_r;
-        for (let i = 0; i < ROW; i++) {
-            Q[i][j].setV(src[i][j].v);
-        }
-        let selected = (s[j].v == 0) ? T : T_XOR_r;
-        selected.columnWireframe[j].visible = true;
-    }
-}
 export function obliviousTransferQColumn(j) {
     let src = (s[j].v == 0) ? T : T_XOR_r;
-    s[j].cube.position.y += 0.2;
+    //s[j].cube.position.y += 0.2;
     src.columnWireframe[j].visible = true;
+    OTText[j].color = src.columnWireframe[j].material.color;
+    OTText[j].visible = true;
     setTimeout(() => {
         for (let i = 0; i < ROW; i++) {
             Q[i][j].setV(src[i][j].v);
         }
-        s[j].cube.position.y -= 0.2;
-    }, 500);
+        //s[j].cube.position.y -= 0.2;
+        OTText[j].visible = false;
+    }, 800);
 }
 export function computeQ_XOR_s() {
     for (let i = 0; i < ROW; i++) {
@@ -260,4 +261,5 @@ export function makeText(str, x, y, z) {
 
     // Update the rendering:
     myText.sync();
+    return myText;
 }
