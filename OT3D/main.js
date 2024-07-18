@@ -1,11 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-
 import {Text} from 'troika-three-text';
-
-export let container;
-export let scene;
-export let camera;
 
 const MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF0000 }),
@@ -16,23 +11,10 @@ const WRAPPING_BOX_MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x8888FF, transparent: true, opacity: 0.3 }),
 ];
+export let scene;
+export let camera;
 
-export let ROW;
-export let r;
-export let COL = 3;
-export let T;
-export let T_XOR_r;
-export let s;
-export let Q;
-export let Q_XOR_s;
-export let OTText;
-export let Target;
-
-export function setContainer(c) {
-    container = c;
-}
-
-function init(container) {
+function initDisplay(container) {
     let W = container.clientWidth;
     let H = container.clientHeight;
 
@@ -80,37 +62,32 @@ function init(container) {
     }
     renderer.setAnimationLoop( animate );
 }
-export function setR(rArr) {
-    console.log("rArr: ", rArr);
-    ROW = rArr.length;
 
-    init(container);
+export let ROW;
+export let COL;
+export let r;
+export let T;
+export let T_XOR_r;
+export let s;
+export let Q;
+export let Q_XOR_s;
+export let OTText;
+export let Target;
 
-    makeR(rArr);
+export function init(container, row, col) {
+    initDisplay(container);
+
+    ROW = row;
+    COL = col;
+    makeR();
     makeT();
     makeT_XOR_r();
     makeS();
     makeQ();
     makeQ_XOR_s();
-    makeTarget(); // after Q and Q_XOR_s
+    //makeTarget(); // after Q and Q_XOR_s
     makeOTText();
-}
-export function makeWrappingBox(cell1, cell2, mat) {
-    let pos1 = cell1.cube.position;
-    let pos2 = cell2.cube.position;
-    let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
-    let OTColumn = new THREE.Mesh(g, mat);
-    OTColumn.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
-    OTColumn.visible = false; // !!
-    scene.add(OTColumn);
-    return OTColumn;
-}
-function makeCube(x, y, z, material) {
-    const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-    const cube = new THREE.Mesh(g, material);
-    cube.position.set(x + 0.5, y + 0.5, z + 0.5); // shift
-    scene.add(cube);
-    return cube;
+
 }
 
 class Cell {
@@ -124,10 +101,28 @@ class Cell {
     }
 }
 
-export function makeR(rArr) {
+export function makeWrappingBox(cell1, cell2, mat) {
+    let pos1 = cell1.cube.position;
+    let pos2 = cell2.cube.position;
+    let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
+    let OTColumn = new THREE.Mesh(g, mat);
+    OTColumn.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
+    OTColumn.visible = false; // !!
+    scene.add(OTColumn);
+    return OTColumn;
+}
+export function makeCube(x, y, z, material) {
+    const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+    const cube = new THREE.Mesh(g, material);
+    cube.position.set(x + 0.5, y + 0.5, z + 0.5); // shift
+    scene.add(cube);
+    return cube;
+}
+
+export function makeR() {
     r = new Array(ROW);
     for (let i = 0; i < ROW; i++) {
-        r[i] = new Cell(rArr[i], 0.5, ROW - i - 1, 0.5);
+        r[i] = new Cell(undefined, 0.5, ROW - i - 1, 0.5);
     }
     let pos = r[ROW - 1].cube.position;
     makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
@@ -203,6 +198,12 @@ export function makeOTText() {
 }
 export function randomBit() {
     return Math.random() < 0.5 ? 0 : 1;
+}
+
+export function setR(rArr) {
+    console.log("setR: ", rArr);
+    if (rArr.length != ROW) { throw new Error("array size mismatch"); }
+    rArr.forEach((v, j) => r[j].setV(v));
 }
 export function generateT() {
     for (let i = 0; i < ROW; i++) {

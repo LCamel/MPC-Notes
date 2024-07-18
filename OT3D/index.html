@@ -12,15 +12,16 @@
     <body>
         <script type="module">
             import * as main from "./main.js";
+            main.init(document.getElementById("THE_CONTAINER"), 5, 3);
             window.main = main;
         </script>
         <script>
             function inputR() {
                 var rStr = prompt("Input r:\nExample:\n1\n0\n101\n01001011001");
                 console.log(rStr);
-                main.setContainer(document.getElementById("THE_CONTAINER"));
                 main.setR([...rStr]);
             }
+
             var nextOTColumn = 0;
             function getNextOTColumn() {
                 let ans = nextOTColumn;
