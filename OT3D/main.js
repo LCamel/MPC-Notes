@@ -24,10 +24,6 @@ class Cell {
 }
 
 class Main {
-    new_Cell(v, x, y, z) {
-        let cube = this.makeCube(x, y, z, MATERIALS[2]);
-        return new Cell(cube);
-    }
     constructor() {
         this.scene = null;
         this.camera = null;
@@ -116,6 +112,11 @@ class Main {
         return cube;
     }
 
+    makeCell(x, y, z) {
+        let cube = this.makeCube(x, y, z, MATERIALS[2]); // TODO: leak info
+        return new Cell(cube);
+    }
+
     makeWrappingBox(cell1, cell2, mat) {
         let pos1 = cell1.cube.position;
         let pos2 = cell2.cube.position;
@@ -130,7 +131,7 @@ class Main {
     makeR() {
         this.r = new Array(this.ROW);
         for (let i = 0; i < this.ROW; i++) {
-            this.r[i] = this.new_Cell(undefined, 0.5, this.ROW - i - 1, 0.5);
+            this.r[i] = this.makeCell(0.5, this.ROW - i - 1, 0.5);
         }
         let pos = this.r[this.ROW - 1].cube.position;
         this.makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
@@ -141,7 +142,7 @@ class Main {
         for (let i = 0; i < this.ROW; i++) {
             this.T[i] = new Array(this.COL);
             for (let j = 0; j < this.COL; j++) {
-                this.T[i][j] = this.new_Cell(undefined, 2 + j, this.ROW - i - 1, 0);
+                this.T[i][j] = this.makeCell(2 + j, this.ROW - i - 1, 0);
             }
         }
         this.T.OTColumn = this.T[this.ROW - 1].map((cell1, j) => this.makeWrappingBox(cell1, this.T[0][j], WRAPPING_BOX_MATERIALS[0]));
@@ -154,7 +155,7 @@ class Main {
         for (let i = 0; i < this.ROW; i++) {
             this.T_XOR_r[i] = new Array(this.COL);
             for (let j = 0; j < this.COL; j++) {
-                this.T_XOR_r[i][j] = this.new_Cell(undefined, 2 + j, this.ROW - i - 1, 1);
+                this.T_XOR_r[i][j] = this.makeCell(2 + j, this.ROW - i - 1, 1);
             }
         }
         this.T_XOR_r.OTColumn = this.T_XOR_r[this.ROW - 1].map((cell1, j) => this.makeWrappingBox(cell1, this.T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1]));
@@ -165,7 +166,7 @@ class Main {
     makeS() {
         this.s = new Array(this.COL);
         for (let j = 0; j < this.COL; j++) {
-            this.s[j] = this.new_Cell(undefined, j - this.COL - 0.4, this.ROW, -1.5);
+            this.s[j] = this.makeCell(j - this.COL - 0.4, this.ROW, -1.5);
         }
         let pos = this.s[0].cube.position;
         this.makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
@@ -176,7 +177,7 @@ class Main {
         for (let i = 0; i < this.ROW; i++) {
             this.Q[i] = new Array(this.COL);
             for (let j = 0; j < this.COL; j++) {
-                this.Q[i][j] = this.new_Cell(undefined, j - this.COL - 0.4, this.ROW - i - 1, 0);
+                this.Q[i][j] = this.makeCell(j - this.COL - 0.4, this.ROW - i - 1, 0);
             }
         }
         let pos = this.Q[this.ROW - 1][0].cube.position;
@@ -188,7 +189,7 @@ class Main {
         for (let i = 0; i < this.ROW; i++) {
             this.Q_XOR_s[i] = new Array(this.COL);
             for (let j = 0; j < this.COL; j++) {
-                this.Q_XOR_s[i][j] = this.new_Cell(undefined, j - this.COL - 0.4, this.ROW - i - 1, 1);
+                this.Q_XOR_s[i][j] = this.makeCell(j - this.COL - 0.4, this.ROW - i - 1, 1);
             }
         }
         let pos = this.Q_XOR_s[this.ROW - 1][0].cube.position;
