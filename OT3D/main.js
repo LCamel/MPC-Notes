@@ -11,89 +11,11 @@ const WRAPPING_BOX_MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x8888FF, transparent: true, opacity: 0.3 }),
 ];
-export let scene;
-export let camera;
-
-function initDisplay(container) {
-    let W = container.clientWidth;
-    let H = container.clientHeight;
-
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x202020);
-
-    {
-        let ratio = W / H;
-        let w = 13;
-        let h = w / ratio;
-        camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 1000 );
-        camera.position.set(0, 10, 0); // or 10,10,10
-        camera.setViewOffset(w, h, 1, -1, w, h);
-    }
-    {
-        const controls = new OrbitControls(camera, container);
-        controls.target.set(0, 0, 0);
-        controls.update();
-    }
-
-    const renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setSize(W, H);
-    container.appendChild( renderer.domElement );
-
-    {
-        let axesHelper = new THREE.AxesHelper(5);
-        //scene.add(axesHelper);
-    }
-    {
-        // ref: https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping.html
-        scene.add( new THREE.AmbientLight( 0xcccccc ) );
-
-        const spotLight = new THREE.SpotLight( 0xffffff, 100 );
-        spotLight.angle = Math.PI / 5;
-        spotLight.penumbra = 0.2;
-        spotLight.position.set( 10, 15, 15 );
-        scene.add(spotLight);
-
-        const dirLight = new THREE.DirectionalLight( 0x55505a, 20 );
-        dirLight.position.set( 0, 3, 0 );
-        scene.add(dirLight);
-    }
-    function animate() {
-        renderer.render( scene, camera );
-    }
-    renderer.setAnimationLoop( animate );
-}
-
-export let ROW;
-export let COL;
-export let r;
-export let T;
-export let T_XOR_r;
-export let s;
-export let Q;
-export let Q_XOR_s;
-export let QQRows;
-export let OTText;
-
-export function init(container, row, col) {
-    initDisplay(container);
-
-    ROW = row;
-    COL = col;
-    makeR();
-    makeT();
-    makeT_XOR_r();
-    makeS();
-    makeQ();
-    makeQ_XOR_s();
-    makeQQRows(); // after Q and Q_XOR_s
-    makeOTText();
-
-}
 
 class Cell {
-    constructor(v, x, y, z) {
-        this.cube = makeCube(x, y, z, MATERIALS[2]);
-        this.setV(v);
+    constructor(cube) {
+        this.v = undefined;
+        this.cube = cube;
     }
     setV(v) {
         this.v = v;
@@ -101,189 +23,291 @@ class Cell {
     }
 }
 
-export function makeWrappingBox(cell1, cell2, mat) {
-    let pos1 = cell1.cube.position;
-    let pos2 = cell2.cube.position;
-    let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
-    let OTColumn = new THREE.Mesh(g, mat);
-    OTColumn.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
-    OTColumn.visible = false; // !!
-    scene.add(OTColumn);
-    return OTColumn;
-}
-export function makeCube(x, y, z, material) {
-    const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-    const cube = new THREE.Mesh(g, material);
-    cube.position.set(x + 0.5, y + 0.5, z + 0.5); // shift
-    scene.add(cube);
-    return cube;
+class Main {
+    new_Cell(v, x, y, z) {
+        let cube = this.makeCube(x, y, z, MATERIALS[2]);
+        return new Cell(cube);
+    }
+    constructor() {
+        this.scene = null;
+        this.camera = null;
+        this.ROW = null;
+        this.COL = null;
+        this.r = null;
+        this.T = null;
+        this.T_XOR_r = null;
+        this.s = null;
+        this.Q = null;
+        this.Q_XOR_s = null;
+        this.QQRows = null;
+        this.OTText = null;
+    }
+
+    init(container, row, col) {
+        this.initDisplay(container);
+
+        this.ROW = row;
+        this.COL = col;
+        this.makeR();
+        this.makeT();
+        this.makeT_XOR_r();
+        this.makeS();
+        this.makeQ();
+        this.makeQ_XOR_s();
+        this.makeQQRows(); // after Q and Q_XOR_s
+        this.makeOTText();
+    }
+
+    initDisplay(container) {
+        let W = container.clientWidth;
+        let H = container.clientHeight;
+
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x202020);
+
+        {
+            let ratio = W / H;
+            let w = 13;
+            let h = w / ratio;
+            this.camera = new THREE.OrthographicCamera(w / -2, w / 2, h / 2, h / -2, 1, 1000);
+            this.camera.position.set(0, 10, 0); // or 10,10,10
+            this.camera.setViewOffset(w, h, 1, -1, w, h);
+        }
+        {
+            const controls = new OrbitControls(this.camera, container);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        }
+
+        const renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(W, H);
+        container.appendChild(renderer.domElement);
+
+        {
+            let axesHelper = new THREE.AxesHelper(5);
+            // this.scene.add(axesHelper);
+        }
+        {
+            // ref: https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping.html
+            this.scene.add(new THREE.AmbientLight(0xcccccc));
+
+            const spotLight = new THREE.SpotLight(0xffffff, 100);
+            spotLight.angle = Math.PI / 5;
+            spotLight.penumbra = 0.2;
+            spotLight.position.set(10, 15, 15);
+            this.scene.add(spotLight);
+
+            const dirLight = new THREE.DirectionalLight(0x55505a, 20);
+            dirLight.position.set(0, 3, 0);
+            this.scene.add(dirLight);
+        }
+
+        const animate = () => {
+            renderer.render(this.scene, this.camera);
+        };
+        renderer.setAnimationLoop(animate);
+    }
+
+    makeCube(x, y, z, material) {
+        const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+        const cube = new THREE.Mesh(g, material);
+        cube.position.set(x + 0.5, y + 0.5, z + 0.5); // shift
+        this.scene.add(cube);
+        return cube;
+    }
+
+    makeWrappingBox(cell1, cell2, mat) {
+        let pos1 = cell1.cube.position;
+        let pos2 = cell2.cube.position;
+        let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
+        let OTColumn = new THREE.Mesh(g, mat);
+        OTColumn.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
+        OTColumn.visible = false; // !!
+        this.scene.add(OTColumn);
+        return OTColumn;
+    }
+
+    makeR() {
+        this.r = new Array(this.ROW);
+        for (let i = 0; i < this.ROW; i++) {
+            this.r[i] = this.new_Cell(undefined, 0.5, this.ROW - i - 1, 0.5);
+        }
+        let pos = this.r[this.ROW - 1].cube.position;
+        this.makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
+    }
+
+    makeT() {
+        this.T = new Array(this.ROW);
+        for (let i = 0; i < this.ROW; i++) {
+            this.T[i] = new Array(this.COL);
+            for (let j = 0; j < this.COL; j++) {
+                this.T[i][j] = this.new_Cell(undefined, 2 + j, this.ROW - i - 1, 0);
+            }
+        }
+        this.T.OTColumn = this.T[this.ROW - 1].map((cell1, j) => this.makeWrappingBox(cell1, this.T[0][j], WRAPPING_BOX_MATERIALS[0]));
+        let pos = this.T[this.ROW - 1][this.COL - 1].cube.position;
+        this.makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
+    }
+
+    makeT_XOR_r() {
+        this.T_XOR_r = new Array(this.ROW);
+        for (let i = 0; i < this.ROW; i++) {
+            this.T_XOR_r[i] = new Array(this.COL);
+            for (let j = 0; j < this.COL; j++) {
+                this.T_XOR_r[i][j] = this.new_Cell(undefined, 2 + j, this.ROW - i - 1, 1);
+            }
+        }
+        this.T_XOR_r.OTColumn = this.T_XOR_r[this.ROW - 1].map((cell1, j) => this.makeWrappingBox(cell1, this.T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1]));
+        let pos = this.T_XOR_r[this.ROW - 1][this.COL - 1].cube.position;
+        this.makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
+    }
+
+    makeS() {
+        this.s = new Array(this.COL);
+        for (let j = 0; j < this.COL; j++) {
+            this.s[j] = this.new_Cell(undefined, j - this.COL - 0.4, this.ROW, -1.5);
+        }
+        let pos = this.s[0].cube.position;
+        this.makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
+    }
+
+    makeQ() {
+        this.Q = new Array(this.ROW);
+        for (let i = 0; i < this.ROW; i++) {
+            this.Q[i] = new Array(this.COL);
+            for (let j = 0; j < this.COL; j++) {
+                this.Q[i][j] = this.new_Cell(undefined, j - this.COL - 0.4, this.ROW - i - 1, 0);
+            }
+        }
+        let pos = this.Q[this.ROW - 1][0].cube.position;
+        this.makeText("Q", pos.x - 1, 0, pos.z - 0.3);
+    }
+
+    makeQ_XOR_s() {
+        this.Q_XOR_s = new Array(this.ROW);
+        for (let i = 0; i < this.ROW; i++) {
+            this.Q_XOR_s[i] = new Array(this.COL);
+            for (let j = 0; j < this.COL; j++) {
+                this.Q_XOR_s[i][j] = this.new_Cell(undefined, j - this.COL - 0.4, this.ROW - i - 1, 1);
+            }
+        }
+        let pos = this.Q_XOR_s[this.ROW - 1][0].cube.position;
+        this.makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
+    }
+
+    makeQQRows() {
+        this.QQRows = [];
+        for (let i = 0; i < this.ROW; i++) {
+            this.QQRows.push([
+                this.makeWrappingBox(this.Q[i][0], this.Q[i][this.COL - 1], WRAPPING_BOX_MATERIALS[0]),
+                this.makeWrappingBox(this.Q_XOR_s[i][0], this.Q_XOR_s[i][this.COL - 1], WRAPPING_BOX_MATERIALS[1])
+            ]);
+        }
+    }
+
+    makeOTText() {
+        this.OTText = new Array(this.COL);
+        for (let j = 0; j < this.COL; j++) {
+            let pos = this.T_XOR_r[this.ROW - 1][j].cube.position;
+            this.OTText[j] = this.makeText("OT", pos.x - 0.34, 0, pos.z + 0.45);
+            this.OTText[j].visible = false;
+        }
+    }
+
+    randomBit() {
+        return Math.random() < 0.5 ? 0 : 1;
+    }
+
+    setR(rArr) {
+        console.log("setR: ", rArr);
+        if (rArr.length != this.ROW) { throw new Error("array size mismatch"); }
+        rArr.forEach((v, j) => this.r[j].setV(v));
+    }
+
+    generateT() {
+        for (let i = 0; i < this.ROW; i++) {
+            for (let j = 0; j < this.COL; j++) {
+                this.T[i][j].setV(this.randomBit());
+            }
+        }
+    }
+
+    computeT_XOR_r() {
+        for (let i = 0; i < this.ROW; i++) {
+            for (let j = 0; j < this.COL; j++) {
+                this.T_XOR_r[i][j].setV(this.T[i][j].v ^ this.r[i].v);
+            }
+        }
+    }
+
+    generateS() {
+        for (let j = 0; j < this.COL; j++) {
+            this.s[j].setV(this.randomBit());
+        }
+    }
+
+    obliviousTransferQColumn(j) {
+        let [src, other] = (this.s[j].v == 0) ? [this.T, this.T_XOR_r] : [this.T_XOR_r, this.T];
+        // this.s[j].cube.position.y += 0.2;
+        src.OTColumn[j].visible = true;
+        other.OTColumn[j].visible = false; // nice to have (when repeating with a different "s")
+        this.OTText[j].color = src.OTColumn[j].material.color;
+        this.OTText[j].visible = true;
+        setTimeout(() => {
+            for (let i = 0; i < this.ROW; i++) {
+                this.Q[i][j].setV(src[i][j].v);
+            }
+            // this.s[j].cube.position.y -= 0.2;
+            this.OTText[j].visible = false;
+        }, 800);
+    }
+
+    computeQ_XOR_s() {
+        for (let i = 0; i < this.ROW; i++) {
+            for (let j = 0; j < this.COL; j++) {
+                this.Q_XOR_s[i][j].setV(this.Q[i][j].v ^ this.s[j].v);
+            }
+        }
+    }
+
+    hideShowRows(fn) {
+        for (let i = 0; i < this.ROW; i++) {
+            var showLayer = fn(i);
+            for (let j = 0; j < this.COL; j++) {
+                this.r[i].cube.visible =
+                this.T[i][j].cube.visible =
+                this.T_XOR_r[i][j].cube.visible =
+                this.Q[i][j].cube.visible =
+                this.Q_XOR_s[i][j].cube.visible = showLayer;
+            }
+        }
+    }
+
+    hideShowTargets(fn) {
+        for (let i = 0; i < this.ROW; i++) {
+            let showLayer = fn(i);
+            for (let k = 0; k < 2; k++) {
+                this.QQRows[i][k].visible = showLayer && (this.r[i].v == k);
+            }
+        }
+    }
+
+    makeText(str, x, y, z) {
+        const myText = new Text();
+        this.scene.add(myText);
+
+        // Set properties to configure:
+        myText.text = str;
+        myText.fontSize = 0.5;
+        myText.position.set(x, y, z);
+        myText.color = 0x9966FF;
+
+        myText.rotation.set(-Math.PI / 2, 0, 0);
+
+        // Update the rendering:
+        myText.sync();
+        return myText;
+    }
 }
 
-export function makeR() {
-    r = new Array(ROW);
-    for (let i = 0; i < ROW; i++) {
-        r[i] = new Cell(undefined, 0.5, ROW - i - 1, 0.5);
-    }
-    let pos = r[ROW - 1].cube.position;
-    makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
-}
-export function makeT() {
-    T = new Array(ROW);
-    for (let i = 0; i < ROW; i++) {
-        T[i] = new Array(COL);
-        for (let j = 0; j < COL; j++) {
-            T[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 0);
-        }
-    }
-    T.OTColumn = T[ROW - 1].map((cell1, j) => makeWrappingBox(cell1, T[0][j], WRAPPING_BOX_MATERIALS[0]));
-    let pos = T[ROW - 1][COL - 1].cube.position;
-    makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
-}
-export function makeT_XOR_r() {
-    T_XOR_r = new Array(ROW);
-    for (let i = 0; i < ROW; i++) {
-        T_XOR_r[i] = new Array(COL);
-        for (let j = 0; j < COL; j++) {
-            T_XOR_r[i][j] = new Cell(undefined, 2 + j, ROW - i - 1, 1);
-        }
-    }
-    T_XOR_r.OTColumn = T_XOR_r[ROW - 1].map((cell1, j) => makeWrappingBox(cell1, T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1]));
-    let pos = T_XOR_r[ROW - 1][COL - 1].cube.position;
-    makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
-}
-export function makeS() {
-    s = new Array(COL);
-    for (let j = 0; j < COL; j++) {
-        s[j] = new Cell(undefined, j - COL - 0.4, ROW, -1.5);
-    }
-    let pos = s[0].cube.position;
-    makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
-
-}
-export function makeQ() {
-    Q = new Array(ROW);
-    for (let i = 0; i < ROW; i++) {
-        Q[i] = new Array(COL);
-        for (let j = 0; j < COL; j++) {
-            Q[i][j] = new Cell(undefined, j - COL - 0.4, ROW - i - 1, 0);
-        }
-    }
-    let pos = Q[ROW - 1][0].cube.position;
-    makeText("Q", pos.x - 1, 0, pos.z - 0.3);
-}
-export function makeQ_XOR_s() {
-    Q_XOR_s = new Array(ROW);
-    for (let i = 0; i < ROW; i++) {
-        Q_XOR_s[i] = new Array(COL);
-        for (let j = 0; j < COL; j++) {
-            Q_XOR_s[i][j] = new Cell(undefined, j - COL - 0.4, ROW - i - 1, 1);
-        }
-    }
-    let pos = Q_XOR_s[ROW - 1][0].cube.position;
-    makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
-}
-export function makeQQRows() {
-    QQRows = [];
-    for (let i = 0; i < ROW; i++) {
-        QQRows.push([
-            makeWrappingBox(Q[i][0], Q[i][COL - 1], WRAPPING_BOX_MATERIALS[0]),
-            makeWrappingBox(Q_XOR_s[i][0], Q_XOR_s[i][COL - 1], WRAPPING_BOX_MATERIALS[1])
-        ]);
-    }
-}
-export function makeOTText() {
-    OTText = new Array(COL);
-    for (let j = 0; j < COL; j++) {
-        let pos = T_XOR_r[ROW - 1][j].cube.position;
-        OTText[j] = makeText("OT", pos.x - 0.34, 0, pos.z + 0.45);
-        OTText[j].visible = false;
-    }
-}
-export function randomBit() {
-    return Math.random() < 0.5 ? 0 : 1;
-}
-
-export function setR(rArr) {
-    console.log("setR: ", rArr);
-    if (rArr.length != ROW) { throw new Error("array size mismatch"); }
-    rArr.forEach((v, j) => r[j].setV(v));
-}
-export function generateT() {
-    for (let i = 0; i < ROW; i++) {
-        for (let j = 0; j < COL; j++) {
-            T[i][j].setV(randomBit());
-        }
-    }
-}
-export function computeT_XOR_r() {
-    for (let i = 0; i < ROW; i++) {
-        for (let j = 0; j < COL; j++) {
-            T_XOR_r[i][j].setV(T[i][j].v ^ r[i].v);
-        }
-    }
-}
-export function generateS() {
-    for (let j = 0; j < COL; j++) {
-        s[j].setV(randomBit());
-    }
-}
-export function obliviousTransferQColumn(j) {
-    let [src, other] = (s[j].v == 0) ? [T, T_XOR_r] : [T_XOR_r, T];
-    //s[j].cube.position.y += 0.2;
-    src.OTColumn[j].visible = true;
-    other.OTColumn[j].visible = false; // nice to have (when repeating with a different "s")
-    OTText[j].color = src.OTColumn[j].material.color;
-    OTText[j].visible = true;
-    setTimeout(() => {
-        for (let i = 0; i < ROW; i++) {
-            Q[i][j].setV(src[i][j].v);
-        }
-        //s[j].cube.position.y -= 0.2;
-        OTText[j].visible = false;
-    }, 800);
-}
-export function computeQ_XOR_s() {
-    for (let i = 0; i < ROW; i++) {
-        for (let j = 0; j < COL; j++) {
-            Q_XOR_s[i][j].setV(Q[i][j].v ^ s[j].v);
-        }
-    }
-}
-export function hideShowRows(fn) {
-    for (let i = 0; i < ROW; i++) {
-        var showLayer = fn(i);
-        for (let j = 0; j < COL; j++) {
-            r[i].cube.visible =
-            T[i][j].cube.visible =
-            T_XOR_r[i][j].cube.visible =
-            Q[i][j].cube.visible =
-            Q_XOR_s[i][j].cube.visible = showLayer;
-        }
-    }
-}
-// not only layer but also "r"
-export function hideShowTargets(fn) {
-    for (let i = 0; i < ROW; i++) {
-        let showLayer = fn(i);
-        for (let k = 0; k < 2; k++) {
-            QQRows[i][k].visible = showLayer && (r[i].v == k);
-        }
-    }
-}
-// https://protectwise.github.io/troika/troika-three-text/
-export function makeText(str, x, y, z) {
-    const myText = new Text();
-    scene.add(myText);
-
-    // Set properties to configure:
-    myText.text = str;
-    myText.fontSize = 0.5;
-    myText.position.set(x, y, z);
-    myText.color = 0x9966FF;
-
-    myText.rotation.set(-Math.PI / 2, 0, 0);
-
-    // Update the rendering:
-    myText.sync();
-    return myText;
-}
+export { Main };

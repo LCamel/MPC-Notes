@@ -11,7 +11,8 @@
     </head>
     <body>
         <script type="module">
-            import * as main from "./main.js";
+            import { Main } from "./main.js";
+            const main = new Main();
             main.init(document.getElementById("THE_CONTAINER"), 5, 3);
             window.main = main;
         </script>
