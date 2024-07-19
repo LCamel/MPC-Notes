@@ -37,6 +37,10 @@ class Main {
         this.Q_XOR_s = null;
         this.QQRows = null;
         this.OTText = null;
+
+        this.nextOTColumn = 0;
+        this.showIfRowGreatOrEqualThan = 0;
+        this.showTarget = false;
     }
 
     init(container, row, col) {
@@ -247,7 +251,7 @@ class Main {
         }
     }
 
-    obliviousTransferQColumn(j) {
+    obliviousTransferColumn(j) { // somewhat private
         let [src, other] = (this.s[j].v == 0) ? [this.T, this.T_XOR_r] : [this.T_XOR_r, this.T];
         // this.s[j].cube.position.y += 0.2;
         src.OTColumn[j].visible = true;
@@ -262,6 +266,10 @@ class Main {
             this.OTText[j].visible = false;
         }, 800);
     }
+    obliviousTransferNextColumn() {
+        this.obliviousTransferColumn(this.nextOTColumn);
+        this.nextOTColumn = (this.nextOTColumn + 1) % this.COL;
+    }
 
     computeQ_XOR_s() {
         for (let i = 0; i < this.ROW; i++) {
@@ -271,7 +279,8 @@ class Main {
         }
     }
 
-    hideShowRows(fn) {
+
+    hideShowCellsByRow(fn) { // somewhat private
         for (let i = 0; i < this.ROW; i++) {
             var showLayer = fn(i);
             for (let j = 0; j < this.COL; j++) {
@@ -283,8 +292,7 @@ class Main {
             }
         }
     }
-
-    hideShowTargets(fn) {
+    hideShowTargetsByRow(fn) { // somewhat private
         for (let i = 0; i < this.ROW; i++) {
             let showLayer = fn(i);
             for (let k = 0; k < 2; k++) {
@@ -292,6 +300,19 @@ class Main {
             }
         }
     }
+    hideShow() { // somewhat private
+        this.hideShowCellsByRow((i) => i >= this.showIfRowGreatOrEqualThan);
+        this.hideShowTargetsByRow((i) => this.showTarget && (i >= this.showIfRowGreatOrEqualThan));
+    }
+    toggleShowRowThreshold() {
+        this.showIfRowGreatOrEqualThan = (this.showIfRowGreatOrEqualThan + 1) % this.ROW;
+        this.hideShow();
+    }
+    toggleShowTarget() {
+        this.showTarget = !this.showTarget;
+        this.hideShow();
+    }
+
 
     makeText(str, x, y, z) {
         const myText = new Text();

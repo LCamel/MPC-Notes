@@ -22,37 +22,17 @@
                 console.log(rStr);
                 main.setR([...rStr]);
             }
-
-            var nextOTColumn = 0;
-            function getNextOTColumn() {
-                let ans = nextOTColumn;
-                nextOTColumn = (nextOTColumn + 1) % main.COL;
-                return ans;
-            }
-
-            var showRowIfGreatOrEqualThan = 0;
-            var showTarget = false;
-            function nextRow() {
-                showRowIfGreatOrEqualThan = (showRowIfGreatOrEqualThan + 1) % main.ROW;
-            }
-            function toggleTarget() {
-                showTarget = !showTarget;
-            }
-            function hideShow() {
-                main.hideShowRows((i) => i >= showRowIfGreatOrEqualThan);
-                main.hideShowTargets((i) => showTarget && (i >= showRowIfGreatOrEqualThan));
-            }
         </script>
-        <button onclick="inputR()">input r</button>
-        <button onclick="main.generateT()">🎲 generate T</button>
-        <button onclick="main.computeT_XOR_r()">compute T⊕r</button><br>
+        <button onclick="inputR()">Input r</button>
+        <button onclick="main.generateT()">🎲 Generate T</button>
+        <button onclick="main.computeT_XOR_r()">Compute T⊕r</button><br>
 
-        <button onclick="main.generateS()">🎲 generate s</button>
-        <button onclick="main.obliviousTransferQColumn(getNextOTColumn())">Oblivious Transfer q *</button>
+        <button onclick="main.generateS()">🎲 Generate s</button>
+        <button onclick="main.obliviousTransferNextColumn()">Oblivious Transfer for Q*</button>
         <button onclick="main.computeQ_XOR_s()">compute Q⊕s</button><br>
 
-        <button onclick="toggleTarget(); hideShow();">toggle targes *</button>
-        <button onclick="nextRow(); hideShow();">examine layers *</button>
+        <button onclick="main.toggleShowTarget()">Toggle targes *</button>
+        <button onclick="main.toggleShowRowThreshold()">Examine layers *</button>
 
         <div id="THE_CONTAINER"></div>
     </body>
