@@ -44,8 +44,6 @@ class Main {
         this.showIfRowGreatOrEqualThan = 0;
         this.showTarget = false;
 
-        this.initDisplay(container);
-
         this.makeR();
         this.makeT();
         this.makeT_XOR_r();
@@ -129,10 +127,17 @@ class Main {
         return box;
     }
 
+    make1DCells(len, posFn) {
+        let ans = new Array(len);
+        for (let i = 0; i < len; i++) {
+            ans[i] = this.makeCell(...posFn(i));
+        }
+        return ans;
+    }
     make2DCells(row, col, posFn) {
         let ans = new Array(row);
         for (let i = 0; i < row; i++) {
-            ans[i] = new Array(col);
+            ans[i] = new Array(col); // reuse make1DCell would become harder to understand
             for (let j = 0; j < col; j++) {
                 ans[i][j] = this.makeCell(...posFn(i, j));
             }
@@ -140,10 +145,7 @@ class Main {
         return ans;
     }
     makeR() {
-        this.r = new Array(this.ROW);
-        for (let i = 0; i < this.ROW; i++) {
-            this.r[i] = this.makeCell(0.5, this.ROW - i - 1, 0.5);
-        }
+        this.r = this.make1DCells(this.ROW, (i) => [0.5, this.ROW - i - 1, 0.5]);
         let pos = this.r[this.ROW - 1].cube.position;
         this.makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
     }
@@ -155,13 +157,7 @@ class Main {
     }
 
     makeT_XOR_r() {
-        this.T_XOR_r = new Array(this.ROW);
-        for (let i = 0; i < this.ROW; i++) {
-            this.T_XOR_r[i] = new Array(this.COL);
-            for (let j = 0; j < this.COL; j++) {
-                this.T_XOR_r[i][j] = this.makeCell(2 + j, this.ROW - i - 1, 1);
-            }
-        }
+        this.T_XOR_r = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 1]);
         let pos = this.T_XOR_r[this.ROW - 1][this.COL - 1].cube.position;
         this.makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
     }
@@ -177,34 +173,19 @@ class Main {
     }
 
     makeS() {
-        this.s = new Array(this.COL);
-        for (let j = 0; j < this.COL; j++) {
-            this.s[j] = this.makeCell(j - this.COL - 0.4, this.ROW, -1.5);
-        }
+        this.s = this.make1DCells(this.COL, (j) => [j - this.COL - 0.4, this.ROW, -1.5]);
         let pos = this.s[0].cube.position;
         this.makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
     }
 
     makeQ() {
-        this.Q = new Array(this.ROW);
-        for (let i = 0; i < this.ROW; i++) {
-            this.Q[i] = new Array(this.COL);
-            for (let j = 0; j < this.COL; j++) {
-                this.Q[i][j] = this.makeCell(j - this.COL - 0.4, this.ROW - i - 1, 0);
-            }
-        }
+        this.Q = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 0]);
         let pos = this.Q[this.ROW - 1][0].cube.position;
         this.makeText("Q", pos.x - 1, 0, pos.z - 0.3);
     }
 
     makeQ_XOR_s() {
-        this.Q_XOR_s = new Array(this.ROW);
-        for (let i = 0; i < this.ROW; i++) {
-            this.Q_XOR_s[i] = new Array(this.COL);
-            for (let j = 0; j < this.COL; j++) {
-                this.Q_XOR_s[i][j] = this.makeCell(j - this.COL - 0.4, this.ROW - i - 1, 1);
-            }
-        }
+        this.Q_XOR_s = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 1]);
         let pos = this.Q_XOR_s[this.ROW - 1][0].cube.position;
         this.makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
     }
