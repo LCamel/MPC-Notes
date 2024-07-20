@@ -27,8 +27,7 @@ class Cell {
 
 class Main {
     constructor(container, row, col) {
-        this.scene = null;
-        this.camera = null;
+        [this.scene, this.camera, this.renderer] = this.initDisplay(container); // only scene is needed
         this.ROW = row;
         this.COL = col;
         this.r = null;
@@ -59,53 +58,54 @@ class Main {
     }
 
     initDisplay(container) {
+        let scene, camera, renderer;
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x202020);
+
         let W = container.clientWidth;
         let H = container.clientHeight;
-
-        this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x202020);
-
         {
             let ratio = W / H;
             let w = 13;
             let h = w / ratio;
-            this.camera = new THREE.OrthographicCamera(w / -2, w / 2, h / 2, h / -2, 1, 1000);
-            this.camera.position.set(0, 10, 0); // or 10,10,10
-            this.camera.setViewOffset(w, h, 1, -1, w, h);
+            camera = new THREE.OrthographicCamera(w / -2, w / 2, h / 2, h / -2, 1, 1000);
+            camera.position.set(0, 10, 0); // or 10,10,10
+            camera.setViewOffset(w, h, 1, -1, w, h);
         }
         {
-            const controls = new OrbitControls(this.camera, container);
+            const controls = new OrbitControls(camera, container);
             controls.target.set(0, 0, 0);
             controls.update();
         }
-
-        const renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setSize(W, H);
         container.appendChild(renderer.domElement);
-
         {
             let axesHelper = new THREE.AxesHelper(5);
-            // this.scene.add(axesHelper);
+            // scene.add(axesHelper);
         }
         {
             // ref: https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping.html
-            this.scene.add(new THREE.AmbientLight(0xcccccc));
+            scene.add(new THREE.AmbientLight(0xcccccc));
 
             const spotLight = new THREE.SpotLight(0xffffff, 100);
             spotLight.angle = Math.PI / 5;
             spotLight.penumbra = 0.2;
             spotLight.position.set(10, 15, 15);
-            this.scene.add(spotLight);
+            scene.add(spotLight);
 
             const dirLight = new THREE.DirectionalLight(0x55505a, 20);
             dirLight.position.set(0, 3, 0);
-            this.scene.add(dirLight);
+            scene.add(dirLight);
         }
 
         const animate = () => {
-            renderer.render(this.scene, this.camera);
+            renderer.render(scene, camera);
         };
         renderer.setAnimationLoop(animate);
+
+        return [scene, camera, renderer];
     }
 
     // all make() functions will add the objects to the scene
