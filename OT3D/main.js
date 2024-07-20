@@ -129,6 +129,16 @@ class Main {
         return box;
     }
 
+    make2DCells(row, col, posFn) {
+        let ans = new Array(row);
+        for (let i = 0; i < row; i++) {
+            ans[i] = new Array(col);
+            for (let j = 0; j < col; j++) {
+                ans[i][j] = this.makeCell(...posFn(i, j));
+            }
+        }
+        return ans;
+    }
     makeR() {
         this.r = new Array(this.ROW);
         for (let i = 0; i < this.ROW; i++) {
@@ -139,13 +149,7 @@ class Main {
     }
 
     makeT() {
-        this.T = new Array(this.ROW);
-        for (let i = 0; i < this.ROW; i++) {
-            this.T[i] = new Array(this.COL);
-            for (let j = 0; j < this.COL; j++) {
-                this.T[i][j] = this.makeCell(2 + j, this.ROW - i - 1, 0);
-            }
-        }
+        this.T = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 0]);
         let pos = this.T[this.ROW - 1][this.COL - 1].cube.position;
         this.makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
     }
