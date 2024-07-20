@@ -110,6 +110,8 @@ class Main {
         renderer.setAnimationLoop(animate);
     }
 
+    // all make() functions will add the objects to the scene
+
     makeCell(x, y, z) {
         const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
         const cube = new THREE.Mesh(g, MATERIALS[undefined]); // init for value "undefined"
@@ -122,11 +124,11 @@ class Main {
         let pos1 = cell1.cube.position;
         let pos2 = cell2.cube.position;
         let g = new THREE.BoxGeometry(pos2.x - pos1.x + 1, pos2.y - pos1.y + 1, pos2.z - pos1.z + 1);
-        let OTColumn = new THREE.Mesh(g, mat);
-        OTColumn.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
-        OTColumn.visible = false; // !!
-        this.scene.add(OTColumn);
-        return OTColumn;
+        let box = new THREE.Mesh(g, mat);
+        box.position.set((pos2.x + pos1.x) / 2, (pos2.y + pos1.y) / 2, (pos2.z + pos1.z) / 2);
+        box.visible = false; // !!
+        this.scene.add(box);
+        return box;
     }
 
     makeR() {
