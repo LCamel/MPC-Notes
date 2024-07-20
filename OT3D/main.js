@@ -2,16 +2,18 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {Text} from 'troika-three-text';
 
-const MATERIALS = [
-    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF0000 }),
-    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
-    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.02, depthWrite: false }),
-];
+const MATERIALS = {
+    0: new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF0000 }),
+    1: new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
+    undefined: new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.02, depthWrite: false }),
+};
 const WRAPPING_BOX_MATERIALS = [
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
     new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x8888FF, transparent: true, opacity: 0.3 }),
 ];
 
+// A Cell contains a value and a cube.
+// When the value is set, it also changes the material of the cube.
 class Cell {
     constructor(cube) {
         this.v = undefined;
@@ -19,7 +21,7 @@ class Cell {
     }
     setV(v) {
         this.v = v;
-        this.cube.material = MATERIALS[(v != undefined) ? v : 2]; // 0 1 undefined
+        this.cube.material = MATERIALS[v]; // 0 1 undefined
     }
 }
 
@@ -108,16 +110,11 @@ class Main {
         renderer.setAnimationLoop(animate);
     }
 
-    makeCube(x, y, z, material) {
+    makeCell(x, y, z) {
         const g = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-        const cube = new THREE.Mesh(g, material);
+        const cube = new THREE.Mesh(g, MATERIALS[undefined]); // init for value "undefined"
         cube.position.set(x + 0.5, y + 0.5, z + 0.5); // shift
         this.scene.add(cube);
-        return cube;
-    }
-
-    makeCell(x, y, z) {
-        let cube = this.makeCube(x, y, z, MATERIALS[2]); // TODO: leak info
         return new Cell(cube);
     }
 
