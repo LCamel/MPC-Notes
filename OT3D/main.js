@@ -26,11 +26,11 @@ class Cell {
 }
 
 class Main {
-    constructor() {
+    constructor(container, row, col) {
         this.scene = null;
         this.camera = null;
-        this.ROW = null;
-        this.COL = null;
+        this.ROW = row;
+        this.COL = col;
         this.r = null;
         this.T = null;
         this.T_XOR_r = null;
@@ -44,13 +44,9 @@ class Main {
         this.nextOTColumn = 0;
         this.showIfRowGreatOrEqualThan = 0;
         this.showTarget = false;
-    }
 
-    init(container, row, col) {
         this.initDisplay(container);
 
-        this.ROW = row;
-        this.COL = col;
         this.makeR();
         this.makeT();
         this.makeT_XOR_r();

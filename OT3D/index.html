@@ -12,9 +12,7 @@
     <body>
         <script type="module">
             import { Main } from "./main.js";
-            const main = new Main();
-            main.init(document.getElementById("THE_CONTAINER"), 5, 3);
-            window.main = main;
+            window.main = new Main(document.getElementById("THE_CONTAINER"), 5, 3);
         </script>
         <script>
             function inputR() {
