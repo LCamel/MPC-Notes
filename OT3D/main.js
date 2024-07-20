@@ -34,6 +34,7 @@ class Main {
         this.r = null;
         this.T = null;
         this.T_XOR_r = null;
+        this.TTCols = null;
         this.s = null;
         this.Q = null;
         this.Q_XOR_s = null;
@@ -53,6 +54,7 @@ class Main {
         this.makeR();
         this.makeT();
         this.makeT_XOR_r();
+        this.makeTTCols(); // after T and T_XOR_r
         this.makeS();
         this.makeQ();
         this.makeQ_XOR_s();
@@ -148,7 +150,6 @@ class Main {
                 this.T[i][j] = this.makeCell(2 + j, this.ROW - i - 1, 0);
             }
         }
-        this.T.OTColumn = this.T[this.ROW - 1].map((cell1, j) => this.makeWrappingBox(cell1, this.T[0][j], WRAPPING_BOX_MATERIALS[0]));
         let pos = this.T[this.ROW - 1][this.COL - 1].cube.position;
         this.makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
     }
@@ -161,9 +162,18 @@ class Main {
                 this.T_XOR_r[i][j] = this.makeCell(2 + j, this.ROW - i - 1, 1);
             }
         }
-        this.T_XOR_r.OTColumn = this.T_XOR_r[this.ROW - 1].map((cell1, j) => this.makeWrappingBox(cell1, this.T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1]));
         let pos = this.T_XOR_r[this.ROW - 1][this.COL - 1].cube.position;
         this.makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
+    }
+
+    makeTTCols() {
+        this.TTCols = [];
+        for (let j = 0; j < this.COL; j++) {
+            this.TTCols.push([
+                this.makeWrappingBox(this.T[this.ROW - 1][j], this.T[0][j], WRAPPING_BOX_MATERIALS[0]),
+                this.makeWrappingBox(this.T_XOR_r[this.ROW - 1][j], this.T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1])
+            ]);
+        }
     }
 
     makeS() {
@@ -251,21 +261,21 @@ class Main {
     }
 
     obliviousTransferColumn(j) { // somewhat private
-        let [src, other] = (this.s[j].v == 0) ? [this.T, this.T_XOR_r] : [this.T_XOR_r, this.T];
-        // this.s[j].cube.position.y += 0.2;
-        src.OTColumn[j].visible = true;
-        other.OTColumn[j].visible = false; // nice to have (when repeating with a different "s")
-        this.OTText[j].color = src.OTColumn[j].material.color;
+        let s = this.s[j].v;
+        this.TTCols[j][s].visible = true;
+        this.TTCols[j][1 - s].visible = false; // nice to have (when repeating with a different "s")
+        this.OTText[j].color = MATERIALS[s].color;
         this.OTText[j].visible = true;
         setTimeout(() => {
+            let src = (s == 0) ? this.T : this.T_XOR_r;
             for (let i = 0; i < this.ROW; i++) {
                 this.Q[i][j].setV(src[i][j].v);
             }
-            // this.s[j].cube.position.y -= 0.2;
             this.OTText[j].visible = false;
         }, 800);
     }
     obliviousTransferNextColumn() {
+        if (this.s[this.nextOTColumn].v == undefined) return;
         this.obliviousTransferColumn(this.nextOTColumn);
         this.nextOTColumn = (this.nextOTColumn + 1) % this.COL;
     }
