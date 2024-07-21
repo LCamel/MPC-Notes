@@ -119,43 +119,27 @@ class Main {
         return box;
     }
 
+    mapN(n, fn) {
+        return [...new Array(n)].map((_, i) => fn(i));
+    }
     make1DCells(len, posFn) {
-        let ans = new Array(len);
-        for (let i = 0; i < len; i++) {
-            ans[i] = this.makeCell(...posFn(i));
-        }
-        return ans;
+        return this.mapN(len, i => this.makeCell(...posFn(i)));
     }
     make2DCells(row, col, posFn) {
-        let ans = new Array(row);
-        for (let i = 0; i < row; i++) {
-            ans[i] = new Array(col); // reusing make1DCell() could make the code harder to understand
-            for (let j = 0; j < col; j++) {
-                ans[i][j] = this.makeCell(...posFn(i, j));
-            }
-        }
-        return ans;
+        return this.mapN(row, i => this.mapN(col, j => this.makeCell(...posFn(i, j))));
     }
 
     makeTTCols() {
-        let ans = [];
-        for (let j = 0; j < this.COL; j++) {
-            ans.push([
-                this.makeWrappingBox(this.T[this.ROW - 1][j], this.T[0][j], WRAPPING_BOX_MATERIALS[0]),
-                this.makeWrappingBox(this.T_XOR_r[this.ROW - 1][j], this.T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1])
-            ]);
-        }
-        return ans;
+        return this.mapN(this.COL, j => [
+            this.makeWrappingBox(this.T[this.ROW - 1][j], this.T[0][j], WRAPPING_BOX_MATERIALS[0]),
+            this.makeWrappingBox(this.T_XOR_r[this.ROW - 1][j], this.T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1])
+        ]);
     }
     makeQQRows() {
-        let ans = [];
-        for (let i = 0; i < this.ROW; i++) {
-            ans.push([
-                this.makeWrappingBox(this.Q[i][0], this.Q[i][this.COL - 1], WRAPPING_BOX_MATERIALS[0]),
-                this.makeWrappingBox(this.Q_XOR_s[i][0], this.Q_XOR_s[i][this.COL - 1], WRAPPING_BOX_MATERIALS[1])
-            ]);
-        }
-        return ans;
+        return this.mapN(this.ROW, i => [
+            this.makeWrappingBox(this.Q[i][0], this.Q[i][this.COL - 1], WRAPPING_BOX_MATERIALS[0]),
+            this.makeWrappingBox(this.Q_XOR_s[i][0], this.Q_XOR_s[i][this.COL - 1], WRAPPING_BOX_MATERIALS[1])
+        ]);
     }
 
     makeStaticText() {
@@ -173,13 +157,12 @@ class Main {
         this.makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
     }
     makeOTText() {
-        let OTText = new Array(this.COL);
-        for (let j = 0; j < this.COL; j++) {
+        return this.mapN(this.COL, j => {
             let pos = this.T_XOR_r[this.ROW - 1][j].cube.position;
-            OTText[j] = this.makeText("OT", pos.x - 0.34, 0, pos.z + 0.45);
-            OTText[j].visible = false;
-        }
-        return OTText;
+            let text = this.makeText("OT", pos.x - 0.34, 0, pos.z + 0.45);
+            text.visible = false;
+            return text;
+        });
     }
 
     randomBit() {
