@@ -38,21 +38,13 @@ class Main {
         this.Q = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 0]);
         this.Q_XOR_s = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 1]);
         this.QQRows = this.makeQQRows();
-        this.OTText = null;
+
+        this.makeStaticText();
+        this.OTText = this.makeOTText();
 
         this.nextOTColumn = 0;
         this.showIfRowGreatOrEqualThan = 0;
         this.showTarget = false;
-
-        this.makeR();
-        this.makeT();
-        this.makeT_XOR_r();
-        //this.makeTTCols(); // after T and T_XOR_r
-        this.makeS();
-        this.makeQ();
-        this.makeQ_XOR_s();
-        //this.makeQQRows(); // after Q and Q_XOR_s
-        this.makeOTText();
     }
 
     initDisplay(container) {
@@ -144,20 +136,6 @@ class Main {
         }
         return ans;
     }
-    makeR() {
-        let pos = this.r[this.ROW - 1].cube.position;
-        this.makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
-    }
-
-    makeT() {
-        let pos = this.T[this.ROW - 1][this.COL - 1].cube.position;
-        this.makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
-    }
-
-    makeT_XOR_r() {
-        let pos = this.T_XOR_r[this.ROW - 1][this.COL - 1].cube.position;
-        this.makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
-    }
 
     makeTTCols() {
         let ans = [];
@@ -169,22 +147,6 @@ class Main {
         }
         return ans;
     }
-
-    makeS() {
-        let pos = this.s[0].cube.position;
-        this.makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
-    }
-
-    makeQ() {
-        let pos = this.Q[this.ROW - 1][0].cube.position;
-        this.makeText("Q", pos.x - 1, 0, pos.z - 0.3);
-    }
-
-    makeQ_XOR_s() {
-        let pos = this.Q_XOR_s[this.ROW - 1][0].cube.position;
-        this.makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
-    }
-
     makeQQRows() {
         let ans = [];
         for (let i = 0; i < this.ROW; i++) {
@@ -196,13 +158,28 @@ class Main {
         return ans;
     }
 
+    makeStaticText() {
+        let pos = this.r[this.ROW - 1].cube.position;
+        this.makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
+        pos = this.T[this.ROW - 1][this.COL - 1].cube.position;
+        this.makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
+        pos = this.T_XOR_r[this.ROW - 1][this.COL - 1].cube.position;
+        this.makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
+        pos = this.s[0].cube.position;
+        this.makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
+        pos = this.Q[this.ROW - 1][0].cube.position;
+        this.makeText("Q", pos.x - 1, 0, pos.z - 0.3);
+        pos = this.Q_XOR_s[this.ROW - 1][0].cube.position;
+        this.makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
+    }
     makeOTText() {
-        this.OTText = new Array(this.COL);
+        let OTText = new Array(this.COL);
         for (let j = 0; j < this.COL; j++) {
             let pos = this.T_XOR_r[this.ROW - 1][j].cube.position;
-            this.OTText[j] = this.makeText("OT", pos.x - 0.34, 0, pos.z + 0.45);
-            this.OTText[j].visible = false;
+            OTText[j] = this.makeText("OT", pos.x - 0.34, 0, pos.z + 0.45);
+            OTText[j].visible = false;
         }
+        return OTText;
     }
 
     randomBit() {
@@ -299,7 +276,7 @@ class Main {
         this.hideShow();
     }
 
-
+    // https://protectwise.github.io/troika/troika-three-text/#usage
     makeText(str, x, y, z) {
         const myText = new Text();
         this.scene.add(myText);
