@@ -26,17 +26,17 @@ class Cell {
 }
 
 class Main {
-    constructor(container, row, col) {
+    constructor(container, ROW, COL) {
         [this.scene, this.camera, this.renderer] = this.initDisplay(container); // only scene is needed
-        this.ROW = row;
-        this.COL = col;
-        this.r = this.make1DCells(this.ROW, (i) => [0.5, this.ROW - i - 1, 0.5]);
-        this.T = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 0]);
-        this.T_XOR_r = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 1]);
+        this.ROW = ROW;
+        this.COL = COL;
+        this.r = this.make1DCells(ROW, (i) => [0.5, ROW - i - 1, 0.5]);
+        this.T = this.make2DCells(ROW, COL, (i, j) => [2 + j, ROW - i - 1, 0]);
+        this.T_XOR_r = this.make2DCells(ROW, COL, (i, j) => [2 + j, ROW - i - 1, 1]);
         this.TTCols = this.makeTTCols();
-        this.s = this.make1DCells(this.COL, (j) => [j - this.COL - 0.4, this.ROW, -1.5]);
-        this.Q = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 0]);
-        this.Q_XOR_s = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 1]);
+        this.s = this.make1DCells(COL, (j) => [j - COL - 0.4, ROW, -1.5]);
+        this.Q = this.make2DCells(ROW, COL, (i, j) => [j - COL - 0.4, ROW - i - 1, 0]);
+        this.Q_XOR_s = this.make2DCells(ROW, COL, (i, j) => [j - COL - 0.4, ROW - i - 1, 1]);
         this.QQRows = this.makeQQRows();
 
         this.makeStaticText();
