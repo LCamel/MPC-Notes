@@ -30,14 +30,14 @@ class Main {
         [this.scene, this.camera, this.renderer] = this.initDisplay(container); // only scene is needed
         this.ROW = row;
         this.COL = col;
-        this.r = null;
-        this.T = null;
-        this.T_XOR_r = null;
-        this.TTCols = null;
-        this.s = null;
-        this.Q = null;
-        this.Q_XOR_s = null;
-        this.QQRows = null;
+        this.r = this.make1DCells(this.ROW, (i) => [0.5, this.ROW - i - 1, 0.5]);
+        this.T = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 0]);
+        this.T_XOR_r = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 1]);
+        this.TTCols = this.makeTTCols();
+        this.s = this.make1DCells(this.COL, (j) => [j - this.COL - 0.4, this.ROW, -1.5]);
+        this.Q = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 0]);
+        this.Q_XOR_s = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 1]);
+        this.QQRows = this.makeQQRows();
         this.OTText = null;
 
         this.nextOTColumn = 0;
@@ -47,11 +47,11 @@ class Main {
         this.makeR();
         this.makeT();
         this.makeT_XOR_r();
-        this.makeTTCols(); // after T and T_XOR_r
+        //this.makeTTCols(); // after T and T_XOR_r
         this.makeS();
         this.makeQ();
         this.makeQ_XOR_s();
-        this.makeQQRows(); // after Q and Q_XOR_s
+        //this.makeQQRows(); // after Q and Q_XOR_s
         this.makeOTText();
     }
 
@@ -137,7 +137,7 @@ class Main {
     make2DCells(row, col, posFn) {
         let ans = new Array(row);
         for (let i = 0; i < row; i++) {
-            ans[i] = new Array(col); // reuse make1DCell would become harder to understand
+            ans[i] = new Array(col); // reusing make1DCell() could make the code harder to understand
             for (let j = 0; j < col; j++) {
                 ans[i][j] = this.makeCell(...posFn(i, j));
             }
@@ -145,59 +145,55 @@ class Main {
         return ans;
     }
     makeR() {
-        this.r = this.make1DCells(this.ROW, (i) => [0.5, this.ROW - i - 1, 0.5]);
         let pos = this.r[this.ROW - 1].cube.position;
         this.makeText("r", pos.x - 0.08, 0, pos.z + 0.4);
     }
 
     makeT() {
-        this.T = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 0]);
         let pos = this.T[this.ROW - 1][this.COL - 1].cube.position;
         this.makeText("T", pos.x + 0.65, 0, pos.z - 0.3);
     }
 
     makeT_XOR_r() {
-        this.T_XOR_r = this.make2DCells(this.ROW, this.COL, (i, j) => [2 + j, this.ROW - i - 1, 1]);
         let pos = this.T_XOR_r[this.ROW - 1][this.COL - 1].cube.position;
         this.makeText("T⊕r", pos.x + 0.65, 0, pos.z - 0.35);
     }
 
     makeTTCols() {
-        this.TTCols = [];
+        let ans = [];
         for (let j = 0; j < this.COL; j++) {
-            this.TTCols.push([
+            ans.push([
                 this.makeWrappingBox(this.T[this.ROW - 1][j], this.T[0][j], WRAPPING_BOX_MATERIALS[0]),
                 this.makeWrappingBox(this.T_XOR_r[this.ROW - 1][j], this.T_XOR_r[0][j], WRAPPING_BOX_MATERIALS[1])
             ]);
         }
+        return ans;
     }
 
     makeS() {
-        this.s = this.make1DCells(this.COL, (j) => [j - this.COL - 0.4, this.ROW, -1.5]);
         let pos = this.s[0].cube.position;
         this.makeText("s", pos.x - 0.9, pos.y - 0.5, pos.z - 0.35);
     }
 
     makeQ() {
-        this.Q = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 0]);
         let pos = this.Q[this.ROW - 1][0].cube.position;
         this.makeText("Q", pos.x - 1, 0, pos.z - 0.3);
     }
 
     makeQ_XOR_s() {
-        this.Q_XOR_s = this.make2DCells(this.ROW, this.COL, (i, j) => [j - this.COL - 0.4, this.ROW - i - 1, 1]);
         let pos = this.Q_XOR_s[this.ROW - 1][0].cube.position;
         this.makeText("Q⊕s", pos.x - 1.64, 0, pos.z - 0.35);
     }
 
     makeQQRows() {
-        this.QQRows = [];
+        let ans = [];
         for (let i = 0; i < this.ROW; i++) {
-            this.QQRows.push([
+            ans.push([
                 this.makeWrappingBox(this.Q[i][0], this.Q[i][this.COL - 1], WRAPPING_BOX_MATERIALS[0]),
                 this.makeWrappingBox(this.Q_XOR_s[i][0], this.Q_XOR_s[i][this.COL - 1], WRAPPING_BOX_MATERIALS[1])
             ]);
         }
+        return ans;
     }
 
     makeOTText() {
