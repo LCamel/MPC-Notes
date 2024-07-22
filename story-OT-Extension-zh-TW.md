@@ -6,27 +6,23 @@ Alice: Hi Bob. 今天想討論什麼嗎?
 
 Bob: 上次在 Garbled Circuit 那邊看到 Oblivious Transfer 之後, 我又找了一下資料. 看到一個有趣的東西叫做 IKNP 的 OT Extension, 想找你討論看看.
 
-Alice: 好啊, 我也查一下資料.
+Alice: 好啊, 我也查一下資料...
 
-(Twelve Seconds Later)
-
-Alice: 好了. 你還記得上次和 TBot 討論的 OT 嗎?
+Alice: 好了. 你還記得上次討論的 OT 嗎?
 
 Bob: 記得啊. 就是你有兩個 message, 我選 0 就看到 message0, 我選 1 就看到 message1. 但是我看不到你的另一個 message, 你也不知道我選了哪個 message 來看.
-![alt text](image-1.png)
+
+<img src="images/OT.gif" alt="OT.gif" width="25%">
 
 Alice: 那你覺得 OT Extension 在做什麼呢?
 
 Bob: 如果今天你有 100 萬組訊息要讓我挑, 那我們就得進行 100 萬次 OT, 成本比較高.
 
-有幾個叫 IKNP 的人就想: 有沒有可能只做比方說 1000 次 OT, 再加上一些設計, 就能達到本來的 100 萬次 OT 的效果呢?
+有幾個叫 IKNP 的人就想: 有沒有可能只做比方說 1000 次 OT, 再加上一些設計, 就能達到本來 100 萬次 OT 的效果呢?
 
-Alice: 嗯嗯. 我覺得 IKNP 的方法很簡潔. 就像這樣:
-![alt text](image.png)
+我們來扮演一下裡面的角色, 確認一下理解怎麼樣?
 
-Bob: 這有點太簡潔了 😅 我們來扮演一下裡面的角色, 確認一下理解怎麼樣?
-
-Alice: 好. 我當 Alice, 你當 Bob. 呃不是. 我當 Sender, 你當 Receiver.
+Alice: 好. 我當 Alice... 呃不是, 我當 Sender, 你當 Receiver.
 
 Bob: OK. 我們先不看 100 萬組訊息, 先只看一組訊息.
 
@@ -37,38 +33,44 @@ Bob: OK. 我們先不看 100 萬組訊息, 先只看一組訊息.
 - 且另外一個空位放上我不知道的 bit string
 
 那就可以拿來做 OT 了: 只要你把 message 用對應的 bit string 加密送給我, 我就只能唯一解出那個用 T 加密的 -- 也就是 r 指到的那個 message 了.
-![alt text](image-2.png)
+
+<img src="images/OT_encrypt.gif" alt="OT_encrypt.gif" width="50%">
+
 
 Alice: 我們再更簡化一點, 先把 T 縮到只有一個 bit 來看.
 
 作為 sender, 我生出一個秘密的 random bit s.
 
-因為 s 只有我知道, 所以 T⊕s 的值你不會知道. 放在另外一個空位來加密 message 的話, 你是解不開的.
+因為你不知道 s, 所以 T⊕s 你應該也不知道. 
 
-![alt text](image-3.png)
+如果我能算出 T⊕s 的話, 就能當成你不知道的 unknown bit 來放在另一格.
 
-我們觀察上下兩格的關係: 如果上面那格叫做 q, 那下面那格一定是 q⊕s .
+<img src="images/OT_T_TS.gif" alt="OT_T_TS.gif" width="25%">
 
-![alt text](image-4.png)
+我們觀察上下兩格的關係: 不論 r 是 0 還是 1, 上面那格 ⊕s 總是能得到下面那格.
 
-也就是說, 我們可以把問題轉成: 專心看 q, 看要怎麼用 r 控制 q 那格出現 T 還是 T⊕s . 而下面那格只要 ⊕s 就好了.
+如果把上面那格取名為 Q, 那下面那格就是 Q⊕s .
 
-![alt text](image-5.png)
+<img src="images/OT_Q_QS.gif" alt="OT_Q_QS.gif" width="35%">
 
-Bob: 整理一下: 我們剛剛從 100 萬組 message 縮到一組, 從兩個 bit string 縮到兩個 bit, 再聚焦在上面那個 bit q 如何被 r 控制成 T 或 T⊕s .
+我們可以把原來的問題轉成: 專心看 Q, 看要怎麼用 r 控制 Q 那格出現 T 還是 T⊕s .
+
+<img src="images/OT_Q_T_TS.gif" alt="OT_Q_T_TS.gif" width="35%">
+
+Bob: 整理一下: 我們剛剛從 100 萬組 message 縮到一組, 從兩個 bit string 縮到兩個 bit, 再聚焦到上面那個 bit Q 如何被 r 控制成 T 或 T⊕s , 這樣 Q⊕s 就會是反過來的 T⊕s 或 T. 只要你把 message 用 Q 和 Q⊕s 加密後送給我, 我就只能開出 T 所在的那個 message, 也就達成 OT 了.
 
 但是話又說回來, 我的 r 和 T 不能讓你知道, 你的 s 也不能讓我知道.
 
-Alice: 嗯嗯, 雖然我手上可能拿著 T 或 T⊕s, 但是對我來說都只是個 random bit, 分不出來現在是哪個 case.
+Alice: 嗯嗯. 如果我明確知道我拿的是 T 還是 T⊕s , 那我就知道 r 了, 這樣就違反了 OT 的需求.
 
-Bob: 要是分的出來, 就會被你知道現在 r 是 0 還是 1 了 😅
+Bob: 反過來看, 如果我知道你的 s 的話, 我就能解開 T 和 T⊕s 加密的兩個 message, 也違反了 OT 的需求.
 
-那到底要怎麼在我不知道 s, 你不知道 r 的情況下, 達成:
+那到底要怎麼在我不知道 s, 你不知道 r 的情況下, 讓你算出:
 ```
 q = T   if r = 0
 q = T⊕s if r = 1
 ```
-這是怎麼做到的呢? 就是用...
+這要怎麼做呢? 就是用...
 
 Alice: 等你說
 
@@ -76,7 +78,7 @@ Bob: 一起說...
 
 Alice, Bob: 反向 OT !
 
-Alice: 這樣有點羞恥. 回到反向 OT.
+Alice: 這樣有點羞恥. 先回到反向 OT.
 
 Bob: 反向 OT.
 
