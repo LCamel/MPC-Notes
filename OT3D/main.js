@@ -278,4 +278,5 @@ class Main {
     }
 }
 
-export { Main };
+// export { Main };
+window.Main = Main;

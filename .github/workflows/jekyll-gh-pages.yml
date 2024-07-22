@@ -30,6 +30,19 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+# ref: https://vitejs.dev/guide/static-deploy.html
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+#         cache: 'npm'
+      - name: Install JS dependencies
+        working-directory: OT3D
+        run: npm ci
+      - name: Build JS
+        working-directory: OT3D
+        run: npx vite build; cp dist/assets/*js ./main.js; rm -fR node_modules dist; find . -ls
+#
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:

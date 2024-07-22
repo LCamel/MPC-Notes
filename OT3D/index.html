@@ -10,11 +10,11 @@
         </style>
     </head>
     <body>
-        <script type="module">
-            import { Main } from "./main.js";
-            window.main = new Main(document.getElementById("THE_CONTAINER"), 5, 3);
-        </script>
+        <script type="module" src="./main.js"></script> <!-- window.Main now points to the JS class "Main"-->
         <script>
+            window.addEventListener("load", () => {
+                main = new Main(document.getElementById("THE_CONTAINER"), 5, 3);
+            });
             function inputR() {
                 var rStr = prompt("Input r:\nExample:\n1\n0\n101\n01001011001");
                 console.log(rStr);
