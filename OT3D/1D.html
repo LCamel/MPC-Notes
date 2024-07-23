@@ -4,7 +4,6 @@
 </style>
 
 <button onclick="inputR1D()">Input r</button>
-<button onclick="main1D.toggleShowTarget()">Show/Hide where r points to *</button>
 <button onclick="main1D.generateT()">🎲 Generate T</button>
 <button onclick="main1D.computeT_XOR_r()">Compute T⊕r</button>
 <br>
@@ -12,16 +11,17 @@
 <button onclick="main1D.obliviousTransferNextColumn()">Oblivious Transfer for Q</button>
 <button onclick="main1D.computeQ_XOR_s()">compute Q⊕s</button>
 <br>
+<button onclick="main1D.toggleShowTarget()">Show/Hide where r points to *</button>
+<br>
 <div id="THE_CONTAINER_1D"></div>
 
 <script type="module" src="./main.js"></script> <!-- window.Main now points to the JS class "Main"-->
 <script>
-// jekyll will replace ">" with "gt" here ! be careful !
+// jekyll will replace ">" with "gt" and "\n\n" with "<p>" here ! be careful !
 function onload1D() {
     main1D = new Main(document.getElementById("THE_CONTAINER_1D"), 1, 1);
 }
 window.addEventListener("load", onload1D);
-
 function inputR1D() {
     while (true) {
         var rStr = prompt("Input r:\nExample:\n0\n1", "1");
