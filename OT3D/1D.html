@@ -1,0 +1,33 @@
+<meta charset="utf-8">
+<style>
+    #THE_CONTAINER_1D { width: 500px; height: 500px; background-color: gray; margin: 0; }
+</style>
+
+<script type="module" src="./main.js"></script> <!-- window.Main now points to the JS class "Main"-->
+<script>
+window.addEventListener("load", () => {
+    main1D = new Main(document.getElementById("THE_CONTAINER_1D"), 1, 1);
+});
+function inputR1D() {
+    while (true) {
+        var rStr = prompt("Input r:\nExample:\n0\n1", "1");
+        if (rStr == null) break;
+        rStr = rStr.trim();
+        if (rStr.match(/^[01]{1}$/)) {
+            main1D.setR([...rStr]);
+            break;
+        }
+    }
+}
+</script>
+
+<button onclick="inputR1D()">Input r</button>
+<button onclick="main1D.toggleShowTarget()">Show/Hide where r points to *</button>
+<button onclick="main1D.generateT()">🎲 Generate T</button>
+<button onclick="main1D.computeT_XOR_r()">Compute T⊕r</button>
+<br>
+<button onclick="main1D.generateS()">🎲 Generate s</button>
+<button onclick="main1D.obliviousTransferNextColumn()">Oblivious Transfer for Q</button>
+<button onclick="main1D.computeQ_XOR_s()">compute Q⊕s</button>
+<br>
+<div id="THE_CONTAINER_1D"></div>
