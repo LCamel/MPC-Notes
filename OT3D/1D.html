@@ -14,13 +14,14 @@
 <br>
 <div id="THE_CONTAINER_1D"></div>
 
-<!-- preventing jekyll replace ">" with "gt" -->
-{% raw %}
 <script type="module" src="./main.js"></script> <!-- window.Main now points to the JS class "Main"-->
 <script>
-window.addEventListener("load", () => {
+// jekyll will replace ">" with "gt" here ! be careful !
+function onload1D() {
     main1D = new Main(document.getElementById("THE_CONTAINER_1D"), 1, 1);
-});
+}
+window.addEventListener("load", onload1D);
+
 function inputR1D() {
     while (true) {
         var rStr = prompt("Input r:\nExample:\n0\n1", "1");
@@ -33,4 +34,3 @@ function inputR1D() {
     }
 }
 </script>
-{% endraw %}
