@@ -26,8 +26,8 @@ class Cell {
 }
 
 class Main {
-    constructor(container, ROW, COL) {
-        [this.scene, this.camera, this.renderer] = this.initDisplay(container); // only scene is needed
+    constructor(container, ROW, COL, initCameraPosition) {
+        [this.scene, this.camera, this.renderer] = this.initDisplay(container, initCameraPosition); // only scene is needed
         this.ROW = ROW;
         this.COL = COL;
         this.r = this.make1DCells(ROW, (i) => [0.5, ROW - i - 1, 0.5]);
@@ -47,7 +47,7 @@ class Main {
         this.showTarget = false;
     }
 
-    initDisplay(container) {
+    initDisplay(container, initCameraPosition = [0, 10, 0]) {
         let scene, camera, renderer;
 
         scene = new THREE.Scene();
@@ -60,7 +60,7 @@ class Main {
             let w = 13;
             let h = w / ratio;
             camera = new THREE.OrthographicCamera(w / -2, w / 2, h / 2, h / -2, 1, 1000);
-            camera.position.set(0, 10, 0); // or 10,10,10
+            camera.position.set(...initCameraPosition);
             camera.setViewOffset(w, h, 1, -1, w, h);
         }
         {

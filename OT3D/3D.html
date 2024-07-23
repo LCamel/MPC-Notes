@@ -1,0 +1,37 @@
+<meta charset="utf-8">
+<style>
+    #THE_CONTAINER_3D { width: 500px; height: 500px; background-color: gray; margin: 0; }
+</style>
+
+<button onclick="inputR3D()">Input r</button>
+<button onclick="main3D.generateT()">🎲 Generate T</button>
+<button onclick="main3D.computeT_XOR_r()">Compute T⊕r</button>
+<br>
+<button onclick="main3D.generateS()">🎲 Generate s</button>
+<button onclick="main3D.obliviousTransferNextColumn()">Oblivious Transfer for Q *</button>
+<button onclick="main3D.computeQ_XOR_s()">compute Q⊕s</button>
+<br>
+<button onclick="main3D.toggleShowTarget()">Show/Hide where r points to *</button>
+<button onclick="main3D.toggleShowRowThreshold()">Examine layers *</button>
+<br>
+<div id="THE_CONTAINER_3D"></div>
+
+<script type="module" src="./main.js"></script> <!-- window.Main now points to the JS class "Main"-->
+<script>
+// jekyll will replace ">" with "gt" and "\n\n" with "<p>" here ! be careful !
+function onload3D() {
+    main3D = new Main(document.getElementById("THE_CONTAINER_3D"), 5, 3, [-3.682602361330681, 6.059032690731526, 7.051706368033811]);
+}
+window.addEventListener("load", onload3D);
+function inputR3D() {
+    while (true) {
+        var rStr = prompt("Input r (5 bits):\nExample:\n10010\n01011", "10010");
+        if (rStr == null) break;
+        rStr = rStr.trim();
+        if (rStr.match(/^[01]{5}$/)) {
+            main3D.setR([...rStr]);
+            break;
+        }
+    }
+}
+</script>
