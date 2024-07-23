@@ -153,66 +153,30 @@ Alice: 也就是你的 T 和我的 s 都要變長, 要多做幾次 OT.
 
 <a href="2D.html" target="_blank">(Open in a new window)</a>
 
+Bob: 因為一整條 T⊕r 都是用同一個 bit r 來準備的, 和 T 會是兩條相同或兩條相反. 所以你做完幾次 OT 之後, Q 會是一整條 T 或是一整條 T⊕s .
 
+Alice: 我再把整條 Q 來 ⊕s , 這樣 (Q, Q⊕s) 就會是兩條 (T, T⊕s) 或是 (T⊕s, T), 可以安全的加密一組訊息了.
 
+Bob: 再來就是關鍵的最後一步. 看要怎麼用這些少量的 OT 達到原來大量 OT 的效果.
 
+我們把 1 個 bit 的 r 恢復成很多個 bits, 然後...
 
+Alice: 先看程式好了, 像這樣:
 
-Alice: 我這邊反向 OT 完之後, 把結果 ⊕s 放下面那格. 所以一定是 (T, T⊕s) 或是 (T⊕s, T). T 會在 r 指的那一格.
+{% include_relative 3D.html %}
 
-Bob: 我把 bit T 恢復成 bit string T. 也就是我 random 比方說 1000 個 bit, 都用同一個 r 做出第二個箱子, 總共 2000  個箱子.
+<a href="3D.html" target="_blank">(Open in a new window)</a>
 
-Alice: 我也製造 1000 個 random bit s, 在你的兩個箱子間做 OT, 做 1000 次. 結果像這樣.
+Bob: 這裡對於每一個 r, 我生出對應的 T 和 T⊕r. 讓你用 s 垂直的每次選走一整個 column.
 
-~~~圖~~~
+Alice: 因為每一層你準備的 T 和 T⊕r 都是根據那層的 r 做出來的, Q 也都是我用 s 反向 OT 的, 所以每層也都是 (T, T⊕s) 或是 (T⊕s, T) .
 
-Bob: 如果你用這兩個 bit strings 加密 message 給我, 我會解的開 r 所指的那個. 不過這樣我們只 OT 了一組 message.
+Bob: 嗯嗯, 我檢視過每一層, 的確 T 都出現在 r 所指的位子上.
 
-Alice: 而我們其實想 OT 100 萬組 message.
+Alice: 我們雖然只進行了少量的 OT, 但是因為每次選了垂直的大量的 bits, 所以一下就把 Q 和 Q⊕s 給填滿了.
 
-Bob: 所以這邊要把箱子拉很高. 我們還是只做 1000 次 OT, 但每次 OT 得到不是 1 個 bit, 而是 100 萬個 bit. 像這樣.
+這樣每一層的兩個 message 都能用 (T, T⊕s) 或是 (T⊕s, T) 加密後送給你, 大量的 OT 就完成了! 耶!
 
+Bob: 謝謝你和我討論, 我覺得清楚多了!
 
-
-
-
-
-
-先看 r = 0 的 case.
-
-我準備兩個箱子, 讓你用 bit s 做 OT 選其中一個箱子.
-
-如果我兩個箱子都放 T, 那不管你選 0 還是選 1, 你拿到的都是 T. 也就是 `q = T if r = 0`.
-
-再看比較複雜的 r = 1 的 case.
-
-我準備兩個箱子, 讓你用 bit s 做 OT 選其中一個箱子.
-
-如果我第 0 個箱子放 T, 但第二個箱子放 NOT T 的話, 你選出來的結果剛好可以表示成 T⊕s !
-
-觀察 XOR 的性質, 我們知道 ⊕0 等於沒做, ⊕1 則是 flip.
-```
-```
-
-
-
-
-我們讓位置 0 1 出現
-
-Bob: 嗯嗯. 我覺得最妙的地方就是到底這兩個 bit strings 是怎麼根據 r 造出來的.
-
-我們也先不看整個 bit string, 先只看一個 bit 就好了.
-
-這邊要做一個反向的 OT, 我準備兩個 bits, 讓你來選一個 bit.
-
-Alice: 好. 我是 sender, 那我的選擇變數就叫 s 好了.
-我用變數 s 從你準備的兩個 bit 中挑一個. 那你要準備什麼讓我挑呢?
-
-Bob: 我準備兩個 bit
-```
-t
-t + r
-```
-其中前面的 t 是隨機的 bit, 而 t + r 則是計算出來的.
-
-Alice: 這就像
+Alice: 也謝謝你!
