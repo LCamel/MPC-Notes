@@ -132,14 +132,16 @@ Bob: 我雖然知道 T, 但不知道 T⊕s, 所以我只能解開其中一個, �
 
 Alice: 我來寫個程式...
 
-Alice: 好了. 就像這樣:
+Alice: 好了, 就像這樣. 左邊是我, 右邊是你. 紅色是 0, 藍色是 1 :
 
 {% include_relative 1D.html %}
+
+<a href="1D.html" target="_blank">(Open in a new window)</a>
 
 
 Alice: 呼, 這樣講了半天, 我們才傳了一組 message. 而且用 1 個 bit 來加密一點也不安全.
 
-Bob: 我們應該要多做很多 bit 來加密.
+Bob: 我們需要用更多 bits 來加密.
 
 Alice: 也就是你的 T 和我的 s 都要變長, 要多做幾次 OT.
 
@@ -148,6 +150,8 @@ Alice: 也就是你的 T 和我的 s 都要變長, 要多做幾次 OT.
 好了! 像這樣:
 
 {% include_relative 2D.html %}
+
+<a href="2D.html" target="_blank">(Open in a new window)</a>
 
 
 
