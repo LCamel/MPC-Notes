@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <style>
-    #THE_CONTAINER_3D { width: 500px; height: 500px; background-color: gray; margin: 0; }
+    #THE_CONTAINER_3D { width: 80vmin; height: 80vmin; background-color: gray; margin: 0; }
 </style>
 
 <button onclick="inputR3D()">Input r</button>
@@ -34,4 +34,9 @@ function inputR3D() {
         }
     }
 }
+function resize3D() {
+    let container = document.querySelector("#THE_CONTAINER_3D")
+    main1D.renderer.setSize(container.clientWidth, container.clientHeight);
+}
+window.addEventListener("resize", resize3D);
 </script>

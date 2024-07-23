@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <style>
-    #THE_CONTAINER_2D { width: 500px; height: 500px; background-color: gray; margin: 0; }
+    #THE_CONTAINER_2D { width: 80vmin; height: 80vmin; background-color: gray; margin: 0; }
 </style>
 
 <button onclick="inputR2D()">Input r</button>
@@ -33,4 +33,9 @@ function inputR2D() {
         }
     }
 }
+function resize2D() {
+    let container = document.querySelector("#THE_CONTAINER_2D")
+    main1D.renderer.setSize(container.clientWidth, container.clientHeight);
+}
+window.addEventListener("resize", resize2D);
 </script>
