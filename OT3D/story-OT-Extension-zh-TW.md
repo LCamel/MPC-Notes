@@ -18,7 +18,7 @@ Alice: 那你覺得 OT Extension 在做什麼呢?
 
 Bob: 如果今天你有 100 萬組訊息要讓我挑, 那我們就得進行 100 萬次 OT, 成本比較高.
 
-有幾個叫 IKNP 的人就想: 有沒有可能只做比方說 1000 次 OT, 再加上一些設計, 就能達到本來 100 萬次 OT 的效果呢?
+有幾個叫 IKNP 的人就想: 有沒有可能只做比方說 100 次 OT, 再加上一些設計, 就能達到本來 100 萬次 OT 的效果呢?
 
 我們來扮演一下裡面的角色, 確認一下理解怎麼樣?
 
@@ -101,7 +101,7 @@ Alice: 這樣我用 s 的值去挑箱子, 不管選第 0 個還是第 1 個, 內
 
 <img src="images/OT_reverse_r_1.gif" alt="OT_reverse_r_1.gif" class="to-be-resized">
 
-Bob: 對你來說, 這兩個 case 進行的動作都一樣, 就是用 s 的值來挑箱子. 也就是反向我當 sender 你當 receiver, 用 s 來進行 OT.
+Bob: 對你來說, 這兩個 case 進行的動作都一樣, 就是用 s 的值來反向 OT.
 
 Alice: 雖然好像我用 s 作了選擇, 但讓我算出 T 還是 T⊕s 又還是基於你的 r 所作的選擇.
 
@@ -152,13 +152,11 @@ Alice: 也就是你的 T 和我的 s 都要變長, 要多做幾次 OT.
 
 <a href="2D.html" target="_blank">(Open in a new window)</a>
 
-Bob: 因為一整條 T⊕r 都是用同一個 bit r 來準備的, 和 T 會是兩條相同或兩條相反. 所以你做完幾次 OT 之後, Q 會是一整條 T 或是一整條 T⊕s .
+Bob: 因為一整條 T⊕r 都是用同一個 bit r 來準備的, 所以和 T 會是整條相同或是整條相反. 這樣你做完幾次 OT 之後, Q 會是一整條 T 或是一整條 T⊕s .
 
-Alice: 我再把整條 Q 來 ⊕s , 這樣 (Q, Q⊕s) 就會是兩條 (T, T⊕s) 或是 (T⊕s, T), 可以安全的加密一組訊息了.
+Alice: 我再拿整條 Q 來 ⊕s , 這樣 (Q, Q⊕s) 就會是兩條 (T, T⊕s) 或是 (T⊕s, T), 可以安全的加密一組訊息了.
 
 Bob: 再來就是關鍵的最後一步. 看要怎麼用這些少量的 OT 達到原來大量 OT 的效果.
-
-我們把 1 個 bit 的 r 恢復成很多個 bits, 然後...
 
 Alice: 先看程式好了, 像這樣:
 
@@ -166,7 +164,7 @@ Alice: 先看程式好了, 像這樣:
 
 <a href="3D.html" target="_blank">(Open in a new window)</a>
 
-Bob: 這裡對於每一個 r, 我生出對應的 T 和 T⊕r. 讓你用 s 垂直的每次選走一整個 column.
+Bob: 這裡對於每一個 r, 我生出對應的 T 和 T⊕r. 因為每一層都是用相同的 s 在選, 所以可以讓你用 s 垂直的每次選走一整個 column.
 
 Alice: 因為每一層你準備的 T 和 T⊕r 都是根據那層的 r 做出來的, Q 也都是我用 s 反向 OT 的, 所以每層也都是 (T, T⊕s) 或是 (T⊕s, T) .
 
@@ -176,9 +174,19 @@ Alice: 我們雖然只進行了少量的 OT, 但是因為每次選了垂直的�
 
 這樣每一層的兩個 message 都能用 (T, T⊕s) 或是 (T⊕s, T) 加密後送給你, 大量的 OT 就完成了! 耶!
 
-Bob: 謝謝你和我討論, 我覺得清楚多了!
+Bob: 呼! 謝謝你和我討論, 我覺得又更清楚了!
 
-Alice: 也謝謝你!
+Alice: 也謝謝你! 下次見!
+
+---
+
+#### References
+
+[Extending Oblivious Transfers Efficiently](https://iacr.org/archive/crypto2003/27290145/27290145.pdf)
+<img src="images/IKNP03.png" alt="IKNP03.png">
+
+[A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/)
+
 
 <script>
 function resizeImg(i) { i.style.width = (i.naturalWidth * 0.25) + "px"; }
