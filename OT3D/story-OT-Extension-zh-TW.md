@@ -12,7 +12,7 @@ Alice: 好了. 你還記得上次討論的 OT 嗎?
 
 Bob: 記得啊. 就是你有兩個 message, 我選 0 就看到 message0, 我選 1 就看到 message1. 但是我看不到你的另一個 message, 你也不知道我選了哪個 message 來看.
 
-<img src="images/OT.gif" alt="OT.gif" width="25%">
+<img src="images/OT.gif" alt="OT.gif" class="to-be-resized">
 
 Alice: 那你覺得 OT Extension 在做什麼呢?
 
@@ -34,8 +34,7 @@ Bob: OK. 我們先不看 100 萬組訊息, 先只看一組訊息.
 
 那就可以拿來做 OT 了: 只要你把 message 用對應的 bit string 加密送給我, 我就只能唯一解出那個用 T 加密的 -- 也就是 r 指到的那個 message 了.
 
-<img src="images/OT_encrypt.gif" alt="OT_encrypt.gif" width="50%">
-
+<img src="images/OT_encrypt.gif" alt="OT_encrypt.gif" class="to-be-resized">
 
 Alice: 我們再更簡化一點, 先把 T 縮到只有一個 bit 來看.
 
@@ -45,17 +44,17 @@ Alice: 我們再更簡化一點, 先把 T 縮到只有一個 bit 來看.
 
 如果我能算出 T⊕s 的話, 就能當成你不知道的 unknown bit 來放在另一格.
 
-<img src="images/OT_T_TS.gif" alt="OT_T_TS.gif" width="25%">
+<img src="images/OT_T_TS.gif" alt="OT_T_TS.gif" class="to-be-resized">
 
 我們觀察上下兩格的關係: 不論 r 是 0 還是 1, 上面那格 ⊕s 總是能得到下面那格.
 
 如果把上面那格取名為 Q, 那下面那格就是 Q⊕s .
 
-<img src="images/OT_Q_QS.gif" alt="OT_Q_QS.gif" width="35%">
+<img src="images/OT_Q_QS.gif" alt="OT_Q_QS.gif" class="to-be-resized">
 
 我們可以把原來的問題轉成: 專心看 Q, 看要怎麼用 r 控制 Q 那格出現 T 還是 T⊕s .
 
-<img src="images/OT_Q_T_TS.gif" alt="OT_Q_T_TS.gif" width="35%">
+<img src="images/OT_Q_T_TS.gif" alt="OT_Q_T_TS.gif" class="to-be-resized">
 
 Bob: 整理一下: 我們剛剛從 100 萬組 message 縮到一組, 從兩個 bit string 縮到兩個 bit, 再聚焦到上面那個 bit Q 如何被 r 控制成 T 或 T⊕s , 這樣 Q⊕s 就會是反過來的 T⊕s 或 T. 只要你把 message 用 Q 和 Q⊕s 加密後送給我, 我就只能開出 T 所在的那個 message, 也就達成 OT 了.
 
@@ -90,7 +89,7 @@ Bob: 反向 OT.
 
 Alice: 我用 s 挑箱子, 不管選 0 選 1, 因為內容一樣, 所以一定都選到 T.
 
-<img src="images/OT_reverse_r_0.gif" alt="OT_reverse_r_0.gif" width="25%">
+<img src="images/OT_reverse_r_0.gif" alt="OT_reverse_r_0.gif" class="to-be-resized">
 
 Bob: 再看 case r = 1: 我想讓你算出 T⊕s . 但我不知道 s. 所以我想:
 
@@ -100,7 +99,7 @@ Bob: 再看 case r = 1: 我想讓你算出 T⊕s . 但我不知道 s. 所以我�
 
 Alice: 這樣我用 s 的值去挑箱子, 不管選第 0 個還是第 1 個, 內容剛好都會是 T⊕s !
 
-<img src="images/OT_reverse_r_1.gif" alt="OT_reverse_r_1.gif" width="25%">
+<img src="images/OT_reverse_r_1.gif" alt="OT_reverse_r_1.gif" class="to-be-resized">
 
 Bob: 對你來說, 這兩個 case 進行的動作都一樣, 就是用 s 的值來挑箱子. 也就是反向我當 sender 你當 receiver, 用 s 來進行 OT.
 
@@ -112,7 +111,7 @@ Alice: 另外就像我這邊的兩個值總是能表示成 Q 和 Q⊕s 一樣, �
 
 Bob: 嗯嗯. 這樣稱呼起來也比較方便.
 
-<img src="images/OT_T_TR.gif" alt="OT_T_TR.gif" width="35%">
+<img src="images/OT_T_TR.gif" alt="OT_T_TR.gif" class="to-be-resized">
 
 Alice: 這樣核心的部分講的差不多了. 我們再整理一下.
 
@@ -180,3 +179,9 @@ Alice: 我們雖然只進行了少量的 OT, 但是因為每次選了垂直的�
 Bob: 謝謝你和我討論, 我覺得清楚多了!
 
 Alice: 也謝謝你!
+
+<script>
+function resizeImg(i) { i.style.width = (i.naturalWidth * 0.25) + "px"; }
+function resizeAllImg() { document.querySelectorAll(".to-be-resized").forEach(resizeImg); }
+window.addEventListener("load", resizeAllImg);
+</script>
