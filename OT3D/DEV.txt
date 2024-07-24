@@ -1,0 +1,27 @@
+Goal:
+
+能在一個 markdown 文件中顯示多個 OT3D
+
+每個 OT3D 可以 "open in a new window"
+
+
+
+目前的作法是: 每個 OT3D 寫在 partial 的 html 中, 讓 jekyll include 到最後產生的大的 html 裡.
+
+由於 browser 的容忍, partial 的 html 也可以單獨顯示
+
+每個 partial html 中都有 <script type="module" src="foo">
+
+重複引用只會發生一次作用
+
+這樣 code / resource 應該不會複製多份
+
+
+
+開發時使用 "npx vite" 的 local server
+
+partial html 可以修改了馬上看結果
+
+
+
+
