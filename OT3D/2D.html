@@ -1,41 +1,23 @@
 <meta charset="utf-8">
 <style>
-    #THE_CONTAINER_2D { width: 80vmin; height: 80vmin; background-color: gray; margin: 0; }
+    #THE_CONTAINER_2 { width: 80vmin; height: 80vmin; background-color: gray; margin: 0; }
 </style>
 
-<button onclick="inputR2D()">Input r</button>
-<button onclick="main2D.generateT()">🎲 Generate T</button>
-<button onclick="main2D.computeT_XOR_r()">Compute T⊕r</button>
+<button onclick="OT2.promptR('Input r:\nExample:\n0\n1', '1')">Input r</button>
+<button onclick="OT2.generateT()">🎲 Generate T</button>
+<button onclick="OT2.computeT_XOR_r()">Compute T⊕r</button>
 <br>
-<button onclick="main2D.generateS()">🎲 Generate s</button>
-<button onclick="main2D.obliviousTransferNextColumn()">Oblivious Transfer for Q *</button>
-<button onclick="main2D.computeQ_XOR_s()">Compute Q⊕s</button>
+<button onclick="OT2.generateS()">🎲 Generate s</button>
+<button onclick="OT2.obliviousTransferNextColumn()">Oblivious Transfer for Q</button>
+<button onclick="OT2.computeQ_XOR_s()">Compute Q⊕s</button>
 <br>
-<button onclick="main2D.toggleShowTarget()">Show/Hide where r points to *</button>
+<button onclick="OT2.toggleShowTarget()">Show/Hide where r points to *</button>
 <br>
-<div id="THE_CONTAINER_2D"></div>
+<div id="THE_CONTAINER_2"></div>
 
-<script type="module" src="./main.js"></script> <!-- window.OT3D now points to the JS class "OT3D"-->
-<script>
+<script type="module">
 // jekyll will replace ">" with "gt" and "\n\n" with "<p>" here ! be careful !
-function onload2D() {
-    main2D = new OT3D(document.getElementById("THE_CONTAINER_2D"), 1, 3);
-}
-window.addEventListener("load", onload2D);
-function inputR2D() {
-    while (true) {
-        var rStr = prompt("Input r:\nExample:\n0\n1", "1");
-        if (rStr == null) break;
-        rStr = rStr.trim();
-        if (rStr.match(/^[01]{1}$/)) {
-            main2D.setR([...rStr]);
-            break;
-        }
-    }
-}
-function resize2D() {
-    let container = document.querySelector("#THE_CONTAINER_2D")
-    main2D.renderer.setSize(container.clientWidth, container.clientHeight);
-}
-window.addEventListener("resize", resize2D);
+import { OT3D } from "./main.js";
+window.OT2 = new OT3D(document.getElementById("THE_CONTAINER_2"), 1, 3);
+window.addEventListener("resize", OT2.resizeListener);
 </script>

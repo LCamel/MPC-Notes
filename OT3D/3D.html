@@ -1,42 +1,24 @@
 <meta charset="utf-8">
 <style>
-    #THE_CONTAINER_3D { width: 80vmin; height: 80vmin; background-color: gray; margin: 0; }
+    #THE_CONTAINER_3 { width: 80vmin; height: 80vmin; background-color: gray; margin: 0; }
 </style>
 
-<button onclick="inputR3D()">Input r</button>
-<button onclick="main3D.generateT()">🎲 Generate T</button>
-<button onclick="main3D.computeT_XOR_r()">Compute T⊕r</button>
+<button onclick="OT3.promptR('Input r (5 bits):\nExample:\n10010\n01011', '10010')">Input r</button>
+<button onclick="OT3.generateT()">🎲 Generate T</button>
+<button onclick="OT3.computeT_XOR_r()">Compute T⊕r</button>
 <br>
-<button onclick="main3D.generateS()">🎲 Generate s</button>
-<button onclick="main3D.obliviousTransferNextColumn()">Oblivious Transfer for Q *</button>
-<button onclick="main3D.computeQ_XOR_s()">Compute Q⊕s</button>
+<button onclick="OT3.generateS()">🎲 Generate s</button>
+<button onclick="OT3.obliviousTransferNextColumn()">Oblivious Transfer for Q</button>
+<button onclick="OT3.computeQ_XOR_s()">Compute Q⊕s</button>
 <br>
-<button onclick="main3D.toggleShowTarget()">Show/Hide where r points to *</button>
-<button onclick="main3D.toggleShowRowThreshold()">Examine layers *</button>
+<button onclick="OT3.toggleShowTarget()">Show/Hide where r points to *</button>
+<button onclick="OT3.toggleShowRowThreshold()">Examine layers *</button>
 <br>
-<div id="THE_CONTAINER_3D"></div>
+<div id="THE_CONTAINER_3"></div>
 
-<script type="module" src="./main.js"></script> <!-- window.OT3D now points to the JS class "OT3D"-->
-<script>
+<script type="module">
 // jekyll will replace ">" with "gt" and "\n\n" with "<p>" here ! be careful !
-function onload3D() {
-    main3D = new OT3D(document.getElementById("THE_CONTAINER_3D"), 5, 3, [-3.682602361330681, 6.059032690731526, 7.051706368033811]);
-}
-window.addEventListener("load", onload3D);
-function inputR3D() {
-    while (true) {
-        var rStr = prompt("Input r (5 bits):\nExample:\n10010\n01011", "10010");
-        if (rStr == null) break;
-        rStr = rStr.trim();
-        if (rStr.match(/^[01]{5}$/)) {
-            main3D.setR([...rStr]);
-            break;
-        }
-    }
-}
-function resize3D() {
-    let container = document.querySelector("#THE_CONTAINER_3D")
-    main3D.renderer.setSize(container.clientWidth, container.clientHeight);
-}
-window.addEventListener("resize", resize3D);
+import { OT3D } from "./main.js";
+window.OT3 = new OT3D(document.getElementById("THE_CONTAINER_3"), 5, 3);
+window.addEventListener("resize", OT3.resizeListener);
 </script>

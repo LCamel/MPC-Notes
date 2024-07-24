@@ -26,8 +26,9 @@ class Cell {
 }
 
 class OT3D {
-    constructor(container, ROW, COL, initCameraPosition) {
-        [this.scene, this.camera, this.renderer] = this.initDisplay(container, initCameraPosition); // only scene is needed
+    constructor(container, ROW, COL, initCameraPosition = [0, 10, 0]) {
+        [this.scene, this.camera, this.renderer, this.resizeListener]
+            = this.initDisplay(container, initCameraPosition);
         this.ROW = ROW;
         this.COL = COL;
         this.r = this.make1DCells(ROW, (i) => [0.5, ROW - i - 1, 0.5]);
@@ -47,7 +48,7 @@ class OT3D {
         this.showTarget = false;
     }
 
-    initDisplay(container, initCameraPosition = [0, 10, 0]) {
+    initDisplay(container, initCameraPosition) {
         let scene, camera, renderer;
 
         scene = new THREE.Scene();
@@ -95,7 +96,9 @@ class OT3D {
         };
         renderer.setAnimationLoop(animate);
 
-        return [scene, camera, renderer];
+        let resizeListener = () => renderer.setSize(container.clientWidth, container.clientHeight);
+
+        return [scene, camera, renderer, resizeListener];
     }
 
     // all make() functions will add the objects to the scene
@@ -276,7 +279,19 @@ class OT3D {
         myText.sync();
         return myText;
     }
+    // You can implement your own input UI and call the setR() function
+    promptR(message, _default) {
+        let regex = new RegExp("^[01asdf]{" + this.ROW + "}$");
+        while (true) {
+            var rStr = prompt(message, _default);
+            if (rStr == null) break;
+            rStr = rStr.trim();
+            if (rStr.match(regex)) {
+                this.setR([...rStr]);
+                break;
+            }
+        }
+    }
 }
 
-window.OT3D = OT3D;
-// export { OT3D };
+export { OT3D };
