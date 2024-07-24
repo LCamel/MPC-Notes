@@ -24,4 +24,24 @@ partial html 可以修改了馬上看結果
 
 
 
+遇到先前的問題了
+如果 main.js 只寫 export { OT3D }
+而 index.html 寫
+<script type="module">
+import { OT3D } from "./main.js";
+window.OT3D_dummydummy = OT3D;
+</script>
 
+SyntaxError: The requested module './main.js' does not provide an export named 'OT3D' (at 1D.html:20:10)
+
+這樣 dist 裡面的一大包 script 並不會提供 export !
+其他的 html 就算 import 了也拿不到 OT3D !
+即便平常 npx vite 是可以用的!
+
+
+可能還是要嘗試看看 library mode !
+
+
+
+<button onclick="main3D.toggleShowRowThreshold()">Examine layers *</button>
+        var rStr = prompt("Input r (5 bits):\nExample:\n10010\n01011", "10010");

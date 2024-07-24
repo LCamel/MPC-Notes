@@ -281,7 +281,7 @@ class OT3D {
     }
     // You can implement your own input UI and call the setR() function
     promptR(message, _default) {
-        let regex = new RegExp("^[01asdf]{" + this.ROW + "}$");
+        let regex = new RegExp("^[01]{" + this.ROW + "}$");
         while (true) {
             var rStr = prompt(message, _default);
             if (rStr == null) break;
