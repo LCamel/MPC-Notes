@@ -25,7 +25,7 @@ class Cell {
     }
 }
 
-class Main {
+class OT3D {
     constructor(container, ROW, COL, initCameraPosition) {
         [this.scene, this.camera, this.renderer] = this.initDisplay(container, initCameraPosition); // only scene is needed
         this.ROW = ROW;
@@ -278,5 +278,5 @@ class Main {
     }
 }
 
-// export { Main };
-window.Main = Main;
+window.OT3D = OT3D;
+// export { OT3D };

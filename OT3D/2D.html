@@ -15,11 +15,11 @@
 <br>
 <div id="THE_CONTAINER_2D"></div>
 
-<script type="module" src="./main.js"></script> <!-- window.Main now points to the JS class "Main"-->
+<script type="module" src="./main.js"></script> <!-- window.OT3D now points to the JS class "OT3D"-->
 <script>
 // jekyll will replace ">" with "gt" and "\n\n" with "<p>" here ! be careful !
 function onload2D() {
-    main2D = new Main(document.getElementById("THE_CONTAINER_2D"), 1, 3);
+    main2D = new OT3D(document.getElementById("THE_CONTAINER_2D"), 1, 3);
 }
 window.addEventListener("load", onload2D);
 function inputR2D() {

@@ -16,11 +16,11 @@
 <br>
 <div id="THE_CONTAINER_3D"></div>
 
-<script type="module" src="./main.js"></script> <!-- window.Main now points to the JS class "Main"-->
+<script type="module" src="./main.js"></script> <!-- window.OT3D now points to the JS class "OT3D"-->
 <script>
 // jekyll will replace ">" with "gt" and "\n\n" with "<p>" here ! be careful !
 function onload3D() {
-    main3D = new Main(document.getElementById("THE_CONTAINER_3D"), 5, 3, [-3.682602361330681, 6.059032690731526, 7.051706368033811]);
+    main3D = new OT3D(document.getElementById("THE_CONTAINER_3D"), 5, 3, [-3.682602361330681, 6.059032690731526, 7.051706368033811]);
 }
 window.addEventListener("load", onload3D);
 function inputR3D() {
