@@ -19,6 +19,7 @@
 <script src="https://d3js.org/d3.v6.min.js"></script>
 <script>
   var L = 3; // 設置樹的高度
+  var levelSpacing = 120; // 設置樹的層級間距
 
   function createFullBinaryTree(level, path = "") {
     if (level === 0) {
@@ -50,9 +51,9 @@
               .attr("width", width)
               .attr("height", height)
               .append("g")
-              .attr("transform", "translate(480, 750)"); // 從底部偏移以避免超出
+              .attr("transform", "translate(" + (width / 2) + "," + (height - 50) + ")"); // 從底部偏移以避免超出
 
-  var treeLayout = d3.tree().size([width - 100, height - 200]); // 增加寬度，減少高度以避免節點超出範圍
+  var treeLayout = d3.tree().nodeSize([100, levelSpacing]); // 設置節點大小，其中 [寬度, 高度]
 
   var root = d3.hierarchy(data);
 
@@ -81,11 +82,12 @@
   svg.selectAll('.link')
      .data(root.links())
      .enter()
-     .append('path')
+     .append('line')
      .attr('class', 'link')
-     .attr('d', d3.linkVertical()
-                 .x(function(d) { return d.x; })
-                 .y(function(d) { return -d.y; })); // 調整連接線的 y 座標
+     .attr('x1', function(d) { return d.target.x; }) // 目標節點的下端中點
+     .attr('y1', function(d) { return -d.target.y + nodeHeight / 2; })
+     .attr('x2', function(d) { return d.source.x; }) // 源節點的上端中點
+     .attr('y2', function(d) { return -d.source.y - nodeHeight / 2; });
 
   var nodes = svg.selectAll(".node")
                  .data(root.descendants())
