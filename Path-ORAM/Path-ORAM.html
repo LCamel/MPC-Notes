@@ -1,0 +1,36 @@
+<div id="THE_CONTAINER"></div>
+<script type="module">
+
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+const svg = d3.select("#THE_CONTAINER")
+.append("svg")
+.attr("width", 500)
+.attr("height", 500)
+;
+
+const L = 3; // level 0 1 2 3    2^3 = 8 leaves
+function createTreeData(level, path) {
+    return { name: "n-" + path, id: "id-" + path,
+        children: level == L ? [] : [ createTreeData(level + 1, path + "0"), createTreeData(level + 1, path + "1")]};
+}
+const treeData = createTreeData(0, "");
+console.log(treeData);
+
+const root = d3.hierarchy(treeData); // now root is a parallel layer on top of treeData
+console.log(root); window.root = root; // debug
+
+const nodeWidth = 50;
+const nodeHeight = 30;
+
+svg.selectAll(".node").data(root.descendants().reverse())
+.enter()
+.append("rect")
+.attr("id", d => d.data.id)
+.attr("x", (d, i) => d.x = (d.height == 0 ? (2 ** L - i - 1) * nodeWidth * 1.1 : (d.children[0].x + d.children[1].x) / 2))
+.attr("y", d => d.y = (d.height * nodeHeight * 1.5))
+.attr("width", nodeWidth)
+.attr("height", nodeHeight)
+.attr("fill", "blue");
+
+</script>
