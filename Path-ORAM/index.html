@@ -14,6 +14,14 @@
     stroke: #555;
     stroke-width: 1.5px;
   }
+  .highlight {
+    fill: orange !important;
+    stroke: #000 !important;
+  }
+  .highlight-link {
+    stroke: orange;
+    stroke-width: 3px;
+  }
 </style>
 <svg width="960" height="800"></svg>
 <script src="https://d3js.org/d3.v6.min.js"></script>
@@ -79,7 +87,7 @@
 
   updatePosition(root);
 
-  svg.selectAll('.link')
+  var links = svg.selectAll('.link')
      .data(root.links())
      .enter()
      .append('line')
@@ -132,4 +140,31 @@
   setTimeout(function() {
     f("id01");
   }, 1000);
+
+  // 新增的函數: highlightPath
+  function highlightPath(leafIndex) {
+    // 找到對應的葉節點
+    var leafNode = root.leaves().find(d => d.data.leafIndex === leafIndex);
+    if (!leafNode) return;
+
+    // 從葉節點開始，沿路徑向上遍歷到根節點
+    var currentNode = leafNode;
+    while (currentNode) {
+      d3.select("#" + currentNode.data.id).classed("highlight", true);
+
+      // 高亮當前節點到父節點的連接線
+      if (currentNode.parent) {
+        links.filter(function(d) {
+          return d.target === currentNode;
+        }).classed("highlight-link", true);
+      }
+
+      currentNode = currentNode.parent;
+    }
+  }
+
+  // 測試高亮函數
+  setTimeout(function() {
+    highlightPath(2); // 高亮 leafIndex 為 2 的路徑
+  }, 2000);
 </script>
