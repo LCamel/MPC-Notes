@@ -4,11 +4,16 @@
     stroke: #555;
     stroke-width: 1.5px;
 }
+.textLine {
+    font: 12px sans-serif;
+}
+
 </style>
 <div id="THE_CONTAINER"></div>
 <script type="module">
 
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+window.d3 = d3;
 
 const svg = d3.select("#THE_CONTAINER")
 .append("svg")
@@ -21,9 +26,13 @@ const treeG = svg.append("g");
 svg.append("rect").attr("width", 500).attr("height", 500).attr("class", "box");
 
 const L = 3; // level 0 1 2 3    2^3 = 8 leaves
+const Z = 4; // bucket size
 function createTreeData(level, path) {
-    return { name: "n-" + path, id: "id-" + path,
-        children: level == L ? [] : [ createTreeData(level + 1, path + "0"), createTreeData(level + 1, path + "1")]};
+    return {
+        id: "id-" + path,
+        textLines: new Array(Z).fill("ABCD"),
+        children: level == L ? [] : [ createTreeData(level + 1, path + "0"), createTreeData(level + 1, path + "1")]
+    };
 }
 const treeData = createTreeData(0, "");
 console.log(treeData);
@@ -32,22 +41,37 @@ const root = d3.hierarchy(treeData); // now root is a parallel layer on top of t
 console.log(root); window.root = root; // debug
 
 const nodeWidth = 50;
-const nodeHeight = 30;
+const textLineHeight = 20;
+const nodeHeight = (Z + 1) * textLineHeight;
 
 root.descendants().reverse().forEach((d, i) => {
-    d.x = d.height == 0 ? (2 ** L - i - 1) * nodeWidth * 1.2 : (d.children[0].x + d.children[1].x) / 2;
-    d.y = d.height * nodeHeight * 1.5;
+    d.x = d.height == 0 ? (2 ** L - i - 1) * nodeWidth * 1.2 + (i % 2) * 8 - 4: (d.children[0].x + d.children[1].x) / 2;
+    d.y = d.height * nodeHeight * 1.2;
 });
 
-treeG.selectAll(".node")
+const nodes = treeG.selectAll(".node")
 .data(root.descendants())
 .enter()
-.append("rect")
+.append("g")
+.attr("class", "node")
+.attr("transform", d => `translate(${d.x}, ${d.y})`);
+
+nodes.append("rect")
 .attr("id", d => d.data.id)
-.attr("x", d => d.x)
-.attr("y", d => d.y)
 .attr("width", nodeWidth)
 .attr("height", nodeHeight)
-.attr("fill", "blue");
+.attr("fill", "gray");
+
+
+nodes.selectAll(".textLine")
+.data(d => d.data.textLines)
+.enter()
+.append("text")
+.attr("class", "textLine")
+.attr("x", nodeWidth / 2)
+.attr("y", (_, i) => (i + 1) * 1.06 * textLineHeight)
+.attr("text-anchor", "middle")
+.text(d => d)
+;
 
 </script>
