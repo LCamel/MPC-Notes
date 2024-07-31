@@ -13,17 +13,41 @@ background-color: yellow;
 display: grid;
 place-items: center;
 }
+.cell {
+width: 50px;
+height: 20px;
+border: 1px solid black;
+}
+.positionLabel {
+position: absolute;
+width: 50;
+height: 50;
+display: grid;
+place-items: center;
+}
+.positionValue {
+position: absolute;
+width: 50;
+height: 50;
+border: 1px solid black;
+display: grid;
+place-items: center;
+}
 
 </style>
 
-<div style="position: relative" id="treeContainer">
-</div>
+<div style="position: relative; width:500; height:500" id="treeContainer"></div>
+<div style="position: relative" id="stashContainer"></div>
+<div style="position: relative" id="positionContainer"></div>
 
 <script>
+const N = 8;
 const L = 3;
 const Z = 4;
 const nodeWidth = 80;
-const nodeHeight = 100;
+const textLineHeight = 20;
+const nodeHeight = (Z + 1) * textLineHeight;
+
 function createNode(l, parent, path, container) {
     let node = document.createElement("div")
     node.className = "node";
@@ -48,4 +72,32 @@ function createNode(l, parent, path, container) {
     return node;
 }
 createNode(0, undefined, "", document.querySelector("#treeContainer"));
+
+function stashAppend(s) {
+    let cell = document.createElement("span");
+    cell.className = "cell";
+    cell.innerText = s;
+    let container = document.querySelector("#stashContainer");
+    container.appendChild(cell);
+}
+stashAppend("aa");
+stashAppend("bb");
+
+let positionContainer = document.querySelector("#positionContainer");
+for (let i = 0; i < N; i++) {
+    let label = document.createElement("div");
+    label.className = "positionLabel";
+    label.innerText = i;
+    label.style.left = 50 * i;
+    positionContainer.appendChild(label);
+
+    let value = document.createElement("div");
+    value.className = "positionValue";
+    value.innerText = Math.floor(Math.random() * N);
+    value.style.left = 50 * i;
+    value.style.top = 50;
+    positionContainer.appendChild(value);
+}
+
+
 </script>
