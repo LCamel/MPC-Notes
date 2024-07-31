@@ -49,7 +49,7 @@ const textLineHeight = 20;
 const nodeHeight = (Z + 1) * textLineHeight;
 
 root.descendants().reverse().forEach((d, i) => {
-    d.x = d.height == 0 ? (2 ** L - i - 1) * nodeWidth * 1.2 + (i % 2) * 8 - 4: (d.children[0].x + d.children[1].x) / 2;
+    d.x = d.height == 0 ? (2 ** L - i - 1) * nodeWidth * 1.2 : (d.children[0].x + d.children[1].x) / 2;
     d.y = d.height * nodeHeight * 1.2;
 });
 
