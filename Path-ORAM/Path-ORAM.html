@@ -7,6 +7,10 @@
 .textLine {
     font: 12px sans-serif;
 }
+.treeLink {
+    stroke: gray;
+    stroke-width: 1.5px;
+}
 
 </style>
 <div id="THE_CONTAINER"></div>
@@ -62,7 +66,6 @@ nodes.append("rect")
 .attr("height", nodeHeight)
 .attr("fill", "gray");
 
-
 nodes.selectAll(".textLine")
 .data(d => d.data.textLines)
 .enter()
@@ -73,5 +76,17 @@ nodes.selectAll(".textLine")
 .attr("text-anchor", "middle")
 .text(d => d)
 ;
+
+treeG.selectAll(".treeLink")
+.data(root.links())
+.enter()
+.append("line")
+.attr("class", "treeLink")
+.attr("x1", d => d.source.x + nodeWidth / 2)
+.attr("y1", d => d.source.y)
+.attr("x2", d => d.target.x + nodeWidth / 2)
+.attr("y2", d => d.target.y + nodeHeight)
+;
+
 
 </script>
