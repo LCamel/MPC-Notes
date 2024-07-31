@@ -2,8 +2,6 @@
 
 .node {
 position: absolute;
-width:100px;
-height:100px;
 background-color: gray;
 display: grid;
 place-items: center;
@@ -24,17 +22,28 @@ place-items: center;
 <script>
 const L = 3;
 const Z = 4;
+const nodeWidth = 80;
+const nodeHeight = 100;
 function createNode(l, parent, path, container) {
     let node = document.createElement("div")
     node.className = "node";
+    node.id = "id-" + path;
     for (let i = 0; i < Z; i++) {
         let textLine = document.createElement("div");
         textLine.className = "textLine";
         textLine.innerHTML = i;
         node.appendChild(textLine);
     }
-    node.style.top = 30;
-    node.style.left = 60;
+    if (l == L) {
+        node.style.left = (parseInt(path, 2) * nodeWidth * 1.2) + "px" ;
+    } else {
+        let c0 = createNode(l + 1, undefined, path + "0", container);
+        let c1 = createNode(l + 1, undefined, path + "1", container);
+        node.style.left = (c0.offsetLeft + c1.offsetLeft) / 2;
+    }
+    node.style.top = (L - l) * nodeHeight * 1.2;
+    node.style.width = nodeWidth;
+    node.style.height = nodeHeight;
     container.appendChild(node);
     return node;
 }
