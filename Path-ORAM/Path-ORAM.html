@@ -1,3 +1,10 @@
+<style>
+.box {
+    fill: none;
+    stroke: #555;
+    stroke-width: 1.5px;
+}
+</style>
 <div id="THE_CONTAINER"></div>
 <script type="module">
 
@@ -8,7 +15,10 @@ const svg = d3.select("#THE_CONTAINER")
 .attr("width", 500)
 .attr("height", 500)
 ;
+window.svg = svg;
 const treeG = svg.append("g");
+
+svg.append("rect").attr("width", 500).attr("height", 500).attr("class", "box");
 
 const L = 3; // level 0 1 2 3    2^3 = 8 leaves
 function createTreeData(level, path) {
@@ -24,12 +34,18 @@ console.log(root); window.root = root; // debug
 const nodeWidth = 50;
 const nodeHeight = 30;
 
-treeG.selectAll(".node").data(root.descendants().reverse())
+root.descendants().reverse().forEach((d, i) => {
+    d.x = d.height == 0 ? (2 ** L - i - 1) * nodeWidth * 1.2 : (d.children[0].x + d.children[1].x) / 2;
+    d.y = d.height * nodeHeight * 1.5;
+});
+
+treeG.selectAll(".node")
+.data(root.descendants())
 .enter()
 .append("rect")
 .attr("id", d => d.data.id)
-.attr("x", (d, i) => d.x = (d.height == 0 ? (2 ** L - i - 1) * nodeWidth * 1.1 : (d.children[0].x + d.children[1].x) / 2))
-.attr("y", d => d.y = (d.height * nodeHeight * 1.5))
+.attr("x", d => d.x)
+.attr("y", d => d.y)
 .attr("width", nodeWidth)
 .attr("height", nodeHeight)
 .attr("fill", "blue");
