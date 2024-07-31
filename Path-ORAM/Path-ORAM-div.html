@@ -1,0 +1,42 @@
+<style>
+
+.node {
+position: absolute;
+width:100px;
+height:100px;
+background-color: gray;
+display: grid;
+place-items: center;
+}
+.textLine {
+width: 50px;
+height: 20px;
+background-color: yellow;
+display: grid;
+place-items: center;
+}
+
+</style>
+
+<div style="position: relative" id="treeContainer">
+</div>
+
+<script>
+const L = 3;
+const Z = 4;
+function createNode(l, parent, path, container) {
+    let node = document.createElement("div")
+    node.className = "node";
+    for (let i = 0; i < Z; i++) {
+        let textLine = document.createElement("div");
+        textLine.className = "textLine";
+        textLine.innerHTML = i;
+        node.appendChild(textLine);
+    }
+    node.style.top = 30;
+    node.style.left = 60;
+    container.appendChild(node);
+    return node;
+}
+createNode(0, undefined, "", document.querySelector("#treeContainer"));
+</script>
