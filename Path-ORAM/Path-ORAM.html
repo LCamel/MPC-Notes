@@ -66,22 +66,23 @@ nodes.append("rect")
 .attr("height", nodeHeight)
 .attr("fill", "gray");
 
-function renderText(nodes) {
-    nodes.selectAll(".textLine")
-        .data(d => d.data.textLines)
-        .join(
-            enter => enter.append("text")
-                .attr("class", "textLine")
-                .attr("x", nodeWidth / 2)
-                .attr("y", (_, i) => (i + 1) * 1.06 * textLineHeight)
-                .attr("text-anchor", "middle")
-                .text(d => d),
-            update => update.text(d => d)
-        );
+nodes.selectAll(".textLine")
+.data(d => d.data.textLines)
+.enter()
+.append("text")
+.attr("class", "textLine")
+.attr("x", nodeWidth / 2)
+.attr("y", (_, i) => (i + 1) * 1.06 * textLineHeight)
+.attr("text-anchor", "middle")
+.text(d => d)
+;
+
+function updateTextLines() {    
+    d3.selectAll(".node").selectAll(".textLine").data(d => d.data.textLines).text(d => d);
 }
-renderText(nodes);
 treeData.textLines[0] = "3333";
-setTimeout(() => renderText(nodes), 1000);
+setTimeout(updateTextLines, 1000);
+
 treeG.selectAll(".treeLink")
 .data(root.links())
 .enter()
