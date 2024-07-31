@@ -8,6 +8,7 @@ const svg = d3.select("#THE_CONTAINER")
 .attr("width", 500)
 .attr("height", 500)
 ;
+const treeG = svg.append("g");
 
 const L = 3; // level 0 1 2 3    2^3 = 8 leaves
 function createTreeData(level, path) {
@@ -23,7 +24,7 @@ console.log(root); window.root = root; // debug
 const nodeWidth = 50;
 const nodeHeight = 30;
 
-svg.selectAll(".node").data(root.descendants().reverse())
+treeG.selectAll(".node").data(root.descendants().reverse())
 .enter()
 .append("rect")
 .attr("id", d => d.data.id)
