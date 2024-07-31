@@ -13,7 +13,7 @@ background-color: yellow;
 display: grid;
 place-items: center;
 }
-.cell {
+.stashCell {
 width: 50px;
 height: 20px;
 border: 1px solid black;
@@ -47,6 +47,7 @@ const Z = 4;
 const nodeWidth = 80;
 const textLineHeight = 20;
 const nodeHeight = (Z + 1) * textLineHeight;
+const DUMMY = "_";
 
 function createNode(l, parent, path, container) {
     let node = document.createElement("div")
@@ -55,7 +56,7 @@ function createNode(l, parent, path, container) {
     for (let i = 0; i < Z; i++) {
         let textLine = document.createElement("div");
         textLine.className = "textLine";
-        textLine.innerHTML = i;
+        textLine.innerHTML = DUMMY;
         node.appendChild(textLine);
     }
     if (l == L) {
@@ -74,14 +75,29 @@ function createNode(l, parent, path, container) {
 createNode(0, undefined, "", document.querySelector("#treeContainer"));
 
 function stashAppend(s) {
+    if (s == DUMMY) return;
     let cell = document.createElement("span");
-    cell.className = "cell";
+    cell.className = "stashCell";
     cell.innerText = s;
     let container = document.querySelector("#stashContainer");
     container.appendChild(cell);
 }
-stashAppend("aa");
-stashAppend("bb");
+function stashAppendAll(vals) {
+    vals.forEach(v => stashAppend(v));
+}
+function stashUpdate(a, data) {
+    let cell = [...document.querySelectorAll(".stashCell")].find(c => c.innerText.startsWith(a + " "));
+    console.log("stashUpdate: cell: ", cell);
+    if (cell) {
+        cell.innerText = a + " " + data;
+    } else {
+        stashAppend(a + " " + data);
+    }
+}
+
+function randomPosition() {
+    return Math.floor(Math.random() * (2 ** L));
+}
 
 let positionContainer = document.querySelector("#positionContainer");
 for (let i = 0; i < N; i++) {
@@ -92,12 +108,58 @@ for (let i = 0; i < N; i++) {
     positionContainer.appendChild(label);
 
     let value = document.createElement("div");
+    value.id = "p-" + i;
     value.className = "positionValue";
-    value.innerText = Math.floor(Math.random() * N);
+    value.innerText = randomPosition();
     value.style.left = 50 * i;
     value.style.top = 50;
     positionContainer.appendChild(value);
 }
-
+function position(a) {
+    return document.getElementById("p-" + a);
+}
+function P(x, l) { // x: leaf index, l: level, return: a bucket div
+    let path = ((1 << L) + x).toString(2).substring(1, 1 + l);
+    console.log("P: x: " + x + " l: " + l + " path: " + path);
+    return document.getElementById("id-" + path);
+}
+function readBucket(bucketNode) {
+    console.log("readBucket: ", bucketNode);
+    return [... bucketNode.childNodes].map(c => c.innerText);
+}
+function clearBucket(bucketNode) {
+    [... bucketNode.childNodes].forEach(c => c.innerText = DUMMY);
+}
+function appendToBucket(bucketNode, s) {
+    let emptyBlock = [... bucketNode.childNodes].find(c => c.innerText == DUMMY);
+    if (emptyBlock) {
+        emptyBlock.innerText = s;
+        return true;
+    } else {
+        return false;
+    }
+}
+function access(op, a, data) {
+    let x = Number(position(a).innerText);
+    position(a).innerText = randomPosition();
+    for (let l = 0; l <= L; l++) {
+        stashAppendAll(readBucket(P(x, l)));
+    }
+    if (op == "write") {
+        stashUpdate(a, data);
+    }
+    for (let l = L; l >= 0; l--) {
+        clearBucket(P(x, l));
+        [...document.querySelectorAll(".stashCell")].forEach(cell => {
+            let [a2, data2] = cell.innerText.split(" ");
+            if (P(x, l) == P(a2, l)) {
+                if (appendToBucket(P(x, l), a2 + " " + data2)) {
+                    cell.parentNode.removeChild(cell);
+                }
+            }
+        });
+    }
+}
+setTimeout(() => access("write", 5, 3), 2000);
 
 </script>
