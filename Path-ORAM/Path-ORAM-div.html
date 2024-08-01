@@ -33,7 +33,9 @@ border: 1px solid black;
 display: grid;
 place-items: center;
 }
-
+.highlight {
+    background-color: red;
+}
 </style>
 
 <div style="position: relative; width:500; height:500" id="treeContainer"></div>
@@ -61,12 +63,19 @@ function createNode(l, parent, path, container) {
     }
     if (l == L) {
         node.style.left = (parseInt(path, 2) * nodeWidth * 1.2) + "px" ;
+        let label = document.createElement("div");
+        label.className = "positionLabel";
+        label.innerText = parseInt(path, 2);
+        label.style.left = node.style.left;
+        label.style.width = nodeWidth;
+        label.style.height = 30;
+        container.appendChild(label);
     } else {
         let c0 = createNode(l + 1, undefined, path + "0", container);
         let c1 = createNode(l + 1, undefined, path + "1", container);
         node.style.left = (c0.offsetLeft + c1.offsetLeft) / 2;
     }
-    node.style.top = (L - l) * nodeHeight * 1.2;
+    node.style.top = (L - l) * nodeHeight * 1.2 + 30;
     node.style.width = nodeWidth;
     node.style.height = nodeHeight;
     container.appendChild(node);
@@ -115,13 +124,22 @@ for (let i = 0; i < N; i++) {
     value.style.top = 50;
     positionContainer.appendChild(value);
 }
+const DELAY = 1000;
+function highlight(node) {
+    console.log("highlight: add: ", node);
+    node.classList.add("highlight");
+    setTimeout(() => {
+        console.log("remove highlight: ", node);
+        node.classList.remove("highlight");
+    }, DELAY);
+    return node;
+}
 function position(a) {
-    return document.getElementById("p-" + a);
+    return highlight(document.getElementById("p-" + a));
 }
 function P(x, l) { // x: leaf index, l: level, return: a bucket div
-    let path = ((1 << L) + x).toString(2).substring(1, 1 + l);
-    console.log("P: x: " + x + " l: " + l + " path: " + path);
-    return document.getElementById("id-" + path);
+    let path = ((1 << L) + Number(x)).toString(2).substring(1, 1 + l);
+    return highlight(document.getElementById("id-" + path));
 }
 function readBucket(bucketNode) {
     console.log("readBucket: ", bucketNode);
@@ -161,19 +179,24 @@ function writeBucket(origBucket, tempBucket) {
         origBucket.children[i].innerText = tempBucket.children[i].innerText;
     }
 }
-function access(op, a, data) {
+async function access(op, a, data) {
     let x = Number(position(a).innerText);
+    await sleep();
     position(a).innerText = randomPosition();
+    await sleep();
     for (let l = 0; l <= L; l++) {
         stashAppendAll(readBucket(P(x, l)));
+        await sleep();
     }
     if (op == "write") {
         stashUpdate(a, data);
     }
     for (let l = L; l >= 0; l--) {
         let tempBucket = createTempBucket(P(x, l));
+        await sleep();
         [...document.querySelectorAll(".stashCell")].forEach(cell => {
             let [a2, data2] = cell.innerText.split(" ");
+            console.log("x: ", x, " a2: ", a2, " data2: ", data2);
             if (P(x, l) == P(a2, l)) {
                 if (appendToBucket(tempBucket, a2 + " " + data2)) {
                     cell.parentNode.removeChild(cell);
@@ -186,4 +209,7 @@ function access(op, a, data) {
 }
 setTimeout(() => access("write", 5, 3), 2000);
 
+async function sleep() {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
 </script>
