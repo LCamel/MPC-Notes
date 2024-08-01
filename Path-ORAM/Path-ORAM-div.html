@@ -14,7 +14,7 @@ background-color: #CCCCCC;
 display: grid;
 place-items: center;
 }
-.stashCell {
+.stashItem {
 width: 50px;
 height: 20px;
 border: 1px solid black;
@@ -93,31 +93,31 @@ createNode(0, undefined, "", document.querySelector("#treeContainer"));
 
 function stashAppend(s) {
     if (s == DUMMY) return;
-    let cell = document.createElement("span");
-    cell.className = "stashCell";
-    cell.innerText = s;
+    let item = document.createElement("span");
+    item.className = "stashItem";
+    item.innerText = s;
     let container = document.querySelector("#stashContainer");
-    container.appendChild(cell);
-    highlight(cell);
+    container.appendChild(item);
+    highlight(item);
 }
 function stashAppendAll(vals) {
     vals.forEach(v => stashAppend(v));
 }
 function stashUpdate(a, data) {
-    let cell = [...document.querySelectorAll(".stashCell")].find(c => c.innerText.startsWith(a + " "));
-    console.log("stashUpdate: cell: ", cell);
-    if (cell) {
-        cell.innerText = a + " " + data;
+    let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
+    console.log("stashUpdate: item: ", item);
+    if (item) {
+        item.innerText = a + " " + data;
     } else {
         stashAppend(a + " " + data);
     }
 }
 function stashItems() {
-    return [...document.querySelectorAll(".stashCell")].map(cell => cell.innerText.split(" ", 2));
+    return [...document.querySelectorAll(".stashItem")].map(item => item.innerText.split(" ", 2));
 }
 function stashRemove(a) {
-    let cell = [...document.querySelectorAll(".stashCell")].find(c => c.innerText.startsWith(a + " "));
-    cell.parentNode.removeChild(cell);
+    let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
+    item.parentNode.removeChild(item);
 }
 
 var nextRandom = undefined;
@@ -167,7 +167,7 @@ function P(x, l) { // x: leaf index, l: level, return: a bucket div
     return document.getElementById("id-" + path);
 }
 function readBucket(bucketNode) {
-    console.log("readBucket: ", bucketNode);
+    //console.log("readBucket: ", bucketNode);
     return [... bucketNode.childNodes].map(c => c.innerText);
 }
 function clearBucket(bucketNode) {
