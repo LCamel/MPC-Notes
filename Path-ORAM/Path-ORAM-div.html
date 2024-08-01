@@ -2,14 +2,15 @@
 
 .node {
 position: absolute;
-background-color: gray;
+background-color: white;
 display: grid;
 place-items: center;
+border: 1px solid black;
 }
 .textLine {
 width: 50px;
 height: 20px;
-background-color: yellow;
+background-color: #CCCCCC;
 display: grid;
 place-items: center;
 }
@@ -32,24 +33,31 @@ height: 50;
 border: 1px solid black;
 display: grid;
 place-items: center;
+font-style: italic;
+}
+.leafLabel {
+position: absolute;
+display: grid;
+place-items: center;
+font-style: italic;
 }
 .highlight {
-    background-color: red;
+    background-color: gray;
 }
 </style>
 
-<div style="position: relative; width:500; height:500" id="treeContainer"></div>
-<div style="position: relative" id="stashContainer"></div>
-<div style="position: relative" id="positionContainer"></div>
+<div style="position: relative; height:500;" id="treeContainer"></div>
+<div style="position: relative; height:50;" id="stashContainer"></div>
+<div style="position: relative;" id="positionContainer"></div>
 
 <script>
 const N = 8;
 const L = 3;
 const Z = 4;
-const nodeWidth = 80;
+const nodeWidth = 70;
 const textLineHeight = 20;
 const nodeHeight = (Z + 1) * textLineHeight;
-const DUMMY = "_";
+const DUMMY = "-";
 
 function createNode(l, parent, path, container) {
     let node = document.createElement("div")
@@ -64,7 +72,7 @@ function createNode(l, parent, path, container) {
     if (l == L) {
         node.style.left = (parseInt(path, 2) * nodeWidth * 1.2) + "px" ;
         let label = document.createElement("div");
-        label.className = "positionLabel";
+        label.className = "leafLabel";
         label.innerText = parseInt(path, 2);
         label.style.left = node.style.left;
         label.style.width = nodeWidth;
@@ -90,6 +98,7 @@ function stashAppend(s) {
     cell.innerText = s;
     let container = document.querySelector("#stashContainer");
     container.appendChild(cell);
+    highlight(cell);
 }
 function stashAppendAll(vals) {
     vals.forEach(v => stashAppend(v));
@@ -142,10 +151,12 @@ const DELAY = 1000;
 function highlight(node) {
     //console.log("highlight: add: ", node);
     node.classList.add("highlight");
+    /*
     setTimeout(() => {
         //console.log("remove highlight: ", node);
         node.classList.remove("highlight");
     }, DELAY);
+    */
     return node;
 }
 function position(a) {
@@ -153,7 +164,7 @@ function position(a) {
 }
 function P(x, l) { // x: leaf index, l: level, return: a bucket div
     let path = ((1 << L) + Number(x)).toString(2).substring(1, 1 + l);
-    return highlight(document.getElementById("id-" + path));
+    return document.getElementById("id-" + path);
 }
 function readBucket(bucketNode) {
     console.log("readBucket: ", bucketNode);
@@ -193,6 +204,9 @@ function writeBucket(origBucket, tempBucket) {
         origBucket.children[i].innerText = tempBucket.children[i].innerText;
     }
 }
+function isEmptyBucket(bucketNode) {
+    return [... bucketNode.childNodes][0].innerText == DUMMY;
+}
 function getPosition(a) {
     return Number(position(a).innerText);
 }
@@ -205,11 +219,12 @@ async function access(op, a, data) {
     setPosition(a, randomPosition());
     await sleep();
     for (let l = 0; l <= L; l++) {
-        stashAppendAll(readBucket(P(x, l)));
+        stashAppendAll(readBucket(highlight(P(x, l))));
         await sleep();
     }
     if (op == "write") {
         stashUpdate(a, data);
+        await sleep();
     }
     for (let l = L; l >= 0; l--) {
         let tempBucket = createTempBucket(P(x, l));
@@ -220,6 +235,8 @@ async function access(op, a, data) {
                 stashRemove(a2);
             }
         }
+        if (!isEmptyBucket(tempBucket)) await sleep();
+
         writeBucket(P(x, l), tempBucket);
         tempBucket.parentNode.removeChild(tempBucket);
     }
@@ -227,6 +244,6 @@ async function access(op, a, data) {
 setTimeout(() => access("write", 5, "foo"), 1000);
 
 async function sleep() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
+  return new Promise((resolve) => setTimeout(resolve, DELAY));
 }
 </script>
