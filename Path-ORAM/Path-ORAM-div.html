@@ -103,9 +103,23 @@ function stashUpdate(a, data) {
         stashAppend(a + " " + data);
     }
 }
+function stashItems() {
+    return [...document.querySelectorAll(".stashCell")].map(cell => cell.innerText.split(" ", 2));
+}
+function stashRemove(a) {
+    let cell = [...document.querySelectorAll(".stashCell")].find(c => c.innerText.startsWith(a + " "));
+    cell.parentNode.removeChild(cell);
+}
 
+var nextRandom = undefined;
 function randomPosition() {
-    return Math.floor(Math.random() * (2 ** L));
+    if (nextRandom == undefined) {
+        return Math.floor(Math.random() * (2 ** L));
+    } else {
+        let ans = nextRandom;
+        nextRandom = undefined;
+        return ans;
+    }
 }
 
 let positionContainer = document.querySelector("#positionContainer");
@@ -126,10 +140,10 @@ for (let i = 0; i < N; i++) {
 }
 const DELAY = 1000;
 function highlight(node) {
-    console.log("highlight: add: ", node);
+    //console.log("highlight: add: ", node);
     node.classList.add("highlight");
     setTimeout(() => {
-        console.log("remove highlight: ", node);
+        //console.log("remove highlight: ", node);
         node.classList.remove("highlight");
     }, DELAY);
     return node;
@@ -179,10 +193,16 @@ function writeBucket(origBucket, tempBucket) {
         origBucket.children[i].innerText = tempBucket.children[i].innerText;
     }
 }
+function getPosition(a) {
+    return Number(position(a).innerText);
+}
+function setPosition(a, val) {
+    position(a).innerText = val;
+}
 async function access(op, a, data) {
-    let x = Number(position(a).innerText);
+    let x = getPosition(a);
     await sleep();
-    position(a).innerText = randomPosition();
+    setPosition(a, randomPosition());
     await sleep();
     for (let l = 0; l <= L; l++) {
         stashAppendAll(readBucket(P(x, l)));
@@ -194,20 +214,17 @@ async function access(op, a, data) {
     for (let l = L; l >= 0; l--) {
         let tempBucket = createTempBucket(P(x, l));
         await sleep();
-        [...document.querySelectorAll(".stashCell")].forEach(cell => {
-            let [a2, data2] = cell.innerText.split(" ");
-            console.log("x: ", x, " a2: ", a2, " data2: ", data2);
-            if (P(x, l) == P(a2, l)) {
-                if (appendToBucket(tempBucket, a2 + " " + data2)) {
-                    cell.parentNode.removeChild(cell);
-                }
+        for (let [a2, data2] of stashItems()) {
+            if (P(x, l) == P(getPosition(a2), l)) {
+                if (!appendToBucket(tempBucket, a2 + " " + data2)) break;
+                stashRemove(a2);
             }
-        });
+        }
         writeBucket(P(x, l), tempBucket);
         tempBucket.parentNode.removeChild(tempBucket);
     }
 }
-setTimeout(() => access("write", 5, 3), 2000);
+setTimeout(() => access("write", 5, "foo"), 1000);
 
 async function sleep() {
   return new Promise((resolve) => setTimeout(resolve, 0));
