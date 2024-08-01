@@ -139,6 +139,28 @@ function appendToBucket(bucketNode, s) {
         return false;
     }
 }
+function createTempBucket(origBucket) {
+    let node = document.createElement("div")
+    node.className = "node";
+    node.id = "id-temp";
+    for (let i = 0; i < Z; i++) {
+        let textLine = document.createElement("div");
+        textLine.className = "textLine";
+        textLine.innerHTML = DUMMY;
+        node.appendChild(textLine);
+    }
+    node.style.left = origBucket.offsetLeft + 10;
+    node.style.top = origBucket.offsetTop + 10;
+    node.style.width = nodeWidth;
+    node.style.height = nodeHeight;
+    origBucket.parentNode.appendChild(node);
+    return node;
+}
+function writeBucket(origBucket, tempBucket) {
+    for (let i = 0; i < Z; i++) {
+        origBucket.children[i].innerText = tempBucket.children[i].innerText;
+    }
+}
 function access(op, a, data) {
     let x = Number(position(a).innerText);
     position(a).innerText = randomPosition();
@@ -149,15 +171,17 @@ function access(op, a, data) {
         stashUpdate(a, data);
     }
     for (let l = L; l >= 0; l--) {
-        clearBucket(P(x, l));
+        let tempBucket = createTempBucket(P(x, l));
         [...document.querySelectorAll(".stashCell")].forEach(cell => {
             let [a2, data2] = cell.innerText.split(" ");
             if (P(x, l) == P(a2, l)) {
-                if (appendToBucket(P(x, l), a2 + " " + data2)) {
+                if (appendToBucket(tempBucket, a2 + " " + data2)) {
                     cell.parentNode.removeChild(cell);
                 }
             }
         });
+        writeBucket(P(x, l), tempBucket);
+        tempBucket.parentNode.removeChild(tempBucket);
     }
 }
 setTimeout(() => access("write", 5, 3), 2000);
