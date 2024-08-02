@@ -31,6 +31,21 @@ height: 50;
 display: grid;
 place-items: center;
 }
+.positionLabel.highlight {
+    background-color: yellow;
+}
+.positionMessage {
+position: absolute;
+width: 50;
+height: 20;
+display: grid;
+place-items: center;
+visibility: hidden; /* ! */
+}
+.positionMessage.highlight {
+    visibility: visible;
+    background-color: yellow;
+}
 .positionValue {
 position: absolute;
 width: 50;
@@ -40,14 +55,18 @@ display: grid;
 place-items: center;
 font-style: italic;
 }
+.positionValue.highlight {
+    background-color: yellow;
+}
+
 .leafLabel {
 position: absolute;
 display: grid;
 place-items: center;
 font-style: italic;
 }
-.highlight {
-    background-color: gray;
+.leafLabel.highlight {
+    background-color: yellow;
 }
 .highlightRead {
     background-color: #C0C0C0;
@@ -83,8 +102,10 @@ function createNode(l, parent, path, container) {
     if (l == L) {
         node.style.left = (parseInt(path, 2) * nodeWidth * 1.2) + "px" ;
         let label = document.createElement("div");
+        let i = parseInt(path, 2);
+        label.id = "leafLabel-" + i;
         label.className = "leafLabel";
-        label.innerText = parseInt(path, 2);
+        label.innerText = i;
         label.style.left = node.style.left;
         label.style.width = nodeWidth;
         label.style.height = 30;
@@ -145,18 +166,28 @@ function randomPosition() {
 let positionContainer = document.querySelector("#positionContainer");
 for (let i = 0; i < N; i++) {
     let label = document.createElement("div");
+    label.id = "positionLabel-" + i;
     label.className = "positionLabel";
     label.innerText = i;
     label.style.left = 50 * i;
     positionContainer.appendChild(label);
 
     let value = document.createElement("div");
-    value.id = "p-" + i;
+    value.id = "positionValue-" + i;
     value.className = "positionValue";
     value.innerText = randomPosition();
     value.style.left = 50 * i;
     value.style.top = 50;
     positionContainer.appendChild(value);
+
+    let message = document.createElement("div");
+    message.id = "positionMessage-" + i;
+    message.className = "positionMessage";
+    message.innerText = "msg";
+    message.style.left = 50 * i;
+    message.style.top = 102;
+    positionContainer.appendChild(message);
+
 }
 const DELAY = 1000;
 function highlightRead(node) {
@@ -184,7 +215,7 @@ function highlightRemoveAll() {
         document.querySelectorAll("." + c).forEach(n => n.classList.remove(c)));
 }
 function position(a) {
-    return document.getElementById("p-" + a);
+    return document.getElementById("positionValue-" + a);
 }
 function P(x, l) { // x: leaf index, l: level, return: a bucket div
     let path = ((1 << L) + Number(x)).toString(2).substring(1, 1 + l);
@@ -234,10 +265,12 @@ function isEmptyBucket(bucketNode) {
     return [... bucketNode.childNodes][0].innerText == DUMMY;
 }
 function getPosition(a) {
-    return Number(highlightRead(position(a)).innerText);
+    //return Number(highlightRead(position(a)).innerText);
+    return Number(position(a).innerText);
 }
 function setPosition(a, val) {
-    highlightWrite(position(a)).innerText = val;
+    //highlightWrite(position(a)).innerText = val;
+    position(a).innerText = val;
 }
 async function access(op, a, data) {
     highlightRemoveAll();
@@ -271,8 +304,40 @@ async function access(op, a, data) {
         await sleep();
     }
 }
-setTimeout(() => access("write", 5, "foo"), 1000);
+//setTimeout(() => access("write", 5, "foo"), 1000);
+function highlightPositionLabel(a) {
+    document.querySelector("#positionLabel-" + a).classList.add("highlight");
+}
+function highlightPositionValue(a) {
+    document.querySelector("#positionValue-" + a).classList.add("highlight");
+}
 
+function setPositionMessage(a, msg) {
+    let node = document.querySelector("#positionMessage-" + a);
+    node.innerText = msg;
+    node.classList.add("highlight");
+}
+function highlightLeafLabel(i) {
+    document.querySelector("#leafLabel-" + i).classList.add("highlight");
+}
+async function access2(op, a, data) {
+    highlightPositionLabel(a);
+    await sleep();
+
+    let x = getPosition(a);
+    highlightPositionValue(a);
+    highlightLeafLabel(x);
+    await sleep();
+
+    setPositionMessage(a, `x=${x}`);
+    await sleep();
+
+    setPosition(a, "🎲");
+    await sleep();
+
+    setPosition(a, randomPosition());
+    await sleep();
+}
 async function sleep() {
   return new Promise((resolve) => setTimeout(resolve, DELAY));
 }
