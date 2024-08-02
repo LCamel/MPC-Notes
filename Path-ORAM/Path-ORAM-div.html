@@ -13,9 +13,6 @@ border: 1px solid black;
 .node.temp {
     background-color: yellow;
 }
-.node.highlight {
-    background-color: yellow;
-}
 .textLine {
 width: 50px;
 height: 20px;
@@ -30,18 +27,12 @@ border: 1px solid black;
 display: inline-block;
 text-align: center;
 }
-.stashItem.highlight {
-    background-color: yellow;
-}
 .positionLabel {
 position: absolute;
 width: 50;
 height: 50;
 display: grid;
 place-items: center;
-}
-.positionLabel.highlight {
-    background-color: yellow;
 }
 .positionMessage {
 position: absolute;
@@ -53,7 +44,6 @@ visibility: hidden; /* ! */
 }
 .positionMessage.highlight {
     visibility: visible;
-    background-color: yellow;
 }
 .positionValue {
 position: absolute;
@@ -64,9 +54,6 @@ display: grid;
 place-items: center;
 font-style: italic;
 }
-.positionValue.highlight {
-    background-color: yellow;
-}
 
 .leafLabel {
 position: absolute;
@@ -74,8 +61,15 @@ display: grid;
 place-items: center;
 font-style: italic;
 }
-.leafLabel.highlight {
+.leafLabel.highlight.highlightEvict {
+    background-color: #0088ff;
+}
+
+.highlight {
     background-color: yellow;
+}
+.highlightEvict {
+    background-color: #0088ff;
 }
 .highlightRead {
     background-color: #C0C0C0;
@@ -214,12 +208,8 @@ for (let i = 0; i < N; i++) {
 
 }
 
-function highlight(node, yn = true) {
-    if (yn) {
-        node.classList.add("highlight");
-    } else {
-        node.classList.remove("highlight");
-    }
+function highlight(node, highlightClass = "highlight") {
+    node.classList.add(highlightClass);
 }
 function highlightRead(node) {
     node.classList.add("highlightRead");
@@ -245,8 +235,8 @@ function highlightRemoveAll() {
     ["highlightRead", "highlightWrite", "highlightPath", "highlight"].forEach(c =>
         document.querySelectorAll("." + c).forEach(n => n.classList.remove(c)));
 }
-function highlightRemoveByClass(c) {
-    document.querySelectorAll(".highlight." + c).forEach(n => n.classList.remove("highlight"));
+function highlightRemoveByClass(nodeClass, highlightClass = "highlight") {
+    document.querySelectorAll(`.${nodeClass}.${highlightClass}`).forEach(n => n.classList.remove(highlightClass));
 }
 function positionNode(a) {
     return document.getElementById("positionValue-" + a);
@@ -429,9 +419,10 @@ DELAY = 1000;
         let addresses = stashAddresses().filter(a2 => P(x, l) == P(getPosition(a2), l));
         if (addresses.length > 0) {
             addresses.forEach(a2 => {
-                highlight(stashNode(a2));
-                highlight(positionNode(a2));
-                highlight(P(getPosition(a2), L));
+                highlight(stashNode(a2), "highlightEvict");
+                highlight(positionNode(a2), "highlightEvict");
+                //highlight(P(getPosition(a2), L), "highlightEvict");
+                highlight(document.querySelector("#leafLabel-" + getPosition(a2)), "highlightEvict");
             });
             await sleep();
         };
@@ -445,9 +436,10 @@ DELAY = 1000;
 
         tempBucket.parentNode.removeChild(tempBucket);
 
-        highlightRemoveByClass("positionValue");
-        highlightRemoveByClass("stashItem");
-        highlightRemoveByClass("node");
+        highlightRemoveByClass("stashItem", "highlightEvict");
+        highlightRemoveByClass("positionValue", "highlightEvict");        
+        //highlightRemoveByClass("node", "highlightEvict");
+        highlightRemoveByClass("leafLabel", "highlightEvict");
 
         await sleep();
     }
