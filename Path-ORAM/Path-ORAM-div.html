@@ -351,8 +351,10 @@ function setMessage(s) {
     document.querySelector("#messages").innerText = s;
 }
 async function access2(op, a, data) {
-
     highlightRemoveAll();
+
+    setMessage(`access(${op}, ${a}, ${data})`);
+    await sleep();
 
     highlightPositionLabel(a);
     await sleep();
@@ -429,15 +431,13 @@ async function access2(op, a, data) {
             await sleep();
         };
 
-
-
         writeBucket(P(x, l), tempBucket);
         //if (addresses.length > 0) await sleep();
         tempBucket.parentNode.removeChild(tempBucket);
-
-
         await sleep();
     }
+    setMessage("done");
+    await sleep();
 }
 var DELAY = 1000;
 async function sleep() {
