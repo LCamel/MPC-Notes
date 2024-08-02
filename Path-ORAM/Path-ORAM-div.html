@@ -257,6 +257,7 @@ function appendToBucket(bucketNode, s) {
     let emptyBlock = [... bucketNode.childNodes].find(c => c.innerText == DUMMY);
     if (emptyBlock) {
         emptyBlock.innerText = s;
+        emptyBlock.classList.add("highlightEvict");
         return true;
     } else {
         return false;
@@ -351,7 +352,6 @@ function setMessage(s) {
 }
 async function access2(op, a, data) {
 
-DELAY = 0;
     highlightRemoveAll();
 
     highlightPositionLabel(a);
@@ -398,48 +398,43 @@ DELAY = 0;
         stashAppend(a + " " + data);
         await sleep();
     }
-DELAY = 1000;
+
     setMessage("evict");
     await sleep();
-    
+
     for (let l = L; l >= 0; l--) {
         let tempBucket = createTempBucket(P(x, l));
         await sleep();
-/*
-        let nodes = stashNodes();
-        nodes.forEach(n => highlight(n));
-        await sleep();
 
-        stashItems().forEach(([a2, v]) => highlightPositionValue(a2));
-        await sleep();
-
-        stashItems().forEach(([a2, v]) => highlight(P(getPosition(a2), L)));
-        await sleep();
-*/
         let addresses = stashAddresses().filter(a2 => P(x, l) == P(getPosition(a2), l));
         if (addresses.length > 0) {
             addresses.forEach(a2 => {
                 highlight(stashNode(a2), "highlightEvict");
                 highlight(positionNode(a2), "highlightEvict");
-                //highlight(P(getPosition(a2), L), "highlightEvict");
                 highlight(document.querySelector("#leafLabel-" + getPosition(a2)), "highlightEvict");
             });
             await sleep();
+
+            for (let i = 0; i < Math.min(addresses.length, Z); i++) {
+                appendToBucket(tempBucket, stashNode(addresses[i]).innerText);
+            }
+//            await sleep();
+            for (let i = 0; i < Math.min(addresses.length, Z); i++) {
+                stashRemove(addresses[i]);
+            }
+            highlightRemoveByClass("stashItem", "highlightEvict");
+            highlightRemoveByClass("positionValue", "highlightEvict");
+            highlightRemoveByClass("leafLabel", "highlightEvict");
+
+            await sleep();
         };
-/*
-        for (let i = 0; i < Z; i++) {
-            appendToBucket(tempBucket, a2 + " " + data2);
-                stashRemove(a2);
 
-        }
-  */      
 
+
+        writeBucket(P(x, l), tempBucket);
+        //if (addresses.length > 0) await sleep();
         tempBucket.parentNode.removeChild(tempBucket);
 
-        highlightRemoveByClass("stashItem", "highlightEvict");
-        highlightRemoveByClass("positionValue", "highlightEvict");        
-        //highlightRemoveByClass("node", "highlightEvict");
-        highlightRemoveByClass("leafLabel", "highlightEvict");
 
         await sleep();
     }
