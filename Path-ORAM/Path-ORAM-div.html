@@ -1,16 +1,16 @@
 <style>
 
-.node {
+.bucket {
 position: absolute;
 background-color: white;
 display: grid;
 place-items: center;
 border: 1px solid black;
 }
-.node.highlightPath {
+.bucket.highlightPath {
     border: 3px solid red;
 }
-.node.temp {
+.bucket.temp {
     background-color: yellow;
 }
 .textLine {
@@ -89,44 +89,44 @@ font-style: italic;
 const N = 8;
 const L = 3;
 const Z = 4;
-const nodeWidth = 70;
+const bucketWidth = 70;
 const textLineHeight = 20;
-const nodeHeight = (Z + 1) * textLineHeight;
+const bucketHeight = (Z + 1) * textLineHeight;
 const DUMMY = "-";
 
-function createNode(l, parent, path, container) {
-    let node = document.createElement("div")
-    node.className = "node";
-    node.id = "id-" + path;
+function createBucket(l, parent, path, container) {
+    let bucket = document.createElement("div")
+    bucket.className = "bucket";
+    bucket.id = "id-" + path;
     for (let i = 0; i < Z; i++) {
         let textLine = document.createElement("div");
         textLine.className = "textLine";
         textLine.innerHTML = DUMMY;
-        node.appendChild(textLine);
+        bucket.appendChild(textLine);
     }
     if (l == L) {
-        node.style.left = (parseInt(path, 2) * nodeWidth * 1.2) + "px" ;
+        bucket.style.left = (parseInt(path, 2) * bucketWidth * 1.2) + "px" ;
         let label = document.createElement("div");
         let i = parseInt(path, 2);
         label.id = "leafLabel-" + i;
         label.className = "leafLabel";
         label.innerText = i;
-        label.style.left = node.style.left;
-        label.style.width = nodeWidth;
+        label.style.left = bucket.style.left;
+        label.style.width = bucketWidth;
         label.style.height = 30;
         container.appendChild(label);
     } else {
-        let c0 = createNode(l + 1, undefined, path + "0", container);
-        let c1 = createNode(l + 1, undefined, path + "1", container);
-        node.style.left = (c0.offsetLeft + c1.offsetLeft) / 2;
+        let c0 = createBucket(l + 1, undefined, path + "0", container);
+        let c1 = createBucket(l + 1, undefined, path + "1", container);
+        bucket.style.left = (c0.offsetLeft + c1.offsetLeft) / 2;
     }
-    node.style.top = (L - l) * nodeHeight * 1.2 + 30;
-    node.style.width = nodeWidth;
-    node.style.height = nodeHeight;
-    container.appendChild(node);
-    return node;
+    bucket.style.top = (L - l) * bucketHeight * 1.2 + 30;
+    bucket.style.width = bucketWidth;
+    bucket.style.height = bucketHeight;
+    container.appendChild(bucket);
+    return bucket;
 }
-createNode(0, undefined, "", document.querySelector("#treeContainer"));
+createBucket(0, undefined, "", document.querySelector("#treeContainer"));
 
 function stashAppend(s) {
     if (s == DUMMY) return;
@@ -264,22 +264,22 @@ function appendToBucket(bucketNode, s) {
     }
 }
 function createTempBucket(origBucket) {
-    let node = document.createElement("div")
-    node.id = "id-temp";
-    node.className = "node";
-    node.classList.add("temp");
+    let bucket = document.createElement("div")
+    bucket.id = "id-temp";
+    bucket.className = "bucket";
+    bucket.classList.add("temp");
     for (let i = 0; i < Z; i++) {
         let textLine = document.createElement("div");
         textLine.className = "textLine";
         textLine.innerHTML = DUMMY;
-        node.appendChild(textLine);
+        bucket.appendChild(textLine);
     }
-    node.style.left = origBucket.offsetLeft + 10;
-    node.style.top = origBucket.offsetTop + 10;
-    node.style.width = nodeWidth;
-    node.style.height = nodeHeight;
-    origBucket.parentNode.appendChild(node);
-    return node;
+    bucket.style.left = origBucket.offsetLeft + 10;
+    bucket.style.top = origBucket.offsetTop + 10;
+    bucket.style.width = bucketWidth;
+    bucket.style.height = bucketHeight;
+    origBucket.parentNode.appendChild(bucket);
+    return bucket;
 }
 function writeBucket(origBucket, tempBucket) {
     highlightWrite(origBucket);
