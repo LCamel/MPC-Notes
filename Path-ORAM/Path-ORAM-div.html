@@ -10,6 +10,12 @@ border: 1px solid black;
 .node.highlightPath {
     border: 3px solid red;
 }
+.node.temp {
+    background-color: yellow;
+}
+.node.highlight {
+    background-color: yellow;
+}
 .textLine {
 width: 50px;
 height: 20px;
@@ -23,6 +29,9 @@ height: 20px;
 border: 1px solid black;
 display: inline-block;
 text-align: center;
+}
+.stashItem.highlight {
+    background-color: yellow;
 }
 .positionLabel {
 position: absolute;
@@ -76,10 +85,12 @@ font-style: italic;
 }
 </style>
 
+<div style="position: relative">
 <div style="position: relative; height:500;" id="treeContainer"></div>
 <div style="position: relative; height:50;" id="stashContainer"></div>
 <div style="position: relative;" id="positionContainer"></div>
-
+<div style="position: absolute; top:400; left:100;" id="messages"></div>
+</div>
 <script>
 const N = 8;
 const L = 3;
@@ -130,10 +141,20 @@ function stashAppend(s) {
     item.innerText = s;
     let container = document.querySelector("#stashContainer");
     container.appendChild(item);
-    highlightWrite(item);
+    //highlightWrite(item);
 }
 function stashAppendAll(vals) {
     vals.forEach(v => stashAppend(v));
+}
+function stashNodes() {
+    return [...document.querySelectorAll(".stashItem")];
+}
+function stashNode(a) {
+    return stashNodes().find(node => stashIsAddress(node, a));
+}
+
+function stashIsAddress(node, a) {
+    return node.innerText.startsWith(a + " ");
 }
 function stashUpdate(a, data) {
     let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
@@ -146,6 +167,9 @@ function stashUpdate(a, data) {
 }
 function stashItems() {
     return [...document.querySelectorAll(".stashItem")].map(item => item.innerText.split(" ", 2));
+}
+function stashAddresses() {
+    return stashItems().map(([a, v]) => a);
 }
 function stashRemove(a) {
     let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
@@ -189,7 +213,14 @@ for (let i = 0; i < N; i++) {
     positionContainer.appendChild(message);
 
 }
-const DELAY = 1000;
+
+function highlight(node, yn = true) {
+    if (yn) {
+        node.classList.add("highlight");
+    } else {
+        node.classList.remove("highlight");
+    }
+}
 function highlightRead(node) {
     node.classList.add("highlightRead");
     node.classList.remove("highlightWrite");
@@ -211,10 +242,13 @@ function highlightPath(a, trueFalse) {
     }
 }
 function highlightRemoveAll() {
-    ["highlightRead", "highlightWrite", "highlightPath"].forEach(c =>
+    ["highlightRead", "highlightWrite", "highlightPath", "highlight"].forEach(c =>
         document.querySelectorAll("." + c).forEach(n => n.classList.remove(c)));
 }
-function position(a) {
+function highlightRemoveByClass(c) {
+    document.querySelectorAll(".highlight." + c).forEach(n => n.classList.remove("highlight"));
+}
+function positionNode(a) {
     return document.getElementById("positionValue-" + a);
 }
 function P(x, l) { // x: leaf index, l: level, return: a bucket div
@@ -240,8 +274,9 @@ function appendToBucket(bucketNode, s) {
 }
 function createTempBucket(origBucket) {
     let node = document.createElement("div")
-    node.className = "node";
     node.id = "id-temp";
+    node.className = "node";
+    node.classList.add("temp");
     for (let i = 0; i < Z; i++) {
         let textLine = document.createElement("div");
         textLine.className = "textLine";
@@ -266,11 +301,11 @@ function isEmptyBucket(bucketNode) {
 }
 function getPosition(a) {
     //return Number(highlightRead(position(a)).innerText);
-    return Number(position(a).innerText);
+    return Number(positionNode(a).innerText);
 }
 function setPosition(a, val) {
     //highlightWrite(position(a)).innerText = val;
-    position(a).innerText = val;
+    positionNode(a).innerText = val;
 }
 async function access(op, a, data) {
     highlightRemoveAll();
@@ -308,8 +343,9 @@ async function access(op, a, data) {
 function highlightPositionLabel(a) {
     document.querySelector("#positionLabel-" + a).classList.add("highlight");
 }
-function highlightPositionValue(a) {
-    document.querySelector("#positionValue-" + a).classList.add("highlight");
+function highlightPositionValue(a, yn = true) {
+    let cl = document.querySelector("#positionValue-" + a).classList;
+    yn ? cl.add("highlight") : cl.remove("highlight");
 }
 
 function setPositionMessage(a, msg) {
@@ -320,7 +356,14 @@ function setPositionMessage(a, msg) {
 function highlightLeafLabel(i) {
     document.querySelector("#leafLabel-" + i).classList.add("highlight");
 }
+function setMessage(s) {
+    document.querySelector("#messages").innerText = s;
+}
 async function access2(op, a, data) {
+
+DELAY = 0;
+    highlightRemoveAll();
+
     highlightPositionLabel(a);
     await sleep();
 
@@ -332,13 +375,91 @@ async function access2(op, a, data) {
     setPositionMessage(a, `x=${x}`);
     await sleep();
 
+    highlightPositionValue(a, false);
     setPosition(a, "🎲");
     await sleep();
 
     setPosition(a, randomPosition());
     await sleep();
+
+    setMessage("read buckets");
+    await sleep();
+
+    for (let l = 0; l <= L; l++) {
+        let blocks = readBucket(P(x, l)).filter(b => b != DUMMY);
+        await sleep();
+        if (blocks.length != 0) {
+            stashAppendAll(blocks);
+            await sleep();
+        }
+    }
+
+    if (op == "write") {
+        setMessage("update stash");
+        await sleep();
+        let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
+        //console.log("stashUpdate: item: ", item);
+        if (item) {
+            item.classList.add("highlight");
+            await sleep();
+            item.parentNode.removeChild(item);
+            await sleep();
+        }
+        stashAppend(a + " " + data);
+        await sleep();
+    }
+DELAY = 1000;
+    setMessage("evict");
+    await sleep();
+    
+    for (let l = L; l >= 0; l--) {
+        let tempBucket = createTempBucket(P(x, l));
+        await sleep();
+/*
+        let nodes = stashNodes();
+        nodes.forEach(n => highlight(n));
+        await sleep();
+
+        stashItems().forEach(([a2, v]) => highlightPositionValue(a2));
+        await sleep();
+
+        stashItems().forEach(([a2, v]) => highlight(P(getPosition(a2), L)));
+        await sleep();
+*/
+        let addresses = stashAddresses().filter(a2 => P(x, l) == P(getPosition(a2), l));
+        if (addresses.length > 0) {
+            addresses.forEach(a2 => {
+                highlight(stashNode(a2));
+                highlight(positionNode(a2));
+                highlight(P(getPosition(a2), L));
+            });
+            await sleep();
+        };
+/*
+        for (let i = 0; i < Z; i++) {
+            appendToBucket(tempBucket, a2 + " " + data2);
+                stashRemove(a2);
+
+        }
+  */      
+
+        tempBucket.parentNode.removeChild(tempBucket);
+
+        highlightRemoveByClass("positionValue");
+        highlightRemoveByClass("stashItem");
+        highlightRemoveByClass("node");
+
+        await sleep();
+    }
 }
+var DELAY = 1000;
 async function sleep() {
   return new Promise((resolve) => setTimeout(resolve, DELAY));
 }
+[...document.querySelectorAll(".textLine,.positionValue")].forEach(n => n.onclick = (e => {
+    let s = prompt();
+    if (s != null) {
+        e.target.innerText = s;
+    }
+}));
 </script>
