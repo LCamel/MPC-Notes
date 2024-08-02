@@ -7,6 +7,9 @@ display: grid;
 place-items: center;
 border: 1px solid black;
 }
+.node.highlightPath {
+    border: 3px solid red;
+}
 .textLine {
 width: 50px;
 height: 20px;
@@ -166,8 +169,18 @@ function highlightWrite(node) {
     node.classList.remove("highlightRead");
     return node;
 }
+function highlightPath(a, trueFalse) {
+    let leaf = getPosition(a);
+    for (let l = L; l >= 0; l--) {
+        if (trueFalse) {
+            P(leaf, l).classList.add("highlightPath");
+        } else {
+            P(leaf, l).classList.remove("highlightPath");
+        }
+    }
+}
 function highlightRemoveAll() {
-    ["highlightRead", "highlightWrite"].forEach(c =>
+    ["highlightRead", "highlightWrite", "highlightPath"].forEach(c =>
         document.querySelectorAll("." + c).forEach(n => n.classList.remove(c)));
 }
 function position(a) {
@@ -245,6 +258,7 @@ async function access(op, a, data) {
         let tempBucket = createTempBucket(P(x, l));
         await sleep();
         for (let [a2, data2] of stashItems()) {
+            highlightPath(a2, true); await sleep(); highlightPath(a2, false);
             if (P(x, l) == P(getPosition(a2), l)) {
                 if (!appendToBucket(tempBucket, a2 + " " + data2)) break;
                 stashRemove(a2);
@@ -254,6 +268,7 @@ async function access(op, a, data) {
 
         writeBucket(P(x, l), tempBucket);
         tempBucket.parentNode.removeChild(tempBucket);
+        await sleep();
     }
 }
 setTimeout(() => access("write", 5, "foo"), 1000);
