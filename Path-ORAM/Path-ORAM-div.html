@@ -298,39 +298,6 @@ function setPosition(a, val) {
     //highlightWrite(position(a)).innerText = val;
     positionNode(a).innerText = val;
 }
-async function access(op, a, data) {
-    highlightRemoveAll();
-    let x = getPosition(a);
-    console.log("x: ", x);
-    await sleep();
-    setPosition(a, randomPosition());
-    await sleep();
-    for (let l = 0; l <= L; l++) {
-        stashAppendAll(readBucket(P(x, l)));
-        await sleep();
-    }
-    if (op == "write") {
-        stashUpdate(a, data);
-        await sleep();
-    }
-    for (let l = L; l >= 0; l--) {
-        let tempBucket = createTempBucket(P(x, l));
-        await sleep();
-        for (let [a2, data2] of stashItems()) {
-            highlightPath(a2, true); await sleep(); highlightPath(a2, false);
-            if (P(x, l) == P(getPosition(a2), l)) {
-                if (!appendToBucket(tempBucket, a2 + " " + data2)) break;
-                stashRemove(a2);
-            }
-        }
-        if (!isEmptyBucket(tempBucket)) await sleep();
-
-        writeBucket(P(x, l), tempBucket);
-        tempBucket.parentNode.removeChild(tempBucket);
-        await sleep();
-    }
-}
-//setTimeout(() => access("write", 5, "foo"), 1000);
 function highlightPositionLabel(a) {
     document.querySelector("#positionLabel-" + a).classList.add("highlight");
 }
