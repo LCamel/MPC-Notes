@@ -7,9 +7,6 @@ display: grid;
 place-items: center;
 border: 1px solid black;
 }
-.bucket.highlightPath {
-    border: 3px solid red;
-}
 .bucket.temp {
     background-color: yellow;
 }
@@ -221,18 +218,8 @@ function highlightWrite(node) {
     node.classList.remove("highlightRead");
     return node;
 }
-function highlightPath(a, trueFalse) {
-    let leaf = getPosition(a);
-    for (let l = L; l >= 0; l--) {
-        if (trueFalse) {
-            P(leaf, l).classList.add("highlightPath");
-        } else {
-            P(leaf, l).classList.remove("highlightPath");
-        }
-    }
-}
 function highlightRemoveAll() {
-    ["highlightRead", "highlightWrite", "highlightPath", "highlight"].forEach(c =>
+    ["highlightRead", "highlightWrite", "highlight"].forEach(c =>
         document.querySelectorAll("." + c).forEach(n => n.classList.remove(c)));
 }
 function highlightRemoveByClass(nodeClass, highlightClass = "highlight") {
