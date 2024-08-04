@@ -83,6 +83,15 @@ const textLineHeight = 20;
 const bucketHeight = (Z + 1) * textLineHeight;
 const DUMMY = "-";
 
+function createLeafLabel(i, left, container) {
+    let label = document.createElement("div");
+    label.id = "leafLabel-" + i;
+    label.className = "leafLabel";
+    label.innerText = i;
+    label.style.left = left;
+    label.style.width = bucketWidth;
+    container.appendChild(label);
+}
 function createBucket(l, parent, path, container) {
     let bucket = document.createElement("div")
     bucket.className = "bucket";
@@ -94,15 +103,9 @@ function createBucket(l, parent, path, container) {
         bucket.appendChild(textLine);
     }
     if (l == L) {
-        bucket.style.left = (parseInt(path, 2) * bucketWidth * 1.2) + "px" ;
-        let label = document.createElement("div");
         let i = parseInt(path, 2);
-        label.id = "leafLabel-" + i;
-        label.className = "leafLabel";
-        label.innerText = i;
-        label.style.left = bucket.style.left;
-        label.style.width = bucketWidth;
-        container.appendChild(label);
+        bucket.style.left = (i * bucketWidth * 1.2) + "px" ;
+        createLeafLabel(i, bucket.style.left, container);
     } else {
         let c0 = createBucket(l + 1, undefined, path + "0", container);
         let c1 = createBucket(l + 1, undefined, path + "1", container);
