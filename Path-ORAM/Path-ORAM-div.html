@@ -31,17 +31,6 @@ height: 50;
 display: grid;
 place-items: center;
 }
-.positionMessage {
-position: absolute;
-width: 50;
-height: 20;
-display: grid;
-place-items: center;
-visibility: hidden; /* ! */
-}
-.positionMessage.highlight {
-    visibility: visible;
-}
 .positionValue {
 position: absolute;
 width: 50;
@@ -182,15 +171,6 @@ for (let i = 0; i < N; i++) {
     value.style.left = 50 * i;
     value.style.top = 50;
     positionContainer.appendChild(value);
-
-    let message = document.createElement("div");
-    message.id = "positionMessage-" + i;
-    message.className = "positionMessage";
-    message.innerText = "msg";
-    message.style.left = 50 * i;
-    message.style.top = 102;
-    positionContainer.appendChild(message);
-
 }
 
 function highlight(node, highlightClass = "highlight") {
@@ -278,11 +258,6 @@ function highlightPositionValue(a, yn = true) {
     yn ? cl.add("highlight") : cl.remove("highlight");
 }
 
-function setPositionMessage(a, msg) {
-    let node = document.querySelector("#positionMessage-" + a);
-    node.innerText = msg;
-    node.classList.add("highlight");
-}
 function highlightLeafLabel(i) {
     document.querySelector("#leafLabel-" + i).classList.add("highlight");
 }
@@ -301,9 +276,6 @@ async function access2(op, a, data) {
     let x = getPosition(a);
     highlightPositionValue(a);
     highlightLeafLabel(x);
-    await sleep();
-
-    setPositionMessage(a, `x=${x}`);
     await sleep();
 
     highlightPositionValue(a, false);
