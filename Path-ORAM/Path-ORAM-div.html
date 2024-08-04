@@ -141,29 +141,17 @@ function stashNodes() {
     return [...document.querySelectorAll(".stashItem")];
 }
 function stashNode(a) {
-    return stashNodes().find(node => stashIsAddress(node, a));
+    return stashNodes().find(node => node.innerText.startsWith(a + " "));
 }
 
-function stashIsAddress(node, a) {
-    return node.innerText.startsWith(a + " ");
-}
-function stashUpdate(a, data) {
-    let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
-    //console.log("stashUpdate: item: ", item);
-    if (item) {
-        item.innerText = a + " " + data;
-    } else {
-        stashAppend(a + " " + data);
-    }
-}
 function stashItems() {
-    return [...document.querySelectorAll(".stashItem")].map(item => item.innerText.split(" ", 2));
+    return stashNodes().map(item => item.innerText.split(" ", 2));
 }
 function stashAddresses() {
     return stashItems().map(([a, v]) => a);
 }
 function stashRemove(a) {
-    let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
+    let item = stashNodes().find(c => c.innerText.startsWith(a + " "));
     item.parentNode.removeChild(item);
 }
 
@@ -236,9 +224,6 @@ function readBucket(bucketNode) {
     //console.log("readBucket: ", bucketNode);
     highlightRead(bucketNode);
     return [... bucketNode.childNodes].map(c => c.innerText);
-}
-function clearBucket(bucketNode) {
-    [... bucketNode.childNodes].forEach(c => c.innerText = DUMMY);
 }
 function appendToBucket(bucketNode, s) {
     let emptyBlock = [... bucketNode.childNodes].find(c => c.innerText == DUMMY);
