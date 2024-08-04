@@ -73,6 +73,7 @@ font-style: italic;
 <div style="position: relative; height:50;" id="stashContainer"></div>
 <div style="position: relative;" id="positionContainer"></div>
 <div style="position: absolute; top:400; left:100;" id="messages"></div>
+<button style="position: absolute; top:400; left:0;" id="nextButton" onclick="go()"">next</button>
 </div>
 <script>
 const N = 8;
@@ -343,8 +344,20 @@ async function access2(op, a, data) {
     await sleep();
 }
 var DELAY = 1000;
+//async function sleep() {
+//  return new Promise((resolve) => setTimeout(resolve, DELAY));
+//}
 async function sleep() {
-  return new Promise((resolve) => setTimeout(resolve, DELAY));
+    return new Promise((resolve) => {
+        toBeResolved = resolve;
+    });
+}
+var toBeResolved;
+function go() {
+    let r = toBeResolved;
+    if (!r) return
+    toBeResolved = undefined;
+    r();
 }
 [...document.querySelectorAll(".textLine,.positionValue")].forEach(n => n.onclick = (e => {
     let s = prompt();
