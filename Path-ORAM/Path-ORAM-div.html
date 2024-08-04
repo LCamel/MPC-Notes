@@ -126,7 +126,6 @@ function stashAppend(s) {
     item.innerText = s;
     let container = document.querySelector("#stashContainer");
     container.appendChild(item);
-    //highlightWrite(item);
 }
 function stashAppendAll(vals) {
     vals.forEach(v => stashAppend(v));
@@ -181,16 +180,6 @@ for (let i = 0; i < N; i++) {
 function highlight(node, highlightClass = "highlight") {
     node.classList.add(highlightClass);
 }
-function highlightRead(node) {
-    node.classList.add("highlightRead");
-    node.classList.remove("highlightWrite");
-    return node;
-}
-function highlightWrite(node) {
-    node.classList.add("highlightWrite");
-    node.classList.remove("highlightRead");
-    return node;
-}
 function highlightRemoveAll() {
     ["highlightRead", "highlightWrite", "highlight"].forEach(c =>
         document.querySelectorAll("." + c).forEach(n => n.classList.remove(c)));
@@ -207,7 +196,7 @@ function P(x, l) { // x: leaf index, l: level, return: a bucket div
 }
 function readBucket(bucketNode) {
     //console.log("readBucket: ", bucketNode);
-    highlightRead(bucketNode);
+    highlight(bucketNode, "highlightRead");
     return [... bucketNode.childNodes].map(c => c.innerText);
 }
 function appendToBucket(bucketNode, s) {
@@ -239,7 +228,7 @@ function createTempBucket(origBucket) {
     return bucket;
 }
 function writeBucket(origBucket, tempBucket) {
-    highlightWrite(origBucket);
+    highlight(origBucket, "highlightWrite");
     for (let i = 0; i < Z; i++) {
         origBucket.children[i].innerText = tempBucket.children[i].innerText;
     }
@@ -248,11 +237,9 @@ function isEmptyBucket(bucketNode) {
     return [... bucketNode.childNodes][0].innerText == DUMMY;
 }
 function getPosition(a) {
-    //return Number(highlightRead(position(a)).innerText);
     return Number(positionNode(a).innerText);
 }
 function setPosition(a, val) {
-    //highlightWrite(position(a)).innerText = val;
     positionNode(a).innerText = val;
 }
 function highlightPositionLabel(a) {
