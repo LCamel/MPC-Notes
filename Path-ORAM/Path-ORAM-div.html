@@ -187,7 +187,7 @@ function highlightRemoveAll() {
 function highlightRemoveByClass(nodeClass, highlightClass = "highlight") {
     document.querySelectorAll(`.${nodeClass}.${highlightClass}`).forEach(n => n.classList.remove(highlightClass));
 }
-function positionNode(a) {
+function positionValueNode(a) {
     return document.getElementById("positionValue-" + a);
 }
 function P(x, l) { // x: leaf index, l: level, return: a bucket div
@@ -237,10 +237,10 @@ function isEmptyBucket(bucketNode) {
     return [... bucketNode.childNodes][0].innerText == DUMMY;
 }
 function getPosition(a) {
-    return Number(positionNode(a).innerText);
+    return Number(positionValueNode(a).innerText);
 }
 function setPosition(a, val) {
-    positionNode(a).innerText = val;
+    positionValueNode(a).innerText = val;
 }
 function highlightPositionLabel(a) {
     document.querySelector("#positionLabel-" + a).classList.add("highlight");
@@ -315,7 +315,7 @@ async function access2(op, a, data) {
         if (addresses.length > 0) {
             addresses.forEach(a2 => {
                 highlight(stashNode(a2), "highlightEvict");
-                highlight(positionNode(a2), "highlightEvict");
+                highlight(positionValueNode(a2), "highlightEvict");
                 highlight(document.querySelector("#leafLabel-" + getPosition(a2)), "highlightEvict");
             });
             await sleep();
