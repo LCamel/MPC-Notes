@@ -43,12 +43,15 @@ font-style: italic;
 
 .leafLabel {
 position: absolute;
-display: grid;
-place-items: center;
+text-align: center;
+line-height: 30px;
 font-style: italic;
 }
 .leafLabel.highlight.highlightEvict {
     background-color: #0088ff;
+}
+.leafLabel.highlight::before {
+    content: "x = "
 }
 
 .highlight {
@@ -99,7 +102,6 @@ function createBucket(l, parent, path, container) {
         label.innerText = i;
         label.style.left = bucket.style.left;
         label.style.width = bucketWidth;
-        label.style.height = 30;
         container.appendChild(label);
     } else {
         let c0 = createBucket(l + 1, undefined, path + "0", container);
