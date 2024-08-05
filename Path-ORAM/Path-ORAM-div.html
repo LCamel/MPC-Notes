@@ -18,7 +18,7 @@ display: grid;
 place-items: center;
 }
 .stashItem {
-width: 50px;
+width: 48px;
 height: 20px;
 border: 1px solid black;
 display: inline-block;
@@ -69,34 +69,51 @@ font-style: italic;
 .highlightRead {
     background-color: #808080;
 }
+/*
 .highlightRead::after {
     content: "R";
+    font-size: 10px;
+    color: #808080;
     position: absolute;
-    top: 100px; /* TODO: change with Z */
+    top: 100px;
     left: 0px;
 }
+*/
 .highlightWrite {
     background-color: #404040;
 }
+/*
 .highlightWrite::after {
     content: "W";
+    font-size: 10px;
+    color: #404040;
     position: absolute;
-    top: 100px; /* TODO: change with Z */
+    top: 100px;
     left: 0px;
+}
+*/
+#logs {
+    overflow:hidden;
+    resize:none;
+    font-size:20px;
+    border:0px;
+    line-height: 1.5lh;
 }
 </style>
 
 <div style="position: relative">
-<div style="position: relative; height:500;" id="treeContainer"></div>
+<div style="position: relative; height:510;" id="treeContainer"></div>
 <div style="position: relative; height:50;" id="stashContainer"></div>
 <div style="position: relative;" id="positionContainer"></div>
-<div style="position: absolute; top:400; left:100;" id="messages"></div>
+<div style="position: absolute; top:450px; left:0px;">
+    <textarea id="logs" rows="1" cols="20"></textarea>
+</div>
 
-<div style="position: absolute; top:450; left:400; line-height: 2;">
+<div style="position: absolute; top:570; left:420; line-height:2; accent-color:black;">
 <input type="radio" name="autoOrManual" value="auto" checked/>
 auto resume after <input type="text" id="resumeAfter" min="0" value="1000" size="5"/> ms<br/>
 <input type="radio" name="autoOrManual" value="manual"/>
-<button id="resumeButton" onclick="resume()">resume manually</button>
+<button id="resumeButton" onclick="resume()">resume manually</button><br/>
 </div>
 
 </div>
@@ -219,13 +236,15 @@ function stashToBlock(a) {
 
 var nextRandom = undefined; // you may manually supply it
 function randomPosition() {
+    var ans;
     if (nextRandom == undefined) {
-        return Math.floor(Math.random() * (2 ** L));
+        ans = Math.floor(Math.random() * (2 ** L));
     } else {
-        let ans = nextRandom;
+        ans = nextRandom;
         nextRandom = undefined;
-        return ans;
     }
+    //setMessage("random = " + ans); // debug
+    return ans;
 }
 
 let positionContainer = document.querySelector("#positionContainer");
@@ -245,6 +264,11 @@ for (let i = 0; i < N; i++) {
     value.style.top = 50;
     positionContainer.appendChild(value);
 }
+console.log(`try:\n`);
+
+console.log(`\naccess("write", 3, "foo")`);
+console.log(`\nfor (let i = 0; i < 10; i++) { await access("write", i % N, i); }`);
+setMessage("open the dev console");
 
 function highlight(node, highlightClass = "highlight") {
     node.classList.add(highlightClass);
@@ -278,9 +302,12 @@ function highlightLeafLabel(i) {
     document.querySelector("#leafLabel-" + i).classList.add("highlight");
 }
 function setMessage(s) {
-    document.querySelector("#messages").innerText = s;
+    let ta = document.querySelector("#logs");
+    ta.textContent += "\n" + s;
+    ta.scrollTop = ta.scrollHeight;
+    //document.querySelector("#messages").innerText = s;
 }
-async function access2(op, a, data) {
+async function access(op, a, data) {
     highlightRemoveAll();
 
     setMessage(`access(${op}, ${a}, ${data})`);
@@ -378,6 +405,7 @@ function resume() {
     toBeResolved = undefined;
     r();
 }
+// click on an element to edit it
 [...document.querySelectorAll(".textLine,.positionValue")].forEach(n => n.onclick = (e => {
     let s = prompt();
     if (s != null) {
