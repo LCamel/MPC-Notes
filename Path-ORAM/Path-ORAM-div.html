@@ -73,7 +73,14 @@ font-style: italic;
 <div style="position: relative; height:50;" id="stashContainer"></div>
 <div style="position: relative;" id="positionContainer"></div>
 <div style="position: absolute; top:400; left:100;" id="messages"></div>
-<button style="position: absolute; top:400; left:0;" id="nextButton" onclick="go()"">next</button>
+
+<div style="position: absolute; top:450; left:400; line-height: 2;">
+<input type="radio" name="autoOrManual" value="auto" checked/>
+next after <input type="text" id="nextAfter" min="0" value="1000" size="5"/> ms<br/>
+<input type="radio" name="autoOrManual" value="manual"/>
+manual <button id="nextButton" onclick="go()">next</button>
+</div>
+
 </div>
 <script>
 const N = 8;
@@ -336,19 +343,20 @@ async function access2(op, a, data) {
     setMessage("done");
     await sleep();
 }
-var DELAY = 1000;
-//async function sleep() {
-//  return new Promise((resolve) => setTimeout(resolve, DELAY));
-//}
+
+var toBeResolved;
 async function sleep() {
     return new Promise((resolve) => {
-        toBeResolved = resolve;
+        if (document.querySelector('input[name="autoOrManual"]:checked').value == "auto") {
+            setTimeout(resolve, Number(document.querySelector("#nextAfter").value));
+        } else {
+            toBeResolved = resolve;
+        }
     });
 }
-var toBeResolved;
 function go() {
     let r = toBeResolved;
-    if (!r) return
+    if (!r) return;
     toBeResolved = undefined;
     r();
 }
