@@ -120,16 +120,17 @@ function createBucket(l, parent, path, container) {
 }
 createBucket(0, undefined, "", document.querySelector("#treeContainer"));
 
-function stashAppend(s) {
-    if (s == DUMMY) return;
+function stashAppend(a, data) {
     let item = document.createElement("div");
     item.className = "stashItem";
-    item.innerText = s;
+    item.innerText = a + " " + data;
     let container = document.querySelector("#stashContainer");
     container.appendChild(item);
 }
-function stashAppendAll(vals) {
-    vals.forEach(v => stashAppend(v));
+function stashAppendBlocks(blocks) {
+    var notDummy = blocks.filter(b => b != DUMMY);
+    notDummy.forEach(v => stashAppend(... v.split(" ", 2)));
+    return notDummy.length > 0;
 }
 function stashNodes() {
     return [...document.querySelectorAll(".stashItem")];
@@ -137,16 +138,15 @@ function stashNodes() {
 function stashNode(a) {
     return stashNodes().find(node => node.innerText.startsWith(a + " "));
 }
-
-function stashItems() {
-    return stashNodes().map(item => item.innerText.split(" ", 2));
-}
 function stashAddresses() {
-    return stashItems().map(([a, v]) => a);
+    return stashNodes().map(item => item.innerText.split(" ", 2)).map(([a, v]) => a);
 }
 function stashRemove(a) {
     let item = stashNodes().find(c => c.innerText.startsWith(a + " "));
     item.parentNode.removeChild(item);
+}
+function stashToBlock(a) {
+    return stashNode(a).innerText; // TODO: encryption
 }
 
 var nextRandom = undefined;
@@ -282,10 +282,9 @@ async function access2(op, a, data) {
     await sleep();
 
     for (let l = 0; l <= L; l++) {
-        let blocks = readBucket(P(x, l)).filter(b => b != DUMMY);
+        let blocks = readBucket(P(x, l));
         await sleep();
-        if (blocks.length != 0) {
-            stashAppendAll(blocks);
+        if (stashAppendBlocks(blocks)) {
             await sleep();
         }
     }
@@ -293,15 +292,14 @@ async function access2(op, a, data) {
     if (op == "write") {
         setMessage("update stash");
         await sleep();
-        let item = [...document.querySelectorAll(".stashItem")].find(c => c.innerText.startsWith(a + " "));
-        //console.log("stashUpdate: item: ", item);
+        let item = stashNode(a);
         if (item) {
             item.classList.add("highlight");
             await sleep();
             item.parentNode.removeChild(item);
             await sleep();
         }
-        stashAppend(a + " " + data);
+        stashAppend(a, data);
         await sleep();
     }
 
@@ -309,7 +307,7 @@ async function access2(op, a, data) {
     await sleep();
 
     for (let l = L; l >= 0; l--) {
-        let tempBucket = createTempBucket(P(x, l));
+        let tempBucket = createTempBucket(P(x, l)); // visualization
         await sleep();
 
         let addresses = stashAddresses().filter(a2 => P(x, l) == P(getPosition(a2), l));
@@ -322,21 +320,16 @@ async function access2(op, a, data) {
             await sleep();
 
             for (let i = 0; i < Math.min(addresses.length, Z); i++) {
-                appendToBucket(tempBucket, stashNode(addresses[i]).innerText);
-            }
-//            await sleep();
-            for (let i = 0; i < Math.min(addresses.length, Z); i++) {
+                appendToBucket(tempBucket, stashToBlock(addresses[i]));
                 stashRemove(addresses[i]);
             }
             highlightRemoveByClass("stashItem", "highlightEvict");
             highlightRemoveByClass("positionValue", "highlightEvict");
             highlightRemoveByClass("leafLabel", "highlightEvict");
-
             await sleep();
         };
 
         writeBucket(P(x, l), tempBucket);
-        //if (addresses.length > 0) await sleep();
         tempBucket.parentNode.removeChild(tempBucket);
         await sleep();
     }
