@@ -2,18 +2,18 @@
 
 .bucket {
 position: absolute;
-background-color: white;
+background-color: #CCCCCC;
 display: grid;
 place-items: center;
-border: 1px solid black;
 }
 .bucket.temp {
-    background-color: yellow;
+    background-color: #DDDDDD;
+    border: 2px solid black;
 }
 .textLine {
 width: 50px;
 height: 20px;
-background-color: #CCCCCC;
+background-color: #FFFFFF;
 display: grid;
 place-items: center;
 }
@@ -48,23 +48,26 @@ line-height: 30px;
 font-style: italic;
 }
 .leafLabel.highlight.highlightEvict {
-    background-color: #0088ff;
+    background-color: #404040;
+    color: #FFFFFF;
 }
 .leafLabel.highlight::before {
     content: "x = "
 }
 
 .highlight {
-    background-color: yellow;
+    background-color: #000000;
+    color: #FFFFFF
 }
 .highlightEvict {
-    background-color: #0088ff;
+    background-color: #404040;
+    color: #FFFFFF;
 }
 .highlightRead {
-    background-color: #C0C0C0;
+    background-color: #808080;
 }
 .highlightWrite {
-    background-color: #808080;
+    background-color: #404040;
 }
 </style>
 
