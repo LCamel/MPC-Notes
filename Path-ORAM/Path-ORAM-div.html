@@ -96,7 +96,7 @@ function createLeafLabel(i, left, container) {
 function createBucket(l, parent, path, container) {
     let bucket = document.createElement("div")
     bucket.className = "bucket";
-    bucket.id = "id-" + path;
+    bucket.id = "bucket-" + path;
     for (let i = 0; i < Z; i++) {
         let textLine = document.createElement("div");
         textLine.className = "textLine";
@@ -136,7 +136,7 @@ function appendToBucket(bucketNode, s) {
 }
 function createTempBucket(origBucket) {
     let bucket = document.createElement("div")
-    bucket.id = "id-temp";
+    bucket.id = "bucket-temp";
     bucket.className = "bucket";
     bucket.classList.add("temp");
     for (let i = 0; i < Z; i++) {
@@ -160,7 +160,7 @@ function writeBucket(origBucket, tempBucket) {
 }
 function P(x, l) { // x: leaf index, l: level, return: a bucket node
     let path = ((1 << L) + Number(x)).toString(2).substring(1, 1 + l);
-    return document.getElementById("id-" + path);
+    return document.getElementById("bucket-" + path);
 }
 
 
