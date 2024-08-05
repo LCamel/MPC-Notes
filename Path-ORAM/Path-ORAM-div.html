@@ -120,6 +120,7 @@ function createBucket(l, parent, path, container) {
 }
 createBucket(0, undefined, "", document.querySelector("#treeContainer"));
 
+// conceptually, every stash item is a [a, data] pair
 function stashAppend(a, data) {
     let item = document.createElement("div");
     item.className = "stashItem";
@@ -129,7 +130,7 @@ function stashAppend(a, data) {
 }
 function stashAppendBlocks(blocks) {
     var notDummy = blocks.filter(b => b != DUMMY);
-    notDummy.forEach(v => stashAppend(... v.split(" ", 2)));
+    notDummy.forEach(v => stashAppend(... v.split(" ", 2))); // TODO: decryption
     return notDummy.length > 0;
 }
 function stashNodes() {
@@ -142,14 +143,14 @@ function stashAddresses() {
     return stashNodes().map(item => item.innerText.split(" ", 2)).map(([a, v]) => a);
 }
 function stashRemove(a) {
-    let item = stashNodes().find(c => c.innerText.startsWith(a + " "));
+    let item = stashNode(a);
     item.parentNode.removeChild(item);
 }
 function stashToBlock(a) {
     return stashNode(a).innerText; // TODO: encryption
 }
 
-var nextRandom = undefined;
+var nextRandom = undefined; // you may manually supply it
 function randomPosition() {
     if (nextRandom == undefined) {
         return Math.floor(Math.random() * (2 ** L));
@@ -196,7 +197,6 @@ function P(x, l) { // x: leaf index, l: level, return: a bucket div
     return document.getElementById("id-" + path);
 }
 function readBucket(bucketNode) {
-    //console.log("readBucket: ", bucketNode);
     highlight(bucketNode, "highlightRead");
     return [... bucketNode.childNodes].map(c => c.innerText);
 }
