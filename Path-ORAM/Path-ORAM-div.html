@@ -291,11 +291,11 @@ async function access2(op, a, data) {
     if (op == "write") {
         setMessage("update stash");
         await sleep();
-        let item = stashNode(a);
-        if (item) {
-            item.classList.add("highlight");
+        let node = stashNode(a);
+        if (node) {
+            highlight(node);
             await sleep();
-            item.parentNode.removeChild(item);
+            node.parentNode.removeChild(node);
             await sleep();
         }
         stashAppend(a, data);
