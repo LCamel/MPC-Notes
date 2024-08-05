@@ -31,6 +31,9 @@ height: 50;
 display: grid;
 place-items: center;
 }
+.positionLabel.highlight {
+    border: 1px solid black;
+}
 .positionValue {
 position: absolute;
 width: 50;
@@ -48,7 +51,7 @@ line-height: 30px;
 font-style: italic;
 }
 .leafLabel.highlight.highlightEvict {
-    background-color: #404040;
+    background-color: #000000;
     color: #FFFFFF;
 }
 .leafLabel.highlight::before {
@@ -56,18 +59,18 @@ font-style: italic;
 }
 
 .highlight {
-    background-color: #000000;
+    background-color: #404040;
     color: #FFFFFF
 }
 .highlightEvict {
-    background-color: #404040;
+    background-color: #000000;
     color: #FFFFFF;
 }
 .highlightRead {
     background-color: #808080;
 }
 .highlightWrite {
-    background-color: #404040;
+    background-color: #000000;
 }
 </style>
 
