@@ -69,8 +69,20 @@ font-style: italic;
 .highlightRead {
     background-color: #808080;
 }
+.highlightRead::after {
+    content: "R";
+    position: absolute;
+    top: 100px; /* TODO: change with Z */
+    left: 0px;
+}
 .highlightWrite {
     background-color: #404040;
+}
+.highlightWrite::after {
+    content: "W";
+    position: absolute;
+    top: 100px; /* TODO: change with Z */
+    left: 0px;
 }
 </style>
 
