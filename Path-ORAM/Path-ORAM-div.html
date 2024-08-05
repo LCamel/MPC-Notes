@@ -120,6 +120,50 @@ function createBucket(l, parent, path, container) {
 }
 createBucket(0, undefined, "", document.querySelector("#treeContainer"));
 
+function readBucket(bucketNode) {
+    highlight(bucketNode, "highlightRead");
+    return [... bucketNode.childNodes].map(c => c.innerText);
+}
+function appendToBucket(bucketNode, s) {
+    let emptyBlock = [... bucketNode.childNodes].find(c => c.innerText == DUMMY);
+    if (emptyBlock) {
+        emptyBlock.innerText = s;
+        emptyBlock.classList.add("highlightEvict");
+        return true;
+    } else {
+        return false;
+    }
+}
+function createTempBucket(origBucket) {
+    let bucket = document.createElement("div")
+    bucket.id = "id-temp";
+    bucket.className = "bucket";
+    bucket.classList.add("temp");
+    for (let i = 0; i < Z; i++) {
+        let textLine = document.createElement("div");
+        textLine.className = "textLine";
+        textLine.innerHTML = DUMMY;
+        bucket.appendChild(textLine);
+    }
+    bucket.style.left = origBucket.offsetLeft + 10;
+    bucket.style.top = origBucket.offsetTop + 10;
+    bucket.style.width = bucketWidth;
+    bucket.style.height = bucketHeight;
+    origBucket.parentNode.appendChild(bucket);
+    return bucket;
+}
+function writeBucket(origBucket, tempBucket) {
+    highlight(origBucket, "highlightWrite");
+    for (let i = 0; i < Z; i++) {
+        origBucket.children[i].innerText = tempBucket.children[i].innerText;
+    }
+}
+function P(x, l) { // x: leaf index, l: level, return: a bucket node
+    let path = ((1 << L) + Number(x)).toString(2).substring(1, 1 + l);
+    return document.getElementById("id-" + path);
+}
+
+
 // conceptually, every stash item is a [a, data] pair
 function stashAppend(a, data) {
     let item = document.createElement("div");
@@ -192,51 +236,7 @@ function highlightRemoveByClass(nodeClass, highlightClass = "highlight") {
 function positionValueNode(a) {
     return document.getElementById("positionValue-" + a);
 }
-function P(x, l) { // x: leaf index, l: level, return: a bucket div
-    let path = ((1 << L) + Number(x)).toString(2).substring(1, 1 + l);
-    return document.getElementById("id-" + path);
-}
-function readBucket(bucketNode) {
-    highlight(bucketNode, "highlightRead");
-    return [... bucketNode.childNodes].map(c => c.innerText);
-}
-function appendToBucket(bucketNode, s) {
-    let emptyBlock = [... bucketNode.childNodes].find(c => c.innerText == DUMMY);
-    if (emptyBlock) {
-        emptyBlock.innerText = s;
-        emptyBlock.classList.add("highlightEvict");
-        return true;
-    } else {
-        return false;
-    }
-}
-function createTempBucket(origBucket) {
-    let bucket = document.createElement("div")
-    bucket.id = "id-temp";
-    bucket.className = "bucket";
-    bucket.classList.add("temp");
-    for (let i = 0; i < Z; i++) {
-        let textLine = document.createElement("div");
-        textLine.className = "textLine";
-        textLine.innerHTML = DUMMY;
-        bucket.appendChild(textLine);
-    }
-    bucket.style.left = origBucket.offsetLeft + 10;
-    bucket.style.top = origBucket.offsetTop + 10;
-    bucket.style.width = bucketWidth;
-    bucket.style.height = bucketHeight;
-    origBucket.parentNode.appendChild(bucket);
-    return bucket;
-}
-function writeBucket(origBucket, tempBucket) {
-    highlight(origBucket, "highlightWrite");
-    for (let i = 0; i < Z; i++) {
-        origBucket.children[i].innerText = tempBucket.children[i].innerText;
-    }
-}
-function isEmptyBucket(bucketNode) {
-    return [... bucketNode.childNodes][0].innerText == DUMMY;
-}
+
 function getPosition(a) {
     return Number(positionValueNode(a).innerText);
 }
