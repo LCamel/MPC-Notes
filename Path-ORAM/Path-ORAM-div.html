@@ -120,8 +120,7 @@ function createBucket(l, parent, path, container) {
 }
 createBucket(0, undefined, "", document.querySelector("#treeContainer"));
 
-function readBucket(bucketNode) {
-    highlight(bucketNode, "highlightRead");
+function readBucket(bucketNode) { // return blocks
     return [... bucketNode.childNodes].map(c => c.innerText);
 }
 function appendToBucket(bucketNode, s) {
@@ -153,7 +152,6 @@ function createTempBucket(origBucket) {
     return bucket;
 }
 function writeBucket(origBucket, tempBucket) {
-    highlight(origBucket, "highlightWrite");
     for (let i = 0; i < Z; i++) {
         origBucket.children[i].innerText = tempBucket.children[i].innerText;
     }
@@ -283,6 +281,7 @@ async function access2(op, a, data) {
 
     for (let l = 0; l <= L; l++) {
         let blocks = readBucket(P(x, l));
+        highlight(P(x, l), "highlightRead");
         await sleep();
         if (stashAppendBlocks(blocks)) {
             await sleep();
@@ -330,6 +329,7 @@ async function access2(op, a, data) {
         };
 
         writeBucket(P(x, l), tempBucket);
+        highlight(P(x, l), "highlightWrite");
         tempBucket.parentNode.removeChild(tempBucket);
         await sleep();
     }
