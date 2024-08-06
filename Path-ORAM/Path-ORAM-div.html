@@ -380,7 +380,12 @@ var toBeResolved;
 async function sleep() {
     return new Promise((resolve) => {
         if (document.querySelector('input[name="autoOrManual"]:checked').value == "auto") {
-            setTimeout(resolve, Number(document.querySelector("#resumeAfter").value));
+            let resumeAfter = Number(document.querySelector("#resumeAfter").value);
+            if (resumeAfter != 0) {
+                setTimeout(resolve, resumeAfter);
+            } else {
+                resolve();
+            }
         } else {
             toBeResolved = resolve;
         }
@@ -404,15 +409,15 @@ function resume() {
 function help() {
     console.group('%cTry', 'color: blue; font-weight: bold; font-size: 16px;');
     console.log(`\na\naccess("write", 3, "foo")`);
-    console.log(`\nb\nfor (let i = 0; i < 10; i++) { await access("write", i % N, i); }`);
-    console.log(`\nc\nfor (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x1F430 + i)); }`);
+    console.log(`\nb\nfor (let i = 0; i < 10; i++) { await access("write", i % N, i * 10); }`);
+    console.log(`\nc\nfor (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x41 + i)); }`);
     console.log(`\nh\nhelp()`);
     console.groupEnd();
     return '';
 }
 Object.defineProperty(window, 'a', { get: () => access("write", 3, "foo") });
-Object.defineProperty(window, 'b', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, i); }}});
-Object.defineProperty(window, 'c', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x1F430 + i)); }}});
+Object.defineProperty(window, 'b', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, i * 10); }}});
+Object.defineProperty(window, 'c', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x41 + i)); }}});
 Object.defineProperty(window, 'h', { get: help });
 help();
 setMessage("open the dev console");
