@@ -106,7 +106,7 @@ font-style: italic;
 <div style="position: relative; height:50;" id="stashContainer"></div>
 <div style="position: relative;" id="positionContainer"></div>
 <div style="position: absolute; top:450px; left:0px;">
-    <textarea id="logs" rows="1" cols="20"></textarea>
+    <textarea id="logs" rows="1" cols="22"></textarea>
 </div>
 
 <div style="position: absolute; top:570; left:420; line-height:2; accent-color:black;">
@@ -264,11 +264,6 @@ for (let i = 0; i < N; i++) {
     value.style.top = 50;
     positionContainer.appendChild(value);
 }
-console.log(`try:\n`);
-
-console.log(`\naccess("write", 3, "foo")`);
-console.log(`\nfor (let i = 0; i < 10; i++) { await access("write", i % N, i); }`);
-setMessage("open the dev console");
 
 function highlight(node, highlightClass = "highlight") {
     node.classList.add(highlightClass);
@@ -412,4 +407,18 @@ function resume() {
         e.target.innerText = s;
     }
 }));
+
+function help() {
+    console.group('%cTry', 'color: blue; font-weight: bold; font-size: 16px;');
+    console.log(`\na\naccess("write", 3, "foo")`);
+    console.log(`\nb\nfor (let i = 0; i < 10; i++) { await access("write", i % N, i); }`);
+    console.log(`\nh\nhelp()`);
+    console.groupEnd();
+    return '';
+}
+Object.defineProperty(window, 'a', { get: () => access("write", 3, "foo") });
+Object.defineProperty(window, 'b', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, i); }}});
+Object.defineProperty(window, 'h', { get: help });
+help();
+setMessage("open the dev console");
 </script>
