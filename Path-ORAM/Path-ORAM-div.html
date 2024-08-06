@@ -229,6 +229,9 @@ function stashRemove(a) {
 function stashToBlock(a) {
     return stashNode(a).innerText; // TODO: encryption
 }
+function stashData(a) {
+    return (stashNode(a).innerText.split(" ", 2))[1];
+}
 
 var nextRandom = undefined; // you may manually supply it
 function randomPosition() {
@@ -295,10 +298,10 @@ function highlightLeafLabel(i) {
 function setMessage(s) {
     document.querySelector("#message").innerText = s;
 }
-async function access(op, a, data) {
+async function access(op, a, data = "") {
     highlightRemoveAll();
 
-    setMessage(`access(${op}, ${a}, ${data})`);
+    setMessage(`access(${op}, ${a}, "${data}")`);
     await sleep();
 
     highlightPositionLabel(a);
@@ -328,14 +331,26 @@ async function access(op, a, data) {
         }
     }
 
+    let returnData = "0"; // default
+    setMessage("read stash");
+    await sleep();
+    let sn = stashNode(a);
+    if (sn) {
+        highlight(sn);
+        await sleep();
+        returnData = stashData(a);
+    }
+    setMessage("read stash: " + returnData);
+    if (op != "write") {
+        highlightRemoveByClass("stashItem");
+    }
+    await sleep();
+
     if (op == "write") {
         setMessage("update stash");
         await sleep();
-        let node = stashNode(a);
-        if (node) {
-            highlight(node);
-            await sleep();
-            node.parentNode.removeChild(node);
+        if (sn) {
+            sn.parentNode.removeChild(sn);
             await sleep();
         }
         stashAppend(a, data);
@@ -373,8 +388,9 @@ async function access(op, a, data) {
         tempBucket.parentNode.removeChild(tempBucket);
         await sleep();
     }
-    setMessage("done");
+    setMessage("return: " + returnData);
     await sleep();
+    return returnData;
 }
 
 var toBeResolved;
@@ -410,15 +426,17 @@ function resume() {
 function help() {
     console.group('%cTry', 'color: blue; font-weight: bold; font-size: 16px;');
     console.log(`\na\naccess("write", 3, "foo")`);
-    console.log(`\nb\nfor (let i = 0; i < 10; i++) { await access("write", i % N, i * 10); }`);
-    console.log(`\nc\nfor (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x41 + i)); }`);
+    console.log(`\nb\naccess("read", 3)`);
+    console.log(`\nc\nfor (let i = 0; i < 10; i++) { await access("write", i % N, i * 10); }`);
+    console.log(`\nd\nfor (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x41 + i)); }`);
     console.log(`\nh\nhelp()`);
     console.groupEnd();
     return '';
 }
-Object.defineProperty(window, 'a', { get: () => access("write", 3, "foo") });
-Object.defineProperty(window, 'b', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, i * 10); }}});
-Object.defineProperty(window, 'c', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x41 + i)); }}});
+Object.defineProperty(window, 'a', { get: async () => await access("write", 3, "foo") });
+Object.defineProperty(window, 'b', { get: async () => await access("read", 3) });
+Object.defineProperty(window, 'c', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, i * 10); }}});
+Object.defineProperty(window, 'd', { get: async () => {for (let i = 0; i < 10; i++) { await access("write", i % N, String.fromCodePoint(0x41 + i)); }}});
 Object.defineProperty(window, 'h', { get: help });
 help();
 setMessage("open the dev console");
