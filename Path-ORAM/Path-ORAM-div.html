@@ -10,7 +10,7 @@ place-items: center;
     background-color: #DDDDDD;
     border: 2px solid black;
 }
-.textLine {
+.block {
 width: 50px;
 height: 20px;
 background-color: #FFFFFF;
@@ -118,8 +118,8 @@ const N = 8;
 const L = 3;
 const Z = 4;
 const bucketWidth = 70;
-const textLineHeight = 20;
-const bucketHeight = (Z + 1) * textLineHeight;
+const blockHeight = 20;
+const bucketHeight = (Z + 1) * blockHeight;
 const DUMMY = "-";
 
 function createLeafLabel(i, left, container) {
@@ -136,10 +136,10 @@ function createBucket(l, parent, path, container) {
     bucket.className = "bucket";
     bucket.id = "bucket-" + path;
     for (let i = 0; i < Z; i++) {
-        let textLine = document.createElement("div");
-        textLine.className = "textLine";
-        textLine.innerHTML = DUMMY;
-        bucket.appendChild(textLine);
+        let block = document.createElement("div");
+        block.className = "block";
+        block.innerHTML = DUMMY;
+        bucket.appendChild(block);
     }
     if (l == L) {
         let i = parseInt(path, 2);
@@ -177,10 +177,10 @@ function createTempBucket(origBucket) {
     bucket.className = "bucket";
     bucket.classList.add("temp");
     for (let i = 0; i < Z; i++) {
-        let textLine = document.createElement("div");
-        textLine.className = "textLine";
-        textLine.innerHTML = DUMMY;
-        bucket.appendChild(textLine);
+        let block = document.createElement("div");
+        block.className = "block";
+        block.innerHTML = DUMMY;
+        bucket.appendChild(block);
     }
     bucket.style.left = origBucket.offsetLeft + 10;
     bucket.style.top = origBucket.offsetTop + 10;
@@ -400,7 +400,7 @@ function resume() {
 }
 
 // click on an element to edit it
-[...document.querySelectorAll(".textLine,.positionValue")].forEach(n => n.onclick = (e => {
+[...document.querySelectorAll(".block,.positionValue")].forEach(n => n.onclick = (e => {
     let s = prompt();
     if (s != null) {
         e.target.innerText = s;
