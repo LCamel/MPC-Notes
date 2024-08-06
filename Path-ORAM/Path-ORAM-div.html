@@ -92,12 +92,9 @@ font-style: italic;
     left: 0px;
 }
 */
-#logs {
-    overflow:hidden;
-    resize:none;
-    font-size:20px;
-    border:0px;
-    line-height: 1.5lh;
+#message {
+    font-family: monospace;
+    font-size: 20px;
 }
 </style>
 
@@ -105,9 +102,7 @@ font-style: italic;
 <div style="position: relative; height:510;" id="treeContainer"></div>
 <div style="position: relative; height:50;" id="stashContainer"></div>
 <div style="position: relative;" id="positionContainer"></div>
-<div style="position: absolute; top:450px; left:0px;">
-    <textarea id="logs" rows="1" cols="22"></textarea>
-</div>
+<div style="position: absolute; top:450px; left:0px;"><span id="message"></span></div>
 
 <div style="position: absolute; top:570; left:420; line-height:2; accent-color:black;">
 <input type="radio" name="autoOrManual" value="auto" checked/>
@@ -297,10 +292,7 @@ function highlightLeafLabel(i) {
     document.querySelector("#leafLabel-" + i).classList.add("highlight");
 }
 function setMessage(s) {
-    let ta = document.querySelector("#logs");
-    ta.textContent += "\n" + s;
-    ta.scrollTop = ta.scrollHeight;
-    //document.querySelector("#messages").innerText = s;
+    document.querySelector("#message").innerText = s;
 }
 async function access(op, a, data) {
     highlightRemoveAll();
@@ -400,6 +392,7 @@ function resume() {
     toBeResolved = undefined;
     r();
 }
+
 // click on an element to edit it
 [...document.querySelectorAll(".textLine,.positionValue")].forEach(n => n.onclick = (e => {
     let s = prompt();
