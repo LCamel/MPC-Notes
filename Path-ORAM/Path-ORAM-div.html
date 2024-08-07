@@ -302,67 +302,67 @@ async function access(op, a, data = "_") {
     highlightRemoveAll();
 
     setMessage(`access(${op}, ${a}, ${data})`);
-    await sleep();
+    await pause();
 
     highlightPositionLabel(a);
     highlightPositionValue(a);
-    await sleep();
+    await pause();
 
     let x = getPosition(a);
     highlightLeafLabel(x);
-    await sleep();
+    await pause();
 
     highlightPositionValue(a, false);
     setPosition(a, "🎲");
-    await sleep();
+    await pause();
 
     setPosition(a, randomPosition());
-    await sleep();
+    await pause();
 
     setMessage("read buckets");
-    await sleep();
+    await pause();
 
     for (let l = 0; l <= L; l++) {
         let blocks = readBucket(P(x, l));
         highlight(P(x, l), "highlightRead");
-        await sleep();
+        await pause();
         if (stashAppendBlocks(blocks)) {
-            await sleep();
+            await pause();
         }
     }
 
     let returnData = "default";
     setMessage("read stash");
-    await sleep();
+    await pause();
     let sn = stashNode(a);
     if (sn) {
         highlight(sn);
-        await sleep();
+        await pause();
         returnData = stashData(a);
     }
     setMessage("read stash: " + returnData);
     if (op != "write") {
         highlightRemoveByClass("stashItem");
     }
-    await sleep();
+    await pause();
 
     if (op == "write") {
         setMessage("update stash");
-        await sleep();
+        await pause();
         if (sn) {
             sn.parentNode.removeChild(sn);
-            await sleep();
+            await pause();
         }
         stashAppend(a, data);
-        await sleep();
+        await pause();
     }
 
     setMessage("evict");
-    await sleep();
+    await pause();
 
     for (let l = L; l >= 0; l--) {
         let tempBucket = createTempBucket(P(x, l)); // visualization
-        await sleep();
+        await pause();
 
         let addresses = stashAddresses().filter(a2 => P(x, l) == P(getPosition(a2), l));
         if (addresses.length > 0) {
@@ -371,7 +371,7 @@ async function access(op, a, data = "_") {
                 highlight(positionValueNode(a2), "highlightEvict");
                 highlight(document.querySelector("#leafLabel-" + getPosition(a2)), "highlightEvict");
             });
-            await sleep();
+            await pause();
 
             for (let i = 0; i < Math.min(addresses.length, Z); i++) {
                 appendToBucket(tempBucket, stashToBlock(addresses[i]));
@@ -380,21 +380,21 @@ async function access(op, a, data = "_") {
             highlightRemoveByClass("stashItem", "highlightEvict");
             highlightRemoveByClass("positionValue", "highlightEvict");
             highlightRemoveByClass("leafLabel", "highlightEvict");
-            await sleep();
+            await pause();
         };
 
         writeBucket(P(x, l), tempBucket);
         highlight(P(x, l), "highlightWrite");
         tempBucket.parentNode.removeChild(tempBucket);
-        await sleep();
+        await pause();
     }
     setMessage("return: " + returnData);
-    await sleep();
+    await pause();
     return returnData;
 }
 
 var toBeResolved;
-async function sleep() {
+async function pause() {
     return new Promise((resolve) => {
         if (document.querySelector('input[name="autoOrManual"]:checked').value == "auto") {
             let resumeAfter = Number(document.querySelector("#resumeAfter").value);
