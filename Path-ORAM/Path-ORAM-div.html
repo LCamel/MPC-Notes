@@ -298,10 +298,10 @@ function highlightLeafLabel(i) {
 function setMessage(s) {
     document.querySelector("#message").innerText = s;
 }
-async function access(op, a, data = "") {
+async function access(op, a, data = "_") {
     highlightRemoveAll();
 
-    setMessage(`access(${op}, ${a}, "${data}")`);
+    setMessage(`access(${op}, ${a}, ${data})`);
     await sleep();
 
     highlightPositionLabel(a);
@@ -331,7 +331,7 @@ async function access(op, a, data = "") {
         }
     }
 
-    let returnData = "0"; // default
+    let returnData = "default";
     setMessage("read stash");
     await sleep();
     let sn = stashNode(a);
