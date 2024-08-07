@@ -1,102 +1,109 @@
 <style>
+    .bucket {
+        position: absolute;
+        background-color: #CCCCCC;
+        display: grid;
+        place-items: center;
+    }
+    .bucket.temp {
+        background-color: #DDDDDD;
+        border: 2px solid black;
+    }
 
-.bucket {
-position: absolute;
-background-color: #CCCCCC;
-display: grid;
-place-items: center;
-}
-.bucket.temp {
-    background-color: #DDDDDD;
-    border: 2px solid black;
-}
-.block {
-width: 50px;
-height: 20px;
-background-color: #FFFFFF;
-display: grid;
-place-items: center;
-white-space: nowrap;
-}
-.stashItem {
-width: 48px;
-height: 20px;
-border: 1px solid black;
-display: inline-block;
-text-align: center;
-}
-.positionLabel {
-position: absolute;
-width: 50;
-height: 50;
-display: grid;
-place-items: center;
-}
-.positionLabel.highlight {
-    border: 1px solid black;
-}
-.positionValue {
-position: absolute;
-width: 50;
-height: 50;
-border: 1px solid black;
-display: grid;
-place-items: center;
-font-style: italic;
-}
+    .block {
+        width: 50px;
+        height: 20px;
+        background-color: #FFFFFF;
+        display: grid;
+        place-items: center;
+        white-space: nowrap;
+    }
 
-.leafLabel {
-position: absolute;
-text-align: center;
-line-height: 30px;
-font-style: italic;
-}
-.leafLabel.highlight.highlightEvict {
-    background-color: #000000;
-    color: #FFFFFF;
-}
-.leafLabel.highlight::before {
-    content: "x = ";
-}
+    .stashItem {
+        width: 48px;
+        height: 20px;
+        border: 1px solid black;
+        display: inline-block;
+        text-align: center;
+    }
 
-.highlight {
-    background-color: #404040;
-    color: #FFFFFF
-}
-.highlightEvict {
-    background-color: #000000;
-    color: #FFFFFF;
-}
-.highlightRead {
-    background-color: #808080;
-}
-/*
-.highlightRead::after {
-    content: "R";
-    font-size: 10px;
-    color: #808080;
-    position: absolute;
-    top: 100px;
-    left: 0px;
-}
-*/
-.highlightWrite {
-    background-color: #404040;
-}
-/*
-.highlightWrite::after {
-    content: "W";
-    font-size: 10px;
-    color: #404040;
-    position: absolute;
-    top: 100px;
-    left: 0px;
-}
-*/
-#message {
-    font-family: monospace;
-    font-size: 20px;
-}
+    .positionLabel {
+        position: absolute;
+        width: 50;
+        height: 50;
+        display: grid;
+        place-items: center;
+    }
+    .positionLabel.highlight {
+        border: 1px solid black;
+    }
+
+    .positionValue {
+        position: absolute;
+        width: 50;
+        height: 50;
+        border: 1px solid black;
+        display: grid;
+        place-items: center;
+        font-style: italic;
+    }
+
+    .leafLabel {
+        position: absolute;
+        text-align: center;
+        line-height: 30px;
+        font-style: italic;
+    }
+    .leafLabel.highlight.highlightEvict {
+        background-color: #000000;
+        color: #FFFFFF;
+    }
+    .leafLabel.highlight::before {
+        content: "x = ";
+    }
+
+    .highlight {
+        background-color: #404040;
+        color: #FFFFFF
+    }
+
+    .highlightEvict {
+        background-color: #000000;
+        color: #FFFFFF;
+    }
+
+    .highlightRead {
+        background-color: #808080;
+    }
+    /*
+    .highlightRead::after {
+        content: "R";
+        font-size: 10px;
+        color: #808080;
+        position: absolute;
+        top: 100px;
+        left: 0px;
+    }
+    */
+
+    .highlightWrite {
+        background-color: #404040;
+    }
+    /*
+    .highlightWrite::after {
+        content: "W";
+        font-size: 10px;
+        color: #404040;
+        position: absolute;
+        top: 100px;
+        left: 0px;
+    }
+    */
+
+    #message {
+        font-family: monospace;
+        font-size: 20px;
+    }
 </style>
 
 <div style="position: relative">
