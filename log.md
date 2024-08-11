@@ -44,3 +44,30 @@ Garbled Circuit - Evaluator<br>
 Garbled Circuit - Generator<br>
 <img src="images/generator.png" alt="generator.png" width="25%">
 </a>
+
+
+## Milestone 2
+
+Estimated Duration: 1 month
+
+Estimated delivery date: 2024-08-10
+
+I have read most of Chapters 4 to 5 of Pragmatic MPC.
+
+### Articles:
+
+Point-and-Permute: [English](story-point-and-permute-en-US.md) / [Chinese](story-point-and-permute-zh-TW.md)
+
+OT Extension (IKNP): [English](OT3D/story-OT-Extension-en-US.md) / [Chinese](OT3D/story-OT-Extension-zh-TW.md)
+
+### Programs:
+
+The feature "Point-and-Permute" has been integrated into the original program.<br/>
+[Garbled Circuit - Point-and-Permute - Evaluator](https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1&pointAndPermute=1)<br/>
+[Garbled Circuit - Point-and-Permute - Generator](https://lcamel.github.io/MPC-Notes/garbled-circuit.html?pointAndPermute=1)
+
+[OT Extension](https://lcamel.github.io/MPC-Notes/OT3D/)
+
+[Path-ORAM](https://lcamel.github.io/MPC-Notes/Path-ORAM/Path-ORAM.html) (no article)
+
+I hope these programs provide the best visualization for these algorithms.

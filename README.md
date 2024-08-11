@@ -43,6 +43,21 @@ Garbled Circuit - Point-and-Permute - Generator<br>
 <img src="images/debug.png" alt="debug.png" width="25%">
 </a>
 <br>
+<br>
+
+<a href="https://lcamel.github.io/MPC-Notes/OT3D/">
+OT Extension (IKNP)<br>
+<img src="images/OT-extension.png" alt="OT-extension.png" width="25%">
+</a>
+<br>
+<br>
+
+<a href="https://lcamel.github.io/MPC-Notes/Path-ORAM/Path-ORAM.html">
+Path-ORAM<br>
+<img src="images/Path-ORAM.png" alt="Path-ORAM.png" width="25%">
+</a>
+<br>
+<br>
 
 ## Articles
 
@@ -52,8 +67,12 @@ In English:
 
 [Point-and-Permute](story-point-and-permute-en-US.md)
 
+[OT Extension (IKNP)](OT3D/story-OT-Extension-en-US.md)
+
 In Chinese:
 
 [淺談 Garbled Circult 與 Oblivious Transfer](story-zh-TW.md)
 
 [Point-and-Permute](story-point-and-permute-zh-TW.md)
+
+[OT Extension (IKNP)](OT3D/story-OT-Extension-zh-TW.md)
