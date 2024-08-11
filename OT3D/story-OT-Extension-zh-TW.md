@@ -4,7 +4,7 @@ Bob: Hi Alice.
 
 Alice: Hi Bob. 今天想討論什麼嗎?
 
-Bob: 上次在 Garbled Circuit 那邊看到 Oblivious Transfer 之後, 我又找了一下資料. 看到一個有趣的東西叫做 IKNP 的 OT Extension, 想找你討論看看.
+Bob: 上次在 [Garbled Circuit](../story-zh-TW.md) 那邊看到 Oblivious Transfer 之後, 我又找了一下資料. 看到一個有趣的東西叫做 IKNP 的 OT Extension, 想找你討論看看.
 
 Alice: 好啊, 我也查一下資料...
 
@@ -115,7 +115,7 @@ Bob: 嗯嗯. 這樣稱呼起來也比較方便.
 
 Alice: 這樣核心的部分講的差不多了. 我們再整理一下.
 
-Bob: 好. 一開始我想從你那邊收到 message0 或 message1, 我 r 這個 bit 來指定.
+Bob: 好. 一開始我想從你那邊收到 message0 或 message1, 我用 r 這個 bit 來指定.
 
 我先 random 出一個你不知道的 bit T 放上面那格, 計算出 T⊕r 放下面那格.
 
