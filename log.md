@@ -55,13 +55,20 @@ Estimated delivery date: 2024-08-10
 
 I have read most of Chapters 4 to 5 of Pragmatic MPC.
 
-### Articles:
+- GRR3
+- FreeXOR
+- Half Gates
+- Oblivioius Stack
+- Random Access Machine + ORAM (partially)
+- Path ORAM
+
+### My Articles:
 
 Point-and-Permute: [English](story-point-and-permute-en-US.md) / [Chinese](story-point-and-permute-zh-TW.md)
 
 OT Extension (IKNP): [English](OT3D/story-OT-Extension-en-US.md) / [Chinese](OT3D/story-OT-Extension-zh-TW.md)
 
-### Programs:
+### My Programs:
 
 The feature "Point-and-Permute" has been integrated into the original program.<br/>
 [Garbled Circuit - Point-and-Permute - Evaluator](https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1&pointAndPermute=1)<br/>
