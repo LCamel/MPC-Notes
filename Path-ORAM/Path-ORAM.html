@@ -13,21 +13,24 @@
 }
 
 </style>
-<div id="THE_CONTAINER"></div>
+<div id="TREE_CONTAINER"></div>
+<div id="STASH_CONTAINER"></div>
 <script type="module">
 
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 window.d3 = d3;
 
-const svg = d3.select("#THE_CONTAINER")
+function debugShowBox(obj) {
+    obj.append("rect").attr("width", obj.attr("width")).attr("height", obj.attr("height")).attr("class", "box");
+}
+
+const treeSVG = d3.select("#TREE_CONTAINER")
 .append("svg")
 .attr("width", 500)
-.attr("height", 500)
-;
-window.svg = svg;
-const treeG = svg.append("g");
+.attr("height", 500);
+window.treeSVG = treeSVG; debugShowBox(treeSVG);
+const treeG = treeSVG.append("g");
 
-svg.append("rect").attr("width", 500).attr("height", 500).attr("class", "box");
 
 const L = 3; // level 0 1 2 3    2^3 = 8 leaves
 const Z = 4; // bucket size
@@ -94,5 +97,30 @@ treeG.selectAll(".treeLink")
 .attr("y2", d => d.target.y + nodeHeight)
 ;
 
+const stash = [5, 7, 2];
+const stashSVG = d3.select("#STASH_CONTAINER")
+.append("svg")
+.attr("width", 600)
+.attr("height", 100);
+window.stashSVG = treeSVG; debugShowBox(stashSVG);
+const stashG = stashSVG.append("g");
+const stashCells = stashG.selectAll(".stashCell")
+.data(stash)
+.enter()
+.append("g")
+.attr("class", "stashCell")
+.attr("transform", (d, i) => `translate(${i * 50}, 0)`)
+
+stashCells.append("rect")
+.attr("width", 50)
+.attr("height", 50)
+.attr("class", "box");
+
+stashCells.append("text")
+.attr("x", 50 / 2)
+.attr("y", 50 / 2)
+.attr("text-anchor", "middle")
+.attr("alignment-baseline", "middle")
+.text(d => d);
 
 </script>
