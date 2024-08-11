@@ -39,7 +39,8 @@ introducing Yao's Garbled Circuit and Oblivious Transfer. I spent about 8 days c
 Garbled Circuit - Evaluator<br>
 <img src="images/evaluator.png" alt="evaluator.png" width="25%">
 </a>
-<p>
+<br/>
+<br/>
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html">
 Garbled Circuit - Generator<br>
 <img src="images/generator.png" alt="generator.png" width="25%">
