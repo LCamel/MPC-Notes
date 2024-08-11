@@ -71,11 +71,31 @@ OT Extension (IKNP): [English](OT3D/story-OT-Extension-en-US.md) / [Chinese](OT3
 ### My Programs:
 
 The feature "Point-and-Permute" has been integrated into the original program.<br/>
-[Garbled Circuit - Point-and-Permute - Evaluator](https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1&pointAndPermute=1)<br/>
-[Garbled Circuit - Point-and-Permute - Generator](https://lcamel.github.io/MPC-Notes/garbled-circuit.html?pointAndPermute=1)
 
-[OT Extension](https://lcamel.github.io/MPC-Notes/OT3D/)
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1&pointAndPermute=1">
+Garbled Circuit - Point-and-Permute - Evaluator<br>
+<img src="images/point-and-permute-evaluator.png" alt="evaluator.png" width="25%">
+</a>
+<br>
 
-[Path-ORAM](https://lcamel.github.io/MPC-Notes/Path-ORAM/Path-ORAM.html) (no article)
+<a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?pointAndPermute=1">
+Garbled Circuit - Point-and-Permute - Generator<br>
+<img src="images/point-and-permute-generator.png" alt="generator.png" width="25%">
+</a>
+<br>
+<br>
 
+<a href="https://lcamel.github.io/MPC-Notes/OT3D/">
+OT Extension (IKNP)<br>
+<img src="images/OT-extension.png" alt="OT-extension.png" width="25%">
+</a>
+<br>
+<br>
+
+<a href="https://lcamel.github.io/MPC-Notes/Path-ORAM/Path-ORAM.html">
+Path-ORAM (no article)<br>
+<img src="images/Path-ORAM.png" alt="Path-ORAM.png" width="25%">
+</a>
+<br>
+<br>
 I hope these programs provide the best visualization for these algorithms.
