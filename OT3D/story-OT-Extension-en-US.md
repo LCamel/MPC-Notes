@@ -4,7 +4,7 @@ Bob: Hi Alice.
 
 Alice: Hi Bob. What would you like to discuss today?
 
-Bob: After seeing Oblivious Transfer in [Garbled Circuit](../story-zh-TW.md) last time, I looked up some more information. I came across an interesting thing called IKNP OT Extension and wanted to discuss it with you.
+Bob: After seeing Oblivious Transfer in [Garbled Circuit](../story-en-US.md) last time, I looked up some more information. I came across an interesting thing called IKNP OT Extension and wanted to discuss it with you.
 
 Alice: Sure, let me look up some information as well...
 
@@ -71,13 +71,13 @@ Q = T⊕s if r = 1
 ```
 in a situation where I don't know s and you don't know r? It's done by...
 
-Alice: Waiting for you to say it.
+Alice: Waiting for you to say it...
 
 Bob: Let's say it together...
 
 Alice, Bob: Reverse OT!
 
-Alice: (That's so chuunibyou...) Let's go back to reverse OT.
+Alice: (That's so childish...) Let's go back to reverse OT.
 
 Bob: Reverse OT.
 
@@ -119,7 +119,7 @@ Bob: Okay. Initially, I want to receive message0 or message1 from you, and I use
 
 I first randomly generate a bit T that you don't know and put it in the upper box, then calculate T⊕r and put it in the lower box.
 
-Alice: Then I randomly generate a bit s that you don't know. I use s and your reverse OT.
+Alice: Then I randomly generate a bit s that you don't know. I use s to do a reverse OT with you.
 
 Although I don't know your r, the effect is that I will get T or T⊕s depending on r. I put the result in the upper box Q.
 
@@ -161,7 +161,7 @@ Alice: Let's look at the program first, it's like this:
 
 Bob: Here, for each r, I generate corresponding T and T⊕r. Because each layer uses the same s for selection, you can use s to vertically select an entire column each time.
 
-Alice: Because the T and T⊕r you prepare for each layer are based on the r of that layer, and Q is also my reverse OT using s, so each layer is also (T, T⊕s) or (T⊕s, T).
+Alice: Because the T and T⊕r you prepare for each layer are based on the r of that layer, and Q is also my reverse OT result with s, so each layer is also (T, T⊕s) or (T⊕s, T).
 
 Bob: Yes, I've checked each layer, and T does appear in the position pointed to by r.
 
