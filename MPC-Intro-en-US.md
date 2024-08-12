@@ -4,6 +4,8 @@ The following is a summary of my reading of the book [A Pragmatic Introduction t
 
 The problem MPC aims to address is: If a function requires inputs from multiple people to be calculated, how do we design a computation method (protocol) that doesn't leak more information about the inputs than what is revealed by the function output?
 
+## Before there were protocols
+
 First, it's important to note that the function output does leak information.
 
 For example, if another person and I calculate `f(x, y) = x + y` together, and I know the answer s and my input x, I can immediately obtain the other person's y by calculating s - x.
@@ -12,13 +14,19 @@ For instance, if another person and I calculate `f(x, y) = (x + y) % 2` together
 
 As mentioned earlier, besides the information leaked by the answer itself, our designed protocol should not leak any additional information.
 
+## Ideal v.s. Real
+
 In an ideal world, we could find a trusted party who won't leak secrets. Everyone would secretly give their input to the trusted party, who would then give the calculated result of f to everyone.
 
 However, in the real world we live in, the cost of finding a trusted party is very high. So we want to establish protocols that allow parties to achieve the effect of calculating f as in the ideal world, without relying on a trusted party.
 
 ![alt text](images/ideal-real.png)
 
+## Generic v.s. Custom
+
 The book introduces some generic protocols that can handle various functions using the same approach. Additionally, for some f, custom, more efficient protocols can be designed based on their specific characteristics.
+
+## Adversary Models: "semi-honest" v.s. "malicious"
 
 Furthermore, when designing protocols, we need to pay attention to the so-called "adversary model". In other words: How "bad" are the people participating in these protocols?
 

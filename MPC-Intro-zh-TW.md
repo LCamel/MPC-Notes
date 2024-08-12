@@ -12,13 +12,19 @@ MPC 想要處理的問題是: 如果有個 function 需要來自多個人的 inp
 
 就像前面說的, 除了答案本身洩漏的資訊之外, 我們的設計的 protocol 不能再洩漏更多資訊.
 
+## Ideal v.s. Real
+
 在一個理想的世界裡, 我們可以另外找一個不會洩密的 trusted party, 每個人都秘密地把自己的 input 交給 trusted party, 再由他把 f 的計算結果交給大家.
 
 但在我們所處的現實世界中, 找一個 trusted party 的成本很高. 所以我們想要建立一些 protocol, 讓 party 之間不依賴 trusted party, 卻能達到像在理想世界中計算 f 的效果.
 
 ![alt text](images/ideal-real.png)
 
+## Generic v.s. Custom
+
 書中介紹了一些 generic 的 protocol, 可以用一樣的手法處理各種 function. 另外有些 f 也可以針對其特性設計出 custom 的, 更有效率的 protocol.
+
+## Adversary Models: "semi-honest" v.s. "malicious"
 
 另外在設計 protocol 時, 我們要注意所謂的 "adversary model". 或者說: 參與這些 protocol 的人有多壞?
 
@@ -33,7 +39,3 @@ MPC 想要處理的問題是: 如果有個 function 需要來自多個人的 inp
 第二, 有方法可以把一個在 semi-honest model 下安全的 protocol 強化成 malicous model 下也安全的 protocol, 需要加上防弊的措施, 不過也會降低一些效率. (詳細作法我還沒讀到)
 
 以下我會介紹一些在 semi-honest model 下的 protocol, 以及這些 protocol 所需要的 primitives.
-
-
-
-
