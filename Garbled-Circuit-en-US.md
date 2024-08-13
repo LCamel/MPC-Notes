@@ -12,7 +12,7 @@ The idea of Garbled Circuit is: we first express `f(x, y)` as a boolean circuit.
 
 ## Articles and Visualization Tools
 
-I feel that when reading the book Pragmatic MPC, many times you see text like the above: a paragraph correctly describes the protocol, gives a high-level overview, but <mark>still requires looking at the actual implementation to gain insights</mark>.
+I feel that when reading the book Pragmatic MPC, many times you see text like the above: a paragraph correctly describes the protocol, gives a high-level overview, but <mark>still requires looking into the details to gain insights</mark>.
 
 I wrote a [long article without prerequisites](story-en-US.md), accompanied by visualization tools, introducing the steps and motivations of garbled circuits. In addition to providing "how it is", I also wrote some thoughts on "why it is this way". We first look at it from the evaluator's perspective in reverse, what exactly is "computation"? How is it different from a regular boolean circuit? Then we look back at what the generator should provide. Why encrypt? Why shuffle? Finally, we introduce the concept of oblivious transfer.
 
