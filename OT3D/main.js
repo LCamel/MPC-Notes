@@ -3,13 +3,13 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {Text} from 'troika-three-text';
 
 const MATERIALS = {
-    0: new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF0000 }),
-    1: new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x0000FF }),
-    undefined: new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.02, depthWrite: false }),
+    0: new THREE.MeshPhongMaterial({ color: new THREE.Color(0x101010) }),
+    1: new THREE.MeshPhongMaterial({ color: new THREE.Color(0xffffff) }),
+    undefined: new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, color: 0x888888, transparent: true, opacity: 0.02, depthWrite: false }),
 };
 const WRAPPING_BOX_MATERIALS = [
-    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
-    new THREE.MeshPhongMaterial({ side: THREE.DoubleSide, color: 0x8888FF, transparent: true, opacity: 0.3 }),
+    new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, color: 0xFF8888, transparent: true, opacity: 0.3 }),
+    new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, color: 0x8888FF, transparent: true, opacity: 0.3 }),
 ];
 
 // A Cell contains a value and a cube.
@@ -52,7 +52,6 @@ class OT3D {
         let scene, camera, renderer;
 
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x202020);
 
         let W = container.clientWidth;
         let H = container.clientHeight;
@@ -72,23 +71,16 @@ class OT3D {
         renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setSize(W, H);
         container.appendChild(renderer.domElement);
-        {
-            let axesHelper = new THREE.AxesHelper(5);
-            // scene.add(axesHelper);
-        }
-        {
-            // ref: https://github.com/mrdoob/three.js/blob/master/examples/webgl_clipping.html
-            scene.add(new THREE.AmbientLight(0xcccccc));
 
-            const spotLight = new THREE.SpotLight(0xffffff, 100);
-            spotLight.angle = Math.PI / 5;
-            spotLight.penumbra = 0.2;
-            spotLight.position.set(10, 15, 15);
-            scene.add(spotLight);
+        // scene.add(new THREE.AxesHelper(5)); // debug: RGB XYZ
 
-            const dirLight = new THREE.DirectionalLight(0x55505a, 20);
-            dirLight.position.set(0, 3, 0);
-            scene.add(dirLight);
+        scene.background = new THREE.Color(0x303040);
+        scene.add( new THREE.HemisphereLight( 0xaaaaaa, 0x444444, 2 ) );
+        {
+            const light = new THREE.DirectionalLight( 0xffffff, 3 );
+            light.position.set( -3, 8, 5 );
+            scene.add( light );
+            // scene.add( new THREE.DirectionalLightHelper( light, 1 ) ); // debug
         }
 
         const animate = () => {
@@ -271,7 +263,8 @@ class OT3D {
         myText.text = str;
         myText.fontSize = 0.5;
         myText.position.set(x, y, z);
-        myText.color = 0x9966FF;
+        //myText.color = 0x9966FF;
+        myText.color = 0xFFFFFF;
 
         myText.rotation.set(-Math.PI / 2, 0, 0);
 
