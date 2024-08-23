@@ -12,9 +12,9 @@ OT Extension 的想法是: 能不能用少量的貴的 public key 的 OT (base O
 
 <img src="images/OT-extension-2.png" alt="OT-extension-2.png" class="to-be-resized">
 
-像上面的圖中, 左邊是 Sender 端. 我們想在其中 5 個由 Receiver 指定的位置上 (01101) 製造出 5 把 key, 每把 key 有 3 個 bit.
+像上面的圖中, 左邊是 Sender 端. 我們想在其中 5 個由 Receiver 指定的位置上 (01101) 製造出 <mark>5 把 key, 每把 key 有 3 個 bit</mark>.
 
-而實作上我們在右邊 Receiver 端做了 3 次 reverse OT, 每次傳垂直的 5 個 bit.
+而實作上我們在右邊 Receiver 端做了 <mark>3 次 reverse OT, 每次傳垂直的 5 個 bit</mark>.
 
 這個 `(5, 3) -> (3, 5)` 的轉換, 就是節省 public key opeartion 次數的關鍵.
 

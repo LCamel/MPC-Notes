@@ -12,9 +12,9 @@ As long as we can generate many such keys in large quantities and cheaply, we ca
 
 <img src="images/OT-extension-2.png" alt="OT-extension-2.png" class="to-be-resized">
 
-As shown in the image above, the left side is the Sender's end. We want to generate 5 keys at 5 positions specified by the Receiver (01101), with each key having 3 bits.
+As shown in the image above, the left side is the Sender's end. We want to generate <mark>5 keys</mark> at 5 positions specified by the Receiver (01101), with each key having <mark>3 bits</mark>.
 
-In practice, we perform 3 reverse OTs on the right side of the Receiver, transmitting 5 vertical bits each time.
+In practice, we perform <mark>3 reverse OTs</mark> on the right side of the Receiver, transmitting <mark>5 vertical bits</mark> each time.
 
 This `(5, 3) -> (3, 5)` transformation is the key to saving the number of public key operations.
 
