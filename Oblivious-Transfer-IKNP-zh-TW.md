@@ -25,7 +25,7 @@ OT Extension 的想法是: 能不能用少量的貴的 public key 的 OT (base O
 工具的 source code 在[這裡](https://github.com/LCamel/MPC-Notes/tree/main/OT3D). MIT license, 歡迎使用.
 
 <script>
-function resizeImg(i) { i.style.width = (i.naturalWidth * 0.75) + "px"; }
+function resizeImg(i) { i.style.width = (i.naturalWidth * 0.50) + "px"; }
 function resizeAllImg() { document.querySelectorAll(".to-be-resized").forEach(resizeImg); }
 window.addEventListener("load", resizeAllImg);
 </script>

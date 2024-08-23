@@ -25,7 +25,7 @@ A standalone tool demonstration is available [here](https://lcamel.github.io/MPC
 The source code for the tool is [here](https://github.com/LCamel/MPC-Notes/tree/main/OT3D). MIT license, feel free to use.
 
 <script>
-function resizeImg(i) { i.style.width = (i.naturalWidth * 0.75) + "px"; }
+function resizeImg(i) { i.style.width = (i.naturalWidth * 0.50) + "px"; }
 function resizeAllImg() { document.querySelectorAll(".to-be-resized").forEach(resizeImg); }
 window.addEventListener("load", resizeAllImg);
 </script>

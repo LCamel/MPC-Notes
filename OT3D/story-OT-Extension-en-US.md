@@ -131,7 +131,7 @@ Bob: Although I know T, I don't know T⊕s, so I can only decrypt one of them, w
 
 Alice: Let me write a program...
 
-Alice: Alright, it's like this. The left side is me, the right side is you. Red is 0, blue is 1:
+Alice: Alright, it's like this. The left side is me, the right side is you. Black is 0, white is 1:
 
 {% include_relative 1D.html %}
 
