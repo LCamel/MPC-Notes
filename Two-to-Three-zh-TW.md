@@ -61,12 +61,12 @@ C 收到 a3 b3, 計算 ABC3 = a3 + b3 + c3, 公開給大家.
 參考資料:
 
 <a href="https://www.youtube.com/watch?v=XA_4dzs1Zys#t=11m22s">
-Secure Multi Party Computation part 1- The BGW Protocol - Gilad Asharov
+Secure Multi Party Computation part 1- The BGW Protocol - Gilad Asharov<br>
 <img src="images/Two-To-Three-ref1.png" class="to-be-resized">
 </a>
 
 <a href="https://www.youtube.com/watch?v=Li2QJ8yImoY#t=2m20s">
-January 2021 CACM, Secure Mulitparty Computation
+January 2021 CACM, Secure Mulitparty Computation<br>
 <img src="images/Two-To-Three-ref2.png" class="to-be-resized">
 </a>
 

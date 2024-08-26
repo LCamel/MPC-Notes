@@ -60,12 +60,12 @@ Next, let's look at a protocol that can handle general problems with more than t
 References:
 
 <a href="https://www.youtube.com/watch?v=XA_4dzs1Zys#t=11m22s">
-Secure Multi Party Computation part 1- The BGW Protocol - Gilad Asharov
+Secure Multi Party Computation part 1- The BGW Protocol - Gilad Asharov<br>
 <img src="images/Two-To-Three-ref1.png" class="to-be-resized">
 </a>
 
 <a href="https://www.youtube.com/watch?v=Li2QJ8yImoY#t=2m20s">
-January 2021 CACM, Secure Mulitparty Computation
+January 2021 CACM, Secure Mulitparty Computation<br>
 <img src="images/Two-To-Three-ref2.png" class="to-be-resized">
 </a>
 
