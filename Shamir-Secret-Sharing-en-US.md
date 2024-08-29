@@ -52,7 +52,7 @@ Because we're only interested in P(x) when x = 0, we can calculate (3, -3, 1) in
 
 ## A Property That May Not Always Be Used
 
-Since we choose the secret to be at x = 0, p = P(0) = the constant term coefficient of the polynomial P.
+Since we choose the secret to be at x = 0, p = P(0) = the constant term of polynomial P.
 
 ## Degree
 
@@ -113,9 +113,17 @@ During this process, A, B, and C don't need to communicate with each other. They
 
 And because they don't need to communicate with each other, this calculation is very cheap.
 
+# Degree (again)
+
+The above three calculations [c * p], [p + q], and [ap + bq + cr + ds] do not increase the required degree of the polynomial passing through the shares.
+
+For example, if the degree of the two polynomials passing through [p] and [q] is 1, then the degree of the polynomial passing through the calculated [p+q] also only needs to be 1. There's no need to use a quadratic curve.
+
+# Next Step
+
 Next, let's look at how the BGW protocol utilizes Shamir secret sharing.
 
 ----
 ## Postscript
 
-Originally, the Lagrange interpolation formula was complex, but after setting x = 0, 1, 2, 3, it suddenly became a simple weighted sum. This is similar to the Chinese Remainder Theorem. (The two methods are inherently similar)
+Originally, the Lagrange interpolation formula was more complex, but after setting x = 0, 1, 2, 3, it suddenly became a simple weighted sum. This is similar to the Chinese Remainder Theorem. (The two methods are inherently similar)

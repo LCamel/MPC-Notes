@@ -52,7 +52,7 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 
 ## 不一定會用到的性質
 
-由於我們選擇 secret 在 x = 0 的位置上, 所以 p = P(0) = 多項式 P 的常數項係數.
+由於我們選擇 secret 在 x = 0 的位置上, 所以 p = P(0) = 多項式 P 的常數項.
 
 ## Degree
 
@@ -112,6 +112,14 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 <mark>也就是說, 我們設計 protocol 時, 可以要求 parties 計算 shares 的 weighted sum. (或說 linear combination)</mark>
 
 而且因為不用互相溝通, 所以這個計算很便宜.
+
+# Degree (again)
+
+上面的三個計算 [c * p] [p + q] [ap + bq + cr + ds] 都不會提高穿過 shares 的多項式所需的 degree.
+
+比方說, 如果穿過 [p] [q] 的兩個多項式的 degree 皆為 1, 則穿過算出來的 [p+q] 的多項式的 degree 也只需要 1. 不需要用二次曲線.
+
+# 下一步
 
 接著我們來看 BGW protocol 怎麼運用 Shamir secret sharing.
 
