@@ -21,7 +21,7 @@ secret = a1 ⊕ a2 ⊕ a3
 
 而 Shamir secret sharing 則是用通過 (0, secret) 的多項式上的一些點來表示.
 
-# 拆開
+## 拆開
 
 先給定每個 party 一個固定的 x 值. 比方說 A: 1, B: 2, C: 3.
 
@@ -34,7 +34,7 @@ p = P(0)   let p1 = P(1)   let p2 = P(2)   let p3 = P(3)
 
 我們用 `[]` 的符號來代表一組 shares. 這邊 [p] = (p1, p2, p3) .
 
-# 合併
+## 合併
 
 我們先用 Lagrange polynomial interpolation 從 p1 p2 p3 重建回 P:
 
@@ -47,6 +47,8 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 因為我們只對 x = 0 的 P(x) 有興趣, 所以可以先算出 (3, -3, 1). 這只和我們選取的 x = 1 2 3 有關, 和 p1 p2 p3 無關.
 
 <mark>也就是說, 從 p1 p2 p3 重建 secret p 可以是簡單的 weighted sum 計算. (或說 linear combination)</mark>
+
+<img src="images/Shamir-weighted-sum.gif">
 
 ## 不一定會用到的性質
 

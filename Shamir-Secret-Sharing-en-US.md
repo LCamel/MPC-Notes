@@ -21,7 +21,7 @@ secret = a1 ⊕ a2 ⊕ a3
 
 Shamir secret sharing, however, uses points on a polynomial that passes through (0, secret) to represent the secret.
 
-# Splitting
+## Splitting
 
 First, we assign a fixed x value to each party. For example, A: 1, B: 2, C: 3.
 
@@ -34,7 +34,7 @@ p = P(0)   let p1 = P(1)   let p2 = P(2)   let p3 = P(3)
 
 We use the `[]` notation to represent a set of shares. Here, [p] = (p1, p2, p3).
 
-# Combining
+## Combining
 
 We first use Lagrange polynomial interpolation to reconstruct P from p1, p2, p3:
 
@@ -47,6 +47,8 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 Because we're only interested in P(x) when x = 0, we can calculate (3, -3, 1) in advance. This only depends on our chosen x values (1, 2, 3) and is independent of p1, p2, p3.
 
 <mark>In other words, reconstructing the secret p from p1, p2, p3 can be a simple weighted sum calculation. (Or a linear combination)</mark>
+
+<img src="images/Shamir-weighted-sum.gif">
 
 ## A Property That May Not Always Be Used
 
