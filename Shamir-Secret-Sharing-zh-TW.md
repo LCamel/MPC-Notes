@@ -113,13 +113,13 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 
 而且因為不用互相溝通, 所以這個計算很便宜.
 
-# Degree (again)
+## Degree (again)
 
 上面的三個計算 [c * p] [p + q] [ap + bq + cr + ds] 都不會提高穿過 shares 的多項式所需的 degree.
 
 比方說, 如果穿過 [p] [q] 的兩個多項式的 degree 皆為 1, 則穿過算出來的 [p+q] 的多項式的 degree 也只需要 1. 不需要用二次曲線.
 
-# 下一步
+## 下一步
 
 接著我們來看 BGW protocol 怎麼運用 Shamir secret sharing.
 

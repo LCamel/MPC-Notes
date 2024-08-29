@@ -113,13 +113,13 @@ During this process, A, B, and C don't need to communicate with each other. They
 
 And because they don't need to communicate with each other, this calculation is very cheap.
 
-# Degree (again)
+## Degree (again)
 
 The above three calculations [c * p], [p + q], and [ap + bq + cr + ds] do not increase the required degree of the polynomial passing through the shares.
 
 For example, if the degree of the two polynomials passing through [p] and [q] is 1, then the degree of the polynomial passing through the calculated [p+q] also only needs to be 1. There's no need to use a quadratic curve.
 
-# Next Step
+## Next Step
 
 Next, let's look at how the BGW protocol utilizes Shamir secret sharing.
 
