@@ -1,13 +1,3 @@
-<script>
-MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  }
-};
-</script>
-<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
-
 # Shamir's Secret Sharing
 
 現在有 A B C 三個 party.
@@ -127,3 +117,13 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 ## 後記
 
 本來 Lagrange interpolation 的式子比較複雜, 但在選定 x = 0 1 2 3 之後, 一下子變成簡單的 weighted sum. 這點和中國餘式定理是一樣的. (兩個作法本來就很像)
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>

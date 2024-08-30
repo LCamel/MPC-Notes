@@ -1,13 +1,3 @@
-<script>
-MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  }
-};
-</script>
-<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
-
 # Shamir's Secret Sharing
 
 There are three parties: A, B, and C.
@@ -127,3 +117,13 @@ Next, let's look at how the BGW protocol utilizes Shamir's secret sharing.
 ## Postscript
 
 Originally, the Lagrange interpolation formula was more complex, but after setting x = 0, 1, 2, 3, it suddenly became a simple weighted sum. This is similar to the Chinese Remainder Theorem. (The two methods are inherently similar)
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
