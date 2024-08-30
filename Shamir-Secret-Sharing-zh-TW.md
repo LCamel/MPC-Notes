@@ -38,7 +38,8 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 
 <mark>也就是說, 從 p1 p2 p3 重建 secret p 可以是簡單的 weighted sum 計算. (或說 linear combination)</mark>
 
-<video src="images/Shamir-weighted-sum.mp4" controls autoplay="true" muted loop></video>
+<video src="images/Shamir-weighted-sum.mp4" controls autoplay="true" muted loop></video><br>
+[[geogebra]](https://www.geogebra.org/calculator/a55ddkcg)
 
 ## 不一定會用到的性質
 
