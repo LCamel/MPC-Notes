@@ -8,7 +8,7 @@ MathJax = {
 <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
 </script>
 
-# Shamir Secret Sharing
+# Shamir's Secret Sharing
 
 There are three parties: A, B, and C.
 
@@ -19,7 +19,7 @@ secret = a1 + a2 + a3
 secret = a1 ⊕ a2 ⊕ a3
 ```
 
-Shamir secret sharing, however, uses points on a polynomial that passes through (0, secret) to represent the secret.
+Shamir's secret sharing, however, uses points on a polynomial that passes through (0, secret) to represent the secret.
 
 ## Splitting
 
@@ -56,7 +56,7 @@ Since we choose the secret to be at x = 0, p = P(0) = the constant term of polyn
 
 ## Degree
 
-Unlike the previous additive sharing, Shamir secret sharing requires considering an additional parameter, which is the degree of the polynomial.
+Unlike the previous additive sharing, Shamir's secret sharing requires considering an additional parameter, which is the degree of the polynomial.
 
 Taking a curve with deg() = 2 as an example. Three points can determine a quadratic curve. So leaking 2 points is fine, but leaking 3 points would reveal the secret.
 
@@ -121,7 +121,7 @@ For example, if the degree of the two polynomials passing through [p] and [q] is
 
 ## Next Step
 
-Next, let's look at how the BGW protocol utilizes Shamir secret sharing.
+Next, let's look at how the BGW protocol utilizes Shamir's secret sharing.
 
 ----
 ## Postscript

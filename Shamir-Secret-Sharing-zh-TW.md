@@ -8,7 +8,7 @@ MathJax = {
 <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
 </script>
 
-# Shamir Secret Sharing
+# Shamir's Secret Sharing
 
 現在有 A B C 三個 party.
 
@@ -19,7 +19,7 @@ secret = a1 + a2 + a3
 secret = a1 ⊕ a2 ⊕ a3
 ```
 
-而 Shamir secret sharing 則是用通過 (0, secret) 的多項式上的一些點來表示.
+而 Shamir's secret sharing 則是用通過 (0, secret) 的多項式上的一些點來表示.
 
 ## 拆開
 
@@ -56,7 +56,7 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 
 ## Degree
 
-不同於前面的 additive sharing, Shamir secret sharing 需要多考慮一個參數, 就是 polynomial 的 degree.
+不同於前面的 additive sharing, Shamir's secret sharing 需要多考慮一個參數, 就是 polynomial 的 degree.
 
 以 deg() = 2 的曲線為例. 3 個點可以決定 2 次曲線. 所以洩漏 2 個點沒有關係, 洩漏 3 個點就洩漏 secret 了.
 
@@ -121,7 +121,7 @@ $$p = P(0) = 3 p1 + (-3) p2 + 1 p3$$
 
 ## 下一步
 
-接著我們來看 BGW protocol 怎麼運用 Shamir secret sharing.
+接著我們來看 BGW protocol 怎麼運用 Shamir's secret sharing.
 
 ----
 ## 後記
