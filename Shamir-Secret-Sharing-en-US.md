@@ -38,7 +38,7 @@ Because we're only interested in P(x) when x = 0, we can calculate (3, -3, 1) in
 
 <mark>In other words, reconstructing the secret p from p1, p2, p3 can be a simple weighted sum calculation. (Or a linear combination)</mark>
 
-<img src="images/Shamir-weighted-sum.gif">
+<video src="images/Shamir-weighted-sum.mp4" controls autoplay="true" muted loop></video>
 
 ## A Property That May Not Always Be Used
 
