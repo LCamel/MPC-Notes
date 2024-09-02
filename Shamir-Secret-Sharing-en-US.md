@@ -61,15 +61,18 @@ For instance, with 3 parties, we can only determine a quadratic curve. A cubic c
 
 Next, let's look at some operations we'll use when designing protocols.
 
-## From c, [p] to [c * p]
+## From c, [p] to [c + p] and [c * p]
 
 If A, B, and C currently have shares of [p], and they all receive a constant c.
 
-Can we let A, B, and C obtain shares of [c * p]?
+Can we let A, B, and C obtain shares of [c + p]?
 
 Yes, we can.
 
-Each party just needs to multiply their share by c, and this new set of shares (c * p1, c * p2, c * p3) becomes a set of shares for [c * p].
+Each party just needs to add c to their share, and this new set of shares (c + p1, c + p2, c + p3) becomes a set of shares for [c + p].<br>
+(Please prove this yourself using the polynomial c + P)
+
+(c * p1, c * p2, c * p3) is a set of shares for [c * p].<br>
 (Please prove this yourself using the polynomial c * P)
 
 During this process, A, B, and C don't need to communicate with each other. They also don't need to know the value of p.
@@ -82,7 +85,7 @@ Can we let A, B, and C obtain shares of [p + q]?
 
 Yes, we can.
 
-Each party just needs to add their two numbers together, and this new set of shares (p1 + q1, p2 + q2, p3 + q3) becomes a set of shares for [p + q].
+Each party just needs to add their two numbers together, and this new set of shares (p1 + q1, p2 + q2, p3 + q3) becomes a set of shares for [p + q].<br>
 (Please prove this yourself using the polynomial P + Q)
 
 During this process, A, B, and C don't need to communicate with each other. They also don't need to know the values of p and q.
@@ -95,7 +98,7 @@ Can we let A, B, and C obtain shares of [ap + bq + cr + ds]?
 
 Yes, we can.
 
-We can achieve this by repeatedly using the two properties mentioned above.
+We can achieve this by repeatedly using the two properties mentioned above.<br>
 (Or consider the polynomial aP + bQ + cR + dS)
 
 During this process, A, B, and C don't need to communicate with each other. They also don't need to know the values of p, q, r, s.
@@ -106,9 +109,9 @@ And because they don't need to communicate with each other, this calculation is 
 
 ## Degree (again)
 
-The above three calculations [c * p], [p + q], and [ap + bq + cr + ds] do not increase the required degree of the polynomial passing through the shares.
+The above calculations [c + p], [c * p], [p + q], and [ap + bq + cr + ds] do not increase the required degree of the polynomial passing through the shares.
 
-For example, if the degree of the two polynomials passing through [p] and [q] is 1, then the degree of the polynomial passing through the calculated [p+q] also only needs to be 1. There's no need to use a quadratic curve.
+For example, assuming [p] and [q] can be passed through by linear functions (degree 1). Then the calculated [p + q] also only needs a linear function to pass through, not a quadratic curve.
 
 ## Next Step
 
