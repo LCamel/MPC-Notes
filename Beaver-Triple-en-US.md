@@ -47,6 +47,7 @@ Next, we roughly list the equations:
      = [ab + ae + db + de]
      <= [ab] + [ae] + [db] + [de]
      <= [c] + e[a] + d[b] + de
+              ~~~~~~~~~~~~~~~~ correction term
 ```
 Then we work backwards. We can reconstruct [xy] at the top of the equation from the bottom equation.<br>
 [(Please refer to the previous article)](./Shamir-Secret-Sharing-en-US.md#from-a-b-c-d-p-q-r-s-to-ap--bq--cr--ds)
@@ -67,6 +68,6 @@ During offline time, we prepare some shares calculated from random numbers that 
 
 When the input comes online, we then correct the error.
 
-Since the calculation of the error term e[a] + d[b] + de is relatively cheap, the online cost is significantly reduced.
+Since the calculation of the correction term `e[a] + d[b] + de` is relatively cheap, the online cost is significantly reduced.
 
 As for how to efficiently mass-produce Beaver Triples, you'll need to look at other reference materials.

@@ -47,6 +47,7 @@ x   *   y   =  ?  (online, local)
      = [ab + ae + db + de]
      <= [ab] + [ae] + [db] + [de]
      <= [c] + e[a] + d[b] + de
+              ~~~~~~~~~~~~~~~~ correction term
 ```
 然後反過來做. 就可以從最下面的算式組回算式最上面的 [xy].<br>
 [(請參考前文)](./Shamir-Secret-Sharing-zh-TW.md#from-a-b-c-d-p-q-r-s-to-ap--bq--cr--ds)
@@ -67,6 +68,6 @@ Offline 時我們準備一些和 input 完全無關的, 用 random 算出的 sha
 
 Online 時 input 來了, 我們再去修正誤差.
 
-由於誤差項 e[a] + d[b] + de 的計算相對便宜, 所以 online 的成本就大幅降低了.
+由於 correction term `e[a] + d[b] + de` 的計算相對便宜, 所以 online 的成本就大幅降低了.
 
 至於怎麼有效率的大量製造 Beaver Triple, 要看其他的參考資料.
