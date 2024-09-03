@@ -20,7 +20,7 @@ We assume there's a cheap broadcast method available.
 
 Let's see how these assumptions help us compute multiplication gates.
 
-Offline, everyone gets [a] [b] [c].
+Offline, everyone gets [a] [b] [c].<br>
 Now online, everyone gets [x] [y], and we want everyone to hold [xy].
 
 ```
@@ -30,15 +30,15 @@ d       e         (online, broadcast)
 =       =
 x   *   y   =  ?  (online, local)
 ```
-We first let each party jointly compute two public numbers d = x - a and e = y - b.
-How is this done?
-Everyone can get [x - a], which is [d], using their [x] and [a].
-Everyone can get [y - b], which is [e], using their [y] and [b].
-Everyone broadcasts their shares of [d] [e] to all parties.
+We first let each party jointly compute two public numbers d = x - a and e = y - b.<br>
+How is this done?<br>
+Everyone can get [x - a], which is [d], using their [x] and [a].<br>
+Everyone can get [y - b], which is [e], using their [y] and [b].<br>
+Everyone broadcasts their shares of [d] [e] to all parties.<br>
 Each person can then reconstruct the numbers d and e.
 
-Suppose A holds shares a1, b1, c1, x1, y1.
-Then A broadcasts two numbers: d1 = x1 - a1 and e1 = y1 - b1.
+Suppose A holds shares a1, b1, c1, x1, y1.<br>
+Then A broadcasts two numbers: d1 = x1 - a1 and e1 = y1 - b1.<br>
 After everyone sends out two deltas, everyone can reconstruct the numbers d and e from the shares.
 
 Next, we roughly list the equations:

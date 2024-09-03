@@ -20,7 +20,7 @@ Beaver Triple 是一種技巧, 讓 parties 可以在真正的 input 來之前 of
 
 我們來看上面的這些假設如何幫助我們計算乘法 gate.
 
-Offline 大家先拿到 [a] [b] [c].
+Offline 大家先拿到 [a] [b] [c].<br>
 現在 online 大家拿到 [x] [y], 想要讓大家持有 [xy].
 
 ```
@@ -30,15 +30,15 @@ d       e         (online, broadcast)
 =       =
 x   *   y   =  ?  (online, local)
 ```
-我們先讓每個 party 共同求出 d = x - a 和 e = y - b 兩個公開數字.
-怎麼做到呢?
-大家用手上的 [x] [a] 可以得到 [x - a] 也就是 [d].
-大家用手上的 [y] [b] 可以得到 [y - b] 也就是 [e].
-大家透過 broadcast 公布各自的 [d] [e] 的 shares 給所有人.
+我們先讓每個 party 共同求出 d = x - a 和 e = y - b 兩個公開數字.<br>
+怎麼做到呢?<br>
+大家用手上的 [x] [a] 可以得到 [x - a] 也就是 [d].<br>
+大家用手上的 [y] [b] 可以得到 [y - b] 也就是 [e].<br>
+大家透過 broadcast 公布各自的 [d] [e] 的 shares 給所有人.<br>
 每個人都能 reconstruct 出 d e 兩個數字.
 
-假設 A 手上的 shares 為 a1, b1, c1, x1, y1.
-則 A broadcast 出 d1 = x1 - a1 和 e1 = y1 - b1 兩個數字.
+假設 A 手上的 shares 為 a1, b1, c1, x1, y1.<br>
+則 A broadcast 出 d1 = x1 - a1 和 e1 = y1 - b1 兩個數字.<br>
 每個人都送出兩個 delta 後, 每個人都能從 shares reconstruct 出 d e 兩個數字.
 
 再來我們粗略的列式
