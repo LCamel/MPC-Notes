@@ -38,8 +38,7 @@ introducing Yao's Garbled Circuit and Oblivious Transfer. I spent about 8 days c
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html?startFrom=evaluator&w0=0&w3=1">
 Garbled Circuit - Evaluator<br>
 <img src="images/evaluator.png" alt="evaluator.png" width="25%">
-</a>
-<br/>
+</a> <br/>
 <br/>
 <a href="https://lcamel.github.io/MPC-Notes/garbled-circuit.html">
 Garbled Circuit - Generator<br>
@@ -99,3 +98,25 @@ Path-ORAM (no article)<br>
 <br>
 <br>
 I hope these programs provide the best visualization for these algorithms.
+
+
+
+## Study Notes
+[Introduction](./MPC-Intro-en-US.md)<br>
+[Garbled Circuit](./Garbled-Circuit-en-US.md) -- [Garbled Circuit and Oblivious Transfer (story)](./story-en-US.md)<br>
+[Garbled Circuit Optimization: Point-and-Permute](./Garbled-Circuit-Point-and-Permute-en-US.md) -- [Point-and-Permute (story)](./story-point-and-permute-en-US.md)<br>
+[Garbled Circuit Optimization: Garbled Row Reduction (GRR3)](./Garbled-Circuit-Garbled-Row-Reduction-GRR3-en-US.md)<br>
+[Garbled Circuit Optimization: FreeXOR](./Garbled-Circuit-FreeXOR-en-US.md)<br>
+[Garbled Circuit Optimization: Half Gates](./Garbled-Circuit-Half-Gates-en-US.md)<br>
+[Oblivious Transfer](./Oblivious-Transfer-en-US.md)<br>
+[IKNP OT Extension](./Oblivious-Transfer-IKNP-en-US.md) -- [IKNP OT Extension (story)](./OT3D/story-OT-Extension-en-US.md)<br>
+[From Two to Three](./Two-to-Three-en-US.md)<br>
+[GMW / GMW87](./GMW-en-US.md)<br>
+[BGW](./BGW-en-US.md)<br>
+[Shamir's Secret Sharing](./Shamir-Secret-Sharing-en-US.md)<br>
+[Beaver Triple](./Beaver-Triple-en-US.md)<br>
+(draft) [Beaver Triple Generation: The MASCOT Way](./Beaver-Triple-Generation-MASCOT-en-US.md)<br>
+[BMR](./BMR-en-US.md)<br>
+[PRF / OPRF / PSI](./PRF-OPRF-PSI-en-US.md)<br>
+[PSI by PSSZ](./PSI-PSSZ-en-US.md)<br>
+[Permutation Network](./Permutation-Network-en-US.md)<br>
