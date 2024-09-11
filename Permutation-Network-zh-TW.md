@@ -76,5 +76,5 @@ b2 = a2 XOR   (p AND (a2 XOR a1))
 我做了一個[短片](https://www.youtube.com/watch?v=9mdrYD_ZBvY), 可以參考看看.
 
 <a href="https://www.youtube.com/watch?v=9mdrYD_ZBvY">
-<img src="https://img.youtube.com/vi/9mdrYD_ZBvY/maxresdefault.jpg">
+<img src="https://img.youtube.com/vi/9mdrYD_ZBvY/maxresdefault.jpg" width="400">
 </a>

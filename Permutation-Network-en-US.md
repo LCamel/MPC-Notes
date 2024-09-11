@@ -72,8 +72,8 @@ It's recommended to manually calculate using the example from the original paper
 2 7 6 8 4 3 1 5
 ```
 
-I made a [short video](https://www.youtube.com/watch?v=9mdrYD_ZBvY) that you can refer to.
+I made a [short video](https://www.youtube.com/watch?v=9mdrYD_ZBvY):
 
 <a href="https://www.youtube.com/watch?v=9mdrYD_ZBvY">
-<img src="https://img.youtube.com/vi/9mdrYD_ZBvY/maxresdefault.jpg">
+<img src="https://img.youtube.com/vi/9mdrYD_ZBvY/maxresdefault.jpg" width="400">
 </a>
