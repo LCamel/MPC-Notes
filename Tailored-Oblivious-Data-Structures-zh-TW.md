@@ -1,4 +1,4 @@
-# Tailered Oblivious Data Structures
+# Tailored Oblivious Data Structures
 
 ## Oblivious Data Structure
 
@@ -45,7 +45,8 @@ accesses, should not leak information about both the op-code and the operand.
 1 1 1 1 1    2 2 2 2 2    4 4 4 4 4    8 8 8 8 8 ...
 ```
 
-![Oblivious-Stack.png](./images/Oblivious-Stack.png)
+![Oblivious-Stack.png](./images/Oblivious-Stack.png)<br>
+(圖出自 [The Book](./The-Book-zh-TW.md))
 
 每個 level 保持兩次修改不會出問題. 然後每兩次修改安排一次跨 level 的 shift.<br>
 如果兩次修改後 level 0 的個數大於 3, 會無法再接受兩次 push. 所以會用 shift 把資料 right shift 到 level 1.<br>

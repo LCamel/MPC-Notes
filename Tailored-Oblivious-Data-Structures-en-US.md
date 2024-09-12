@@ -1,4 +1,4 @@
-# Tailered Oblivious Data Structures
+# Tailored Oblivious Data Structures
 
 ## Oblivious Data Structure
 
@@ -45,7 +45,8 @@ The design used here is as shown in the figure. It's divided into levels. The pu
 1 1 1 1 1    2 2 2 2 2    4 4 4 4 4    8 8 8 8 8 ...
 ```
 
-![Oblivious-Stack.png](./images/Oblivious-Stack.png)
+![Oblivious-Stack.png](./images/Oblivious-Stack.png)<br>
+(The diagram comes from [The Book](./The-Book-en-US.md))
 
 Each level maintains that two modifications won't cause problems. Then a cross-level shift is arranged every two modifications.<br>
 If after two modifications, the number in level 0 is greater than 3, it won't be able to accept two more pushes. So a shift will be used to right shift the data to level 1.<br>
