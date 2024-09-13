@@ -320,7 +320,7 @@ async function access(op, a, data = "_") {
     await pause();
 
     highlightPositionValue(a, false);
-    setPosition(a, "🎲");
+    setPosition(a, "RND"); // "🎲"
     await pause();
 
     setPosition(a, randomPosition());
@@ -339,19 +339,25 @@ async function access(op, a, data = "_") {
     }
 
     let returnData = "default";
-    setMessage("read stash");
-    await pause();
     let sn = stashNode(a);
     if (sn) {
-        highlight(sn);
-        await pause();
         returnData = stashData(a);
     }
-    setMessage("read stash: " + returnData);
-    if (op != "write") {
-        highlightRemoveByClass("stashItem");
+    // here are the "read" animations.
+    // you can also show them for write operations. (somewhat distracting)
+    if (op == "read") {
+        setMessage("read stash");
+        await pause();
+        if (sn) {
+            highlight(sn);
+            await pause();
+        }
+        setMessage("read stash: " + returnData);
+        if (op != "write") { // ...
+            highlightRemoveByClass("stashItem");
+        }
+        await pause();
     }
-    await pause();
 
     if (op == "write") {
         setMessage("update stash");
