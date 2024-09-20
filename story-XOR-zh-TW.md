@@ -77,24 +77,8 @@ a   b   a⊕b
 0   0   0
 0   1   1
 1   0   1
-1   0   1
-1   1   0
 1   1   0
 ```
 P(a = 1 | a⊕b = 1) = P(a = 1)
 
 P(b = 1 | a⊕b = 1) = P(b = 1)
-
-## Selection
-
-因為
-```
-a ⊕ 0 = a
-a ⊕ 1 = NOT a
-```
-所以計算 a⊕b 也可以看成在 pair (a, NOT a) 中用 b 當 index 去選
-```
-b = 0 選中 a
-b = 1 選中 NOT a
-```
-
