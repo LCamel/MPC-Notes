@@ -55,7 +55,7 @@ I think this is something to be cautious about.
 
 ## Path ORAM
 
-The concept of ORAM was first introduced in a 1990 paper by [Ostrovsky](https://web.cs.ucla.edu/~rafail/PUBLIC/index.html) alone. A 1996 journal paper co-authored with Goldreich is more commonly cited.
+The 1996 paper by Goldreich and Ostrovsky is a more frequently cited work.
 
 Here we introduce [Path ORAM](https://eprint.iacr.org/2013/280.pdf) proposed by Stefanov et al. in 2013. (Based on Shi's 2011 binary tree construction)
 

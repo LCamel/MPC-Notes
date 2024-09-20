@@ -55,7 +55,7 @@ Advasary 如果拿到一段 physical access sequence, 會無法有效地分辨�
 
 ## Path ORAM
 
-ORAM 的概念最早是 1990 年 [Ostrovsky](https://web.cs.ucla.edu/~rafail/PUBLIC/index.html) 一個人寫的 paper. 1996 年和 Goldreich 合寫的 journal paper 則是大家比較常引用的一篇.
+Goldreich 和 Ostrovsky 1996 的 paper 是比較常被 cite 的作品.
 
 這裡介紹 2013 年 Stefanov et al. 提出的 [Path ORAM](https://eprint.iacr.org/2013/280.pdf). (基於 2011 年 Shi 的 binary tree construction)
 
