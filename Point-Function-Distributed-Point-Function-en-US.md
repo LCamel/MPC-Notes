@@ -38,7 +38,7 @@ If we give the tables of f1 and f2 to two parties, we can expect f1(x) ⊕ f2(x)
 
 Looking at their own tables, these two parties won't know that originally only the point 5 had a non-zero value "10".
 
-## 2-Server Private Information Retrieval (PIR)
+## A 2-Server Secure Keyword Search Protocol
 
 Now we have a set `S = {x1, x2, ... , xn}`, copied in full to parties P1 and P2.<br>
 A user arrives.<br>

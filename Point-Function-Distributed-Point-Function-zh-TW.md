@@ -38,7 +38,7 @@ x  0   1   2   3   4   5   6   7
 
 這兩個 party 各自看著手上的 table, 不會知道原本只有在 5 這個點有一個不為 0 的 value "10".
 
-## 2-Server Private Information Retrieval (PIR)
+## A 2-Server Secure Keyword Search Protocol
 
 現在有一個 set `S = {x1, x2, ... , xn}`, 複製完整的兩份給 party P1 P2.<br>
 來了一個 user.<br>
