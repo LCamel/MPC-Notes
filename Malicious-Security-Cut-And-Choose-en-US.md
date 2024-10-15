@@ -47,7 +47,7 @@ To prevent a malicious evaluator, the generator can connect all the 0 labels of 
 
 ### Input Consistency (Generator)
 
-Here we introduce the concept of a 2-universal hash, used to describe a set of hash functions where each one is very unlikely to have collisions: For any given distinct inputs z1 and z2, if we randomly pick a single h from the hash functions, the chance of h(z1) = h(z2) is very small. As small as 1 / |range|. That is, when the range is very large, if the hash output values are the same, we consider the inputs to be the same.
+Here we introduce the concept of a 2-universal hash, used to describe a set of hash functions where each one is very unlikely to have collisions: For any given distinct inputs z1 and z2, if we randomly pick a single h from the hash functions, the chance of h(z1) = h(z2) is very small. As small as 1 / (size of range). That is, when the range is very large, if the hash output values are the same, we consider the inputs to be the same.
 
 Here we require the generator to first provide the input labels for each circuit. Then the evaluator picks a hash function. Use MPC to calculate the hash result of the generator's input values in each circuit. If all output values are the same, we believe the generator has given the same input values in each circuit.
 

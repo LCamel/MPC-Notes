@@ -47,7 +47,7 @@ Evaluator 對同一個 function 的多個選中的 circuits 會各 evaluate 一�
 
 ### Input Consistency (Generator)
 
-這邊引入一個 2-universal hash 的觀念, 用來形容一組每一個都很難有 collision 的 hash functions: 對於任何 given 的相異的 inputs z1 z2, 我們從 hash functions 中抽單一一個 h 出來, 則 h(z1) = h(z2) 的機會很小. 小到 1 / |range| 這麼小. 也就是當 range 很大時, 如果 hash output value 相同, 我們就當作 input 是相同的.
+這邊引入一個 2-universal hash 的觀念, 用來形容一組每一個都很難有 collision 的 hash functions: 對於任何 given 的相異的 inputs z1 z2, 我們從 hash functions 中抽單一一個 h 出來, 則 h(z1) = h(z2) 的機會很小. 小到 1 / (size of range) 這麼小. 也就是當 range 很大時, 如果 hash output value 相同, 我們就當作 input 是相同的.
 
 這邊我們要求 generator 先給出要給每一份 circuit 的 input labels. 然後 evaluator 抽一個 hash function. 用 MPC 在每一份 circuit 都另外計算 generator input values hash 出來的結果. 如果 output value 都相同, 我們就相信 generator 有在每一份 circuit 都給了一樣的 input values.
 
