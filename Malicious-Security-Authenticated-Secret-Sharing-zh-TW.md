@@ -173,31 +173,107 @@ d3 * x - t3 = 1 * 2 - 4 = -2
 
 假設 P2 P3 共謀, 想要欺騙 P1 x 是 3. 但 P2 P3 完全不知道 d1 t1 是多少, 因此很難去 cancel 3 * d1 - t1 的值. 也就騙不了 P1.
 
+我們也可以想成: 為了保護 x 拆出的 x1 x2 x3 不被更改, trusted party 弄出了 delta 和 delta * x. Trusted party 用兩種方法拆解 delta * x : 一種是拆 x, 一種是拆整個 delta * x. 這兩個方法拼起來的值應該要一樣. 而檢查是否一樣的方法並不是把兩個方向各自完整的 reconstruct 再比較(因為這樣會洩密), 而是看總 diff 是否為 0.
+
+又, 如果 open 的過程只對單一個 party (比方說 P1) 送訊息, 則可以只讓 P1 知道實際的 value, 而其他 party 保持不知道.
+
 ## 計算
+
+以下繼續用 mod 7 的 field.
+
+delta = 6 = d1 + d2 + d3 = 2 + 3 + 1
 
 如果 P1 P2 P3 有著 [2].
 ```
-     2   2 * 6
+     x   delta * x
+     2   6 * 2
 P1   5   3
 P2   1   5
 P3   3   4
 ```
 
-我們希望可以作一些運算.
+我們希望可以作一些運算, 且仍然保持可以 verify 的性質.
 
 先看怎麼 "* c" . (c 是 public constant)
 ```
-     2c   2c * 6
+     2c   6 * 2c
 P1   5c   3c
 P2   1c   5c
 P3   3c   4c
 ```
-這樣應該就讓 P1 P2 P3 持有 [2c] .
+這樣就得到了一份可 verify 的 [2 * c] .
 
 再看怎麼 "+ c" .
 ```
-     2+c   (2+c) * 6
-P1   5+c   3
-P2   1     5
-P3   3     4
+     2+c   6 * (2+c)
+P1   5+c   3 + 2c    <- (t1 + d1 * c)
+P2   1     5 + 3c    <- (t2 + d2 * c)
+P3   3     4 + 1c    <- (t3 + d3 * c)
 ```
+這樣就得到了一份可 verify 的 [2 + c] .
+
+如果
+```
+     x   delta * x     y   delta * y
+     2   6 * 2         3   6 * 3
+P1   5   3             4   2
+P2   1   5             5   1
+P3   3   4             1   1
+```
+
+想計算 x + y
+```
+     x + y         delta * (x + y)
+     2 + 3 = 5     6 * 2 + 6 * 3 = 2
+P1   5 + 4 = 2     3 + 2 = 5
+P2   1 + 5 = 6     5 + 1 = 6
+P3   3 + 1 = 4     4 + 1 = 5
+```
+這樣就得到了一份可 verify 的 [x + y] .
+
+想計算 x * y 需要 Beaver triple. 假設拿到一組 a * b = c . <br>
+P1 P2 P3 不知道 a b c 這三個數字.
+```
+x = a + d
+y = b + e
+x * y = (a + d) * (b + e)
+      = ab + ae + db + de
+      = c  + ae + db + de
+
+let var1 = x
+let var2 = y
+
+let var3 = a
+let var4 = b
+let var5 = c
+
+let var6 = d = x - a = var1 - var3
+open var6 
+let var7 = e = y - b = var2 - var4
+open var7
+
+let var8 = ae = var3 * constant var7
+let var9 = db = constant var6 * var4
+let var10 = de = constant var6 * constant var7
+
+let var11 = x * y
+          = c + ae + db + de
+          = var5 + var8 + var9 + constant var10
+```
+這樣就得到了一份可 verify 的 [x * y] .
+
+## 初始化 Input
+
+假設已經有拿到一個 single "v" 在 var1.<br>
+現在希望 P1 可以把自己的 input x 輸入到 var2.<br>
+我們希望只有 P1 知道 var2 的 value, 其他 party 不知道.<br>
+我們希望 var2 有著可以被 SPDZ verify 的格式.
+
+一開始所有 party 對 P1 open var1 = v.
+
+P1 計算出 constant "x - v", publish x - v, 要求大家計算 var2 = var1 + (x - v) .
+
+這樣 var2 便是符合條件的 variable.
+
+
+
