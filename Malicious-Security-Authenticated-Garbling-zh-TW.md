@@ -73,6 +73,7 @@ Evaluator 拿到 label 時可以看到 public pointer bit $\hat{x}$, 也知道�
 Rows 直接用 pointer bits $\hat{x}$ 和 $\hat{y}$ 的順序來看.
 
 當 $\hat{x} = 0, \hat{y} = 0$, 則
+
 $$
 \begin{split}
 \hat{z_{00}} &= z \oplus \lambda_\gamma \\
@@ -82,6 +83,7 @@ $$
 &= (\lambda_\alpha \land \lambda_\beta) \oplus \lambda_\gamma
 \end{split}
 $$
+
 Evaluator 到這邊會持有 $L_{\alpha,\hat{x}}$ 也就是 $L_{\alpha,0}$.<br>
 也會持有 $L_{\beta,\hat{y}}$ 也就是 $L_{\beta,0}$.<br>
 我們希望 evaluator 可以 decrypt 出 $L_{\gamma,\hat{z}}$ 和 pointer bit $\hat{z}$.<br>
@@ -139,6 +141,7 @@ $$
 &= (L_{\gamma,0} \oplus r_{00}\Delta_A \oplus K[s_{00}]) \oplus (M[s_{00}])
 \end{split}
 $$
+
 左邊給 generator, 右邊給 evaluator.<br>
 當 generator 把左邊送給 evaluator 時, evaluator 就可以還原出 $L_{\gamma,\hat{z}_{00}}$.
 
