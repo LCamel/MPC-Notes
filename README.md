@@ -10,7 +10,7 @@ Thanks to the Ethereum Foundation's Learning Grant and to Nam Ngo for reviewing 
 <br>
 (Chinese)
 
-這裡是我在讀 [A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/) 這本書時的筆記. 主要觀點都來自書中或原 paper, 再補充一些心得. 部分主題另外寫了程式來展示概念. 如有錯誤, 還請不吝指正, 謝謝.
+這是我讀 [A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/) 這本書時的筆記. 主要觀點都來自書中或原 paper, 再補充一些心得. 部分主題另外寫了程式來展示概念. 如有錯誤, 還請不吝指正, 謝謝.
 
 感謝 Ethereum Foundation 的 Learning Grant. 感謝 Nam Ngo 的審閱. 
 
