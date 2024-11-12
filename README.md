@@ -1,7 +1,5 @@
 # MPC-Notes
 
-[Link to the repository](https://github.com/LCamel/MPC-Notes)
-
 (English)
 
 These are my notes from reading [A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/). Most viewpoints come from the book or original papers, supplemented with some personal insights. For some topics, I wrote programs to demonstrate the concepts. If there are any errors, please feel free to point them out. Thank you.
