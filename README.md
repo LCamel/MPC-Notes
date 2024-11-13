@@ -4,7 +4,7 @@
 
 These are my notes from reading [A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/). Most viewpoints come from the book or original papers, supplemented with some personal insights. For some topics, I wrote programs to demonstrate the concepts. If there are any errors, please feel free to point them out. Thank you.
 
-Thanks to the Ethereum Foundation's Learning Grant and to Nam Ngo for reviewing this work.
+Thanks to the Ethereum Foundation's Learning Grant and to Nam Ngo / Tyler AtHeartEngineer for reviewing this work.
 <br>
 <br>
 <br>
@@ -12,7 +12,7 @@ Thanks to the Ethereum Foundation's Learning Grant and to Nam Ngo for reviewing 
 
 這是我讀 [A Pragmatic Introduction to Secure Multi-Party Computation](https://securecomputation.org/) 這本書時的筆記. 主要觀點都來自書中或原 paper, 再補充一些心得. 部分主題另外寫了程式來展示概念. 如有錯誤, 還請不吝指正, 謝謝.
 
-感謝 Ethereum Foundation 的 Learning Grant. 感謝 Nam Ngo 的審閱. 
+感謝 Ethereum Foundation 的 Learning Grant. 感謝 Nam Ngo / Tyler AtHeartEngineer 的審閱.
 
 ## Study Notes
 
